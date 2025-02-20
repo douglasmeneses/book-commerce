@@ -71,12 +71,12 @@
       "containerId": "xUY457Oe1ROGZQ-yyvO83",
       "originalText": "Resources\n\n id (UUID) ? PK, default: uuid_generate_v4()  \n username (String) NOT NULL\n email  (String)  UNIQUE, NOT NULL\n password (String) NOT NULL\n createdAt Date() default(now())\n updateAt Date() default(now())\n",
       "lineHeight": 1.2,
-      "baseline": 209
+      "baseline": 212
     },
     {
       "type": "text",
-      "version": 420,
-      "versionNonce": 1989046991,
+      "version": 421,
+      "versionNonce": 835327273,
       "isDeleted": false,
       "id": "67CQMQgalNS4BeKW9nWnQ",
       "fillStyle": "solid",
@@ -96,7 +96,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740024044221,
+      "updated": 1740068342053,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -140,8 +140,8 @@
     },
     {
       "type": "text",
-      "version": 267,
-      "versionNonce": 1704807183,
+      "version": 268,
+      "versionNonce": 929820135,
       "isDeleted": false,
       "id": "mFe79B0c7iu6GFh6HguSh",
       "fillStyle": "hachure",
@@ -161,7 +161,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740024044221,
+      "updated": 1740068342059,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -242,7 +242,7 @@
       "containerId": "XM9eBD0__znU0e-zURRoJ",
       "originalText": "Routes/userRouter.ts",
       "lineHeight": 1.1921870377739072,
-      "baseline": 26
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -312,7 +312,7 @@
       "containerId": "sckQC-n-f14P4DZ2NiMP-",
       "originalText": "Controller/suserController.ts",
       "lineHeight": 1.1921870377739072,
-      "baseline": 26
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -382,7 +382,7 @@
       "containerId": "sAzYftdvqT4yalw7IDgrw",
       "originalText": "services/userService.ts",
       "lineHeight": 1.1921870377739072,
-      "baseline": 26
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -452,7 +452,7 @@
       "containerId": "_qdDpDX7zNfxngkeIhxH3",
       "originalText": "models",
       "lineHeight": 1.1921870377739072,
-      "baseline": 26
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -522,7 +522,7 @@
       "containerId": "64ROXmC3onTYJ6k2IGVfz",
       "originalText": "Requests/users",
       "lineHeight": 1.2,
-      "baseline": 24
+      "baseline": 28
     },
     {
       "type": "rectangle",
@@ -592,7 +592,7 @@
       "containerId": "vzSa7DEwv3_rU9LNyFmCv",
       "originalText": "POST: \"/\"; (REGISTER)\n -Req: {username, email, password};\n -Res: {user} HTTP:201\n -Validações: username, email (único, formato válido), \n password (≥8 caracteres, letra e número)",
       "lineHeight": 1.2,
-      "baseline": 158
+      "baseline": 162
     },
     {
       "type": "rectangle",
@@ -662,7 +662,7 @@
       "containerId": "MpTMo5gONFwHycajhP__v",
       "originalText": "PUT: \"/:id\"; (ATUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json) {username || email || password}; \n -Res: HTTP:200\n validações: mesma de register",
       "lineHeight": 1.2,
-      "baseline": 125
+      "baseline": 128
     },
     {
       "type": "rectangle",
@@ -732,7 +732,7 @@
       "containerId": "iLuPhPCCCVqhUJQ_HC-ek",
       "originalText": "POST: \"/login\"; (LOGIN)\n -Req: {email, password}; \n -Res: {user}; HTTP:200 \n -validações: email (exitente), password(correta)",
       "lineHeight": 1.2,
-      "baseline": 125
+      "baseline": 128
     },
     {
       "type": "rectangle",
@@ -802,7 +802,7 @@
       "containerId": "1Ki0mPtQsxbP1MBk_j8pR",
       "originalText": "DELETE: \"/:id\"; (REMOVER CONTA)\n -Req: PARAMS: autorization(token), content-type(application.json)\n -Res: {} HTTP:204 \n validações: verificar se está logado e se user existe",
       "lineHeight": 1.2,
-      "baseline": 158
+      "baseline": 162
     },
     {
       "type": "rectangle",
@@ -872,72 +872,72 @@
       "containerId": "xqBk4r0ej6TUtS_jMLac2",
       "originalText": "GET: \"/:id\"; (VISUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json); \n -Res: {[user]} HTTP:200 \n -validações: verificar exitencia de token e \n user",
       "lineHeight": 1.2,
-      "baseline": 158
+      "baseline": 162
     },
     {
-      "id": "jsz9lv8hkFuedlljls4XA",
       "type": "rectangle",
-      "x": -443.1666666666665,
-      "y": -1076.1904761904757,
-      "width": 1270,
-      "height": 506.6666666666664,
-      "angle": 0,
-      "strokeColor": "#2f9e44",
-      "backgroundColor": "transparent",
+      "version": 127,
+      "versionNonce": 1221165793,
+      "isDeleted": false,
+      "id": "jsz9lv8hkFuedlljls4XA",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
       "roughness": 1,
       "opacity": 100,
+      "angle": 0,
+      "x": -443.1666666666665,
+      "y": -1076.1904761904757,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "transparent",
+      "width": 1270,
+      "height": 506.6666666666664,
+      "seed": 1033789025,
       "groupIds": [],
       "frameId": null,
       "roundness": {
         "type": 3
       },
-      "seed": 1033789025,
-      "version": 127,
-      "versionNonce": 1221165793,
-      "isDeleted": false,
-      "boundElements": null,
+      "boundElements": [],
       "updated": 1740024203907,
       "link": null,
       "locked": false
     },
     {
-      "id": "Ziskwy7BGG1s2XlK4vlrp",
       "type": "text",
-      "x": -389.83333333333303,
-      "y": -1019.5238095238091,
-      "width": 848.7951049804688,
-      "height": 375,
-      "angle": 0,
-      "strokeColor": "#2f9e44",
-      "backgroundColor": "transparent",
+      "version": 5,
+      "versionNonce": 939493385,
+      "isDeleted": false,
+      "id": "Ziskwy7BGG1s2XlK4vlrp",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
       "roughness": 1,
       "opacity": 100,
+      "angle": 0,
+      "x": -389.83333333333303,
+      "y": -1019.5238095238091,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "transparent",
+      "width": 848.7951049804688,
+      "height": 375,
+      "seed": 114580847,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 114580847,
-      "version": 4,
-      "versionNonce": 1746625295,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1740024223497,
+      "boundElements": [],
+      "updated": 1740068342068,
       "link": null,
       "locked": false,
-      "text": "Relacionamentos:\n\n1:N → addresses (user_id)\n\n1:N → purchases (user_id)\n\nN:M → products (via favorites)\n\nN:M → products (via cart)\n\n1:N → reviews (user_id)\n\n1:N → payments (user_id) (novo relacionamento)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)",
       "fontSize": 20,
       "fontFamily": 1,
+      "text": "Relacionamentos:\n\n1:N → addresses (user_id)\n\n1:N → purchases (user_id)\n\nN:M → products (via favorites)\n\nN:M → products (via cart)\n\n1:N → reviews (user_id)\n\n1:N → payments (user_id) (novo relacionamento)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)",
       "textAlign": "left",
       "verticalAlign": "top",
-      "baseline": 368,
       "containerId": null,
       "originalText": "Relacionamentos:\n\n1:N → addresses (user_id)\n\n1:N → purchases (user_id)\n\nN:M → products (via favorites)\n\nN:M → products (via cart)\n\n1:N → reviews (user_id)\n\n1:N → payments (user_id) (novo relacionamento)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)",
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "baseline": 367
     }
   ],
   "appState": {
