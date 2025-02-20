@@ -75,8 +75,13 @@
     },
     {
       "type": "text",
+<<<<<<< HEAD
       "version": 404,
       "versionNonce": 523907765,
+=======
+      "version": 403,
+      "versionNonce": 1550621531,
+>>>>>>> develop
       "isDeleted": false,
       "id": "ggoBNfBi2RcQMzeIBHtOD",
       "fillStyle": "solid",
@@ -89,14 +94,23 @@
       "y": -1231.2528061113503,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
+<<<<<<< HEAD
       "width": 160.45986938476562,
       "height": 24,
+=======
+      "width": 160.45982360839844,
+      "height": 25,
+>>>>>>> develop
       "seed": 970965499,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1740020623153,
+=======
+      "updated": 1739832666934,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -467,8 +481,13 @@
     },
     {
       "type": "text",
+<<<<<<< HEAD
       "version": 469,
       "versionNonce": 1482597307,
+=======
+      "version": 468,
+      "versionNonce": 1656855509,
+>>>>>>> develop
       "isDeleted": false,
       "id": "-ryv_2WQ0Wl3Bcryzcn-8",
       "fillStyle": "solid",
@@ -481,14 +500,23 @@
       "y": -1451.1999835968015,
       "strokeColor": "#2f9e44",
       "backgroundColor": "transparent",
+<<<<<<< HEAD
       "width": 76.419921875,
       "height": 24,
+=======
+      "width": 76.41990661621094,
+      "height": 25,
+>>>>>>> develop
       "seed": 1320267477,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1740020623157,
+=======
+      "updated": 1739832666935,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1472,8 +1500,13 @@
     },
     {
       "type": "text",
+<<<<<<< HEAD
       "version": 129,
       "versionNonce": 770208859,
+=======
+      "version": 128,
+      "versionNonce": 1486256123,
+>>>>>>> develop
       "isDeleted": false,
       "id": "oo4bdYqVZk8saGazA2VsX",
       "fillStyle": "hachure",
@@ -1482,18 +1515,31 @@
       "roughness": 1,
       "opacity": 100,
       "angle": 0.018613146451799345,
+<<<<<<< HEAD
       "x": 1714.6819613054136,
       "y": -173.78153057528854,
       "strokeColor": "#2f9e44",
       "backgroundColor": "#e9ecef",
       "width": 52.135986328125,
       "height": 33.6,
+=======
+      "x": 1714.6688184142924,
+      "y": -173.7816518290151,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "#e9ecef",
+      "width": 52.13621520996094,
+      "height": 35,
+>>>>>>> develop
       "seed": 924744565,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1740020623161,
+=======
+      "updated": 1739832666935,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -1503,8 +1549,13 @@
       "verticalAlign": "top",
       "containerId": null,
       "originalText": "API",
+<<<<<<< HEAD
       "lineHeight": 1.2,
       "baseline": 24
+=======
+      "lineHeight": 1.25,
+      "baseline": 25
+>>>>>>> develop
     },
     {
       "type": "rectangle",
@@ -1853,8 +1904,13 @@
       "verticalAlign": "top",
       "containerId": "W0zlx-Vn6ecp_lsDyQIGG",
       "originalText": "Requests/books",
+<<<<<<< HEAD
       "lineHeight": 1.2,
       "baseline": 28
+=======
+      "lineHeight": 1.25,
+      "baseline": 25
+>>>>>>> develop
     },
     {
       "type": "rectangle",
@@ -1893,7 +1949,11 @@
     {
       "type": "text",
       "version": 477,
+<<<<<<< HEAD
       "versionNonce": 1528831546,
+=======
+      "versionNonce": 723798700,
+>>>>>>> develop
       "isDeleted": false,
       "id": "jPercfxIp4_oftXabNZlg",
       "fillStyle": "solid",
@@ -1906,14 +1966,23 @@
       "y": 1313.4064027089926,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#ffffff",
+<<<<<<< HEAD
       "width": 454.18780517578125,
       "height": 100.80000000000001,
+=======
+      "width": 454.1899719238281,
+      "height": 105,
+>>>>>>> develop
       "seed": 1965837947,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1739931032303,
+=======
+      "updated": 1739836405800,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -1923,7 +1992,11 @@
       "verticalAlign": "top",
       "containerId": "EW_Ei-PjLebb6XE3QpsYG",
       "originalText": "POST: \"/\";\n Req: {?}; Res: {book} HTTP:201\n validações: ?",
+<<<<<<< HEAD
       "lineHeight": 1.2,
+=======
+      "lineHeight": 1.25,
+>>>>>>> develop
       "baseline": 95
     },
     {
@@ -1993,8 +2066,13 @@
       "verticalAlign": "top",
       "containerId": "zE1i8wmfJip-4iP6y5gGK",
       "originalText": "POST: \"/:id/favorite\";\n Req: QUERY: id, user_id, Res: {book} || {}; HTTP:200\n validações: ?",
+<<<<<<< HEAD
       "lineHeight": 1.2,
       "baseline": 129
+=======
+      "lineHeight": 1.25,
+      "baseline": 130
+>>>>>>> develop
     },
     {
       "type": "rectangle",
@@ -2063,7 +2141,11 @@
       "verticalAlign": "top",
       "containerId": "pV1tgcapokuVuMvzts_Kc",
       "originalText": "GET: \"/\" ;\n Req: QUERY: filter; Res: {[books]}; HTTP:202 \n validações: ?",
+<<<<<<< HEAD
       "lineHeight": 1.2,
+=======
+      "lineHeight": 1.25,
+>>>>>>> develop
       "baseline": 95
     },
     {
@@ -2103,7 +2185,11 @@
     {
       "type": "text",
       "version": 587,
+<<<<<<< HEAD
       "versionNonce": 349388198,
+=======
+      "versionNonce": 1766072108,
+>>>>>>> develop
       "isDeleted": false,
       "id": "hRwexO3C1-ODZb_EmtZ1m",
       "fillStyle": "solid",
@@ -2116,14 +2202,23 @@
       "y": 1519.406400165861,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#ffffff",
+<<<<<<< HEAD
       "width": 427.22381591796875,
       "height": 100.80000000000001,
+=======
+      "width": 427.225830078125,
+      "height": 105,
+>>>>>>> develop
       "seed": 1136947035,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1739931032313,
+=======
+      "updated": 1739836621668,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -2133,7 +2228,11 @@
       "verticalAlign": "top",
       "containerId": "fGBNrGdF0pnSvgpuUt4A9",
       "originalText": "DELETE: \"/\";\n Req: {?}; Res: {} HTTP:2014 \n validações: ?",
+<<<<<<< HEAD
       "lineHeight": 1.2,
+=======
+      "lineHeight": 1.25,
+>>>>>>> develop
       "baseline": 95
     },
     {
@@ -2173,7 +2272,11 @@
     {
       "type": "text",
       "version": 888,
+<<<<<<< HEAD
       "versionNonce": 1128617914,
+=======
+      "versionNonce": 637047060,
+>>>>>>> develop
       "isDeleted": false,
       "id": "AyJFn_phci4_EJcocOm-G",
       "fillStyle": "solid",
@@ -2186,14 +2289,23 @@
       "y": 1519.406400165861,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#ffffff",
+<<<<<<< HEAD
       "width": 592.4237670898438,
       "height": 100.80000000000001,
+=======
+      "width": 592.4265747070312,
+      "height": 105,
+>>>>>>> develop
       "seed": 866139445,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1739931032314,
+=======
+      "updated": 1739836556161,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -2203,7 +2315,11 @@
       "verticalAlign": "top",
       "containerId": "Ii5L7Jn44ct9jZwMSpYWh",
       "originalText": "PUT: \"/:id\";\n Req: PARAMS: id; Res: {book} HTTP:200 \n validações: ?",
+<<<<<<< HEAD
       "lineHeight": 1.2,
+=======
+      "lineHeight": 1.25,
+>>>>>>> develop
       "baseline": 95
     },
     {
@@ -2243,7 +2359,11 @@
     {
       "type": "text",
       "version": 864,
+<<<<<<< HEAD
       "versionNonce": 2660582,
+=======
+      "versionNonce": 664233108,
+>>>>>>> develop
       "isDeleted": false,
       "id": "_Z6wIGZ7CRfIJ2MpmcGGI",
       "fillStyle": "solid",
@@ -2256,14 +2376,23 @@
       "y": 1313.4064027089926,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#ffffff",
+<<<<<<< HEAD
       "width": 635.375732421875,
       "height": 100.80000000000001,
+=======
+      "width": 635.3787231445312,
+      "height": 105,
+>>>>>>> develop
       "seed": 123099771,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
+<<<<<<< HEAD
       "updated": 1739931032314,
+=======
+      "updated": 1739837114151,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -2273,13 +2402,22 @@
       "verticalAlign": "top",
       "containerId": "l5cU59m9WgyVEecLQOUOf",
       "originalText": "GET: \"/:id\";\n Req: PARAMS: id; Res: {[books]} HTTP:200 \n validações: ?",
+<<<<<<< HEAD
       "lineHeight": 1.2,
+=======
+      "lineHeight": 1.25,
+>>>>>>> develop
       "baseline": 95
     },
     {
       "type": "text",
+<<<<<<< HEAD
       "version": 77,
       "versionNonce": 1514918613,
+=======
+      "version": 76,
+      "versionNonce": 2083084597,
+>>>>>>> develop
       "isDeleted": false,
       "id": "OKgo8tWqORB1hD3mdztHx",
       "fillStyle": "solid",
@@ -2288,12 +2426,17 @@
       "roughness": 1,
       "opacity": 100,
       "angle": 0,
-      "x": 1128.707127162387,
+      "x": 1128.7070890154143,
       "y": -832.5620148068363,
       "strokeColor": "#2f9e44",
       "backgroundColor": "transparent",
+<<<<<<< HEAD
       "width": 125.0279541015625,
       "height": 86.39999999999999,
+=======
+      "width": 125.02803039550781,
+      "height": 90,
+>>>>>>> develop
       "seed": 380054010,
       "groupIds": [],
       "frameId": null,
@@ -2304,7 +2447,11 @@
           "type": "arrow"
         }
       ],
+<<<<<<< HEAD
       "updated": 1740020623163,
+=======
+      "updated": 1739832666935,
+>>>>>>> develop
       "link": null,
       "locked": false,
       "fontSize": 36,
@@ -2314,8 +2461,13 @@
       "verticalAlign": "top",
       "containerId": null,
       "originalText": "- id PK\n- ....",
+<<<<<<< HEAD
       "lineHeight": 1.2,
       "baseline": 74
+=======
+      "lineHeight": 1.25,
+      "baseline": 77
+>>>>>>> develop
     },
     {
       "type": "line",
