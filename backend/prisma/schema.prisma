@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id             String   @id @default(uuid())
+  title          String
+  synopsis       String   @db.Text
+  image          Bytes
+  language       String
+  price          Decimal
+  ISBN           String   @unique
+  rating         Decimal  @default(0) @db.Decimal(1, 1)
+  favorite_count Int      @default(0)
+  page_count     Int
+  release_date   DateTime
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  genres     bookGenre[]
+  authors    bookAuthor[]
+  publishers bookPublisher[]
+}
+
+model Genre {
+  id         String      @id @default(uuid())
+  name       String
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  books      bookGenre[]
+}
+
+model Author {
+  id            String       @id @default(uuid())
+  name          String
+  bio           String       @db.Text
+  year_of_birth DateTime
+  image         Bytes
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  books         bookAuthor[]
+}
+
+model Publisher {
+  id         String          @id @default(uuid())
+  name       String
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+  books      bookPublisher[]
+}
+
+model bookGenre {
+  id         String   @id @default(uuid())
+  book_id    String
+  genre_id   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  book  Book  @relation(fields: [book_id], references: [id])
+  genre Genre @relation(fields: [genre_id], references: [id])
+}
+
+model bookAuthor {
+  id         String   @id @default(uuid())
+  book_id    String
+  author_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  book       Book     @relation(fields: [book_id], references: [id])
+  author     Author   @relation(fields: [author_id], references: [id])
+}
+
+model bookPublisher {
+  id           String    @id @default(uuid())
+  book_id      String
+  publisher_id String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  book         Book      @relation(fields: [book_id], references: [id])
+  publisher    Publisher @relation(fields: [publisher_id], references: [id])
+}
