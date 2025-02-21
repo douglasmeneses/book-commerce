@@ -1,7 +1,7 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
+  "source": "vscode-webview://0gutcrfmq9hob2k7u1ef8dielp5lakf0sefndqcu4n2us07tf1r6",
   "elements": [
     {
       "type": "rectangle",
@@ -23,7 +23,6 @@
       "height": 250,
       "seed": 945050113,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -57,7 +56,6 @@
       "height": 216,
       "seed": 417098209,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044221,
@@ -69,9 +67,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "xUY457Oe1ROGZQ-yyvO83",
-      "originalText": "Resources\n\n id (UUID) ? PK, default: uuid_generate_v4()  \n username (String) NOT NULL\n email  (String)  UNIQUE, NOT NULL\n password (String) NOT NULL\n createdAt Date() default(now())\n updateAt Date() default(now())\n",
-      "lineHeight": 1.2,
-      "baseline": 212
+      "originalText": "Resources\n\n id (UUID) ? PK, default: uuid_generate_v4()  \n username (String) NOT NULL\n email  (String)  UNIQUE, NOT NULL\n password (String) NOT NULL\n createdAt Date() default(now())\n updateAt Date() default(now())\n"
     },
     {
       "type": "text",
@@ -93,7 +89,6 @@
       "height": 24,
       "seed": 72779201,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740068942621,
@@ -105,9 +100,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Backend - users",
-      "lineHeight": 1.2,
-      "baseline": 17
+      "originalText": "Backend - users"
     },
     {
       "type": "rectangle",
@@ -129,7 +122,6 @@
       "height": 1130.0000381469724,
       "seed": 1440884129,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -158,7 +150,6 @@
       "height": 33.6,
       "seed": 1487849857,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740068942624,
@@ -170,9 +161,7 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "API",
-      "lineHeight": 1.2,
-      "baseline": 24
+      "originalText": "API"
     },
     {
       "type": "rectangle",
@@ -194,7 +183,6 @@
       "height": 147.10056599349178,
       "seed": 1174139233,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -228,7 +216,6 @@
       "height": 37.199999999999996,
       "seed": 51977537,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044316,
@@ -240,9 +227,7 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "XM9eBD0__znU0e-zURRoJ",
-      "originalText": "Routes/userRouter.ts",
-      "lineHeight": 1.1921870377739072,
-      "baseline": 31
+      "originalText": "Routes/userRouter.ts"
     },
     {
       "type": "rectangle",
@@ -264,7 +249,6 @@
       "height": 147.10056599349178,
       "seed": 526765345,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -298,7 +282,6 @@
       "height": 37.199999999999996,
       "seed": 307331329,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044324,
@@ -310,9 +293,7 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "sckQC-n-f14P4DZ2NiMP-",
-      "originalText": "Controller/suserController.ts",
-      "lineHeight": 1.1921870377739072,
-      "baseline": 31
+      "originalText": "Controller/suserController.ts"
     },
     {
       "type": "rectangle",
@@ -334,7 +315,6 @@
       "height": 147.10056599349178,
       "seed": 962312417,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -368,7 +348,6 @@
       "height": 37.199999999999996,
       "seed": 370406593,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -380,9 +359,7 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "sAzYftdvqT4yalw7IDgrw",
-      "originalText": "services/userService.ts",
-      "lineHeight": 1.1921870377739072,
-      "baseline": 31
+      "originalText": "services/userService.ts"
     },
     {
       "type": "rectangle",
@@ -404,7 +381,6 @@
       "height": 147.10056599349178,
       "seed": 1276753057,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -438,7 +414,6 @@
       "height": 37.199999999999996,
       "seed": 1595701377,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -450,9 +425,7 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "_qdDpDX7zNfxngkeIhxH3",
-      "originalText": "models",
-      "lineHeight": 1.1921870377739072,
-      "baseline": 31
+      "originalText": "models"
     },
     {
       "type": "rectangle",
@@ -474,7 +447,6 @@
       "height": 822.0001983642576,
       "seed": 819708001,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -508,7 +480,6 @@
       "height": 33.6,
       "seed": 1059523649,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -520,9 +491,7 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "64ROXmC3onTYJ6k2IGVfz",
-      "originalText": "Requests/users",
-      "lineHeight": 1.2,
-      "baseline": 28
+      "originalText": "Requests/users"
     },
     {
       "type": "rectangle",
@@ -544,7 +513,6 @@
       "height": 178,
       "seed": 568187937,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -578,7 +546,6 @@
       "height": 168,
       "seed": 1223667713,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -590,9 +557,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "vzSa7DEwv3_rU9LNyFmCv",
-      "originalText": "POST: \"/\"; (REGISTER)\n -Req: {username, email, password};\n -Res: {user} HTTP:201\n -Validações: username, email (único, formato válido), \n password (≥8 caracteres, letra e número)",
-      "lineHeight": 1.2,
-      "baseline": 162
+      "originalText": "POST: \"/\"; (REGISTER)\n -Req: {username, email, password};\n -Res: {user} HTTP:201\n -Validações: username, email (único, formato válido), \n password (≥8 caracteres, letra e número)"
     },
     {
       "type": "rectangle",
@@ -614,7 +579,6 @@
       "height": 212,
       "seed": 2052851681,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -648,7 +612,6 @@
       "height": 134.4,
       "seed": 271737793,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -660,9 +623,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "MpTMo5gONFwHycajhP__v",
-      "originalText": "PUT: \"/:id\"; (ATUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json) {username || email || password}; \n -Res: HTTP:200\n validações: mesma de register",
-      "lineHeight": 1.2,
-      "baseline": 128
+      "originalText": "PUT: \"/:id\"; (ATUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json) {username || email || password}; \n -Res: HTTP:200\n validações: mesma de register"
     },
     {
       "type": "rectangle",
@@ -684,7 +645,6 @@
       "height": 185.99998474121094,
       "seed": 1989297057,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -718,7 +678,6 @@
       "height": 134.4,
       "seed": 1772824449,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -730,9 +689,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "iLuPhPCCCVqhUJQ_HC-ek",
-      "originalText": "POST: \"/login\"; (LOGIN)\n -Req: {email, password}; \n -Res: {user}; HTTP:200 \n -validações: email (exitente), password(correta)",
-      "lineHeight": 1.2,
-      "baseline": 128
+      "originalText": "POST: \"/login\"; (LOGIN)\n -Req: {email, password}; \n -Res: {user}; HTTP:200 \n -validações: email (exitente), password(correta)"
     },
     {
       "type": "rectangle",
@@ -754,7 +711,6 @@
       "height": 181,
       "seed": 1941737313,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -788,7 +744,6 @@
       "height": 168,
       "seed": 722860865,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -800,9 +755,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "1Ki0mPtQsxbP1MBk_j8pR",
-      "originalText": "DELETE: \"/:id\"; (REMOVER CONTA)\n -Req: PARAMS: autorization(token), content-type(application.json)\n -Res: {} HTTP:204 \n validações: verificar se está logado e se user existe",
-      "lineHeight": 1.2,
-      "baseline": 162
+      "originalText": "DELETE: \"/:id\"; (REMOVER CONTA)\n -Req: PARAMS: autorization(token), content-type(application.json)\n -Res: {} HTTP:204 \n validações: verificar se está logado e se user existe"
     },
     {
       "type": "rectangle",
@@ -824,7 +777,6 @@
       "height": 212,
       "seed": 806808353,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -858,7 +810,6 @@
       "height": 168,
       "seed": 1798233857,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740024044222,
@@ -870,9 +821,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "xqBk4r0ej6TUtS_jMLac2",
-      "originalText": "GET: \"/:id\"; (VISUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json); \n -Res: {[user]} HTTP:200 \n -validações: verificar exitencia de token e \n user",
-      "lineHeight": 1.2,
-      "baseline": 162
+      "originalText": "GET: \"/:id\"; (VISUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json); \n -Res: {[user]} HTTP:200 \n -validações: verificar exitencia de token e \n user"
     },
     {
       "type": "rectangle",
@@ -894,7 +843,6 @@
       "height": 506.6666666666664,
       "seed": 1033789025,
       "groupIds": [],
-      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -905,8 +853,8 @@
     },
     {
       "type": "text",
-      "version": 6,
-      "versionNonce": 1183077633,
+      "version": 7,
+      "versionNonce": 1256647070,
       "isDeleted": false,
       "id": "Ziskwy7BGG1s2XlK4vlrp",
       "fillStyle": "solid",
@@ -919,14 +867,13 @@
       "y": -1019.5238095238091,
       "strokeColor": "#2f9e44",
       "backgroundColor": "transparent",
-      "width": 848.7951049804688,
-      "height": 375,
+      "width": 851.5392456054688,
+      "height": 360,
       "seed": 114580847,
       "groupIds": [],
-      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740068942630,
+      "updated": 1740179818893,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -935,9 +882,7 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Relacionamentos:\n\n1:N → addresses (user_id)\n\n1:N → purchases (user_id)\n\nN:M → products (via favorites)\n\nN:M → products (via cart)\n\n1:N → reviews (user_id)\n\n1:N → payments (user_id) (novo relacionamento)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)",
-      "lineHeight": 1.25,
-      "baseline": 367
+      "originalText": "Relacionamentos:\n\n1:N → addresses (user_id)\n\n1:N → purchases (user_id)\n\nN:M → products (via favorites)\n\nN:M → products (via cart)\n\n1:N → reviews (user_id)\n\n1:N → payments (user_id) (novo relacionamento)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)"
     }
   ],
   "appState": {
