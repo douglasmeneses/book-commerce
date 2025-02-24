@@ -13,17 +13,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  uuid       String   @id @default(uuid())
+  id         Int      @unique @default(autoincrement())
+  email      String   @unique
+  password   String
+  name       String
+  username   String   @unique
+  avatar     Bytes?
+  age        Int?
+  CPF        String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model Book {
-  id             String   @id @default(uuid())
+  uuid           String   @id @default(uuid())
+  id             Int      @unique @default(autoincrement())
   title          String
   synopsis       String   @db.Text
-  image          Bytes
+  image          Bytes?
   language       String
   price          Decimal
   ISBN           String   @unique
   rating         Decimal  @default(0) @db.Decimal(1, 1)
   favorite_count Int      @default(0)
-  page_count     Int
+  page_count     Int?
   release_date   DateTime
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
@@ -62,7 +77,7 @@ model Publisher {
 
 model bookGenre {
   id         String   @id @default(uuid())
-  book_id    String
+  book_id    Int
   genre_id   String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -73,7 +88,7 @@ model bookGenre {
 
 model bookAuthor {
   id         String   @id @default(uuid())
-  book_id    String
+  book_id    Int
   author_id  String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -83,7 +98,7 @@ model bookAuthor {
 
 model bookPublisher {
   id           String    @id @default(uuid())
-  book_id      String
+  book_id      Int
   publisher_id String
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
