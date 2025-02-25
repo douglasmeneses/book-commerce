@@ -22,7 +22,8 @@ model User {
   username   String   @unique
   avatar     Bytes?
   age        Int?
-  CPF        String?
+  CPF        String?  @unique
+  phone      String?  @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
