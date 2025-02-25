@@ -13,6 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  uuid       String   @id @default(uuid())
+  id         Int      @unique @default(autoincrement())
+  email      String   @unique
+  password   String
+  name       String
+  username   String   @unique
+  avatar     Bytes?
+  age        Int?
+  CPF        String?  @unique
+  phone      String?  @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model Book {
   id             String   @id @default(uuid())
   title          String
