@@ -14,8 +14,8 @@ datasource db {
 }
 
 model User {
-  uuid       String   @id @default(uuid())
-  id         Int      @unique @default(autoincrement())
+  uuid       String   @default(uuid())
+  id         Int      @id @unique @default(autoincrement())
   email      String   @unique
   password   String
   name       String
@@ -23,7 +23,7 @@ model User {
   avatar     Bytes?
   age        Int?
   CPF        String?  @unique
-  phone      String?  @unique
+  phone      String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
