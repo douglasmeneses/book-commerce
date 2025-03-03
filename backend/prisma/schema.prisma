@@ -146,11 +146,11 @@ model Book {
   id             Int      @id @default(autoincrement())
   title          String
   synopsis       String   @db.Text
-  image          Bytes
+  image          Bytes?
   language       String
   price          Decimal
   ISBN           String   @unique
-  rating         Decimal  @default(0) @db.Decimal(1, 1) 
+  rating         Decimal  @default(0) @db.Decimal(1, 1)
   favorite_count Int      @default(0)
   page_count     Int
   release_date   DateTime
@@ -169,16 +169,16 @@ model Book {
 }
 
 model Genre {
-  id         String      @id @default(uuid())
-  name       String
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   books      bookGenre[]
 }
 
 model Author {
-  id            String       @id @default(uuid())
-  name          String
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
   bio           String       @db.Text
   year_of_birth DateTime
   image         Bytes
@@ -188,17 +188,17 @@ model Author {
 }
 
 model Publisher {
-  id         String          @id @default(uuid())
-  name       String
+  id         Int             @id @default(autoincrement())
+  name       String          @unique
   created_at DateTime        @default(now())
   updated_at DateTime        @updatedAt
   books      bookPublisher[]
 }
 
 model bookGenre {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   book_id    Int
-  genre_id   String
+  genre_id   Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -207,9 +207,9 @@ model bookGenre {
 }
 
 model bookAuthor {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   book_id    Int
-  author_id  String
+  author_id  Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   book       Book     @relation(fields: [book_id], references: [id])
@@ -217,9 +217,9 @@ model bookAuthor {
 }
 
 model bookPublisher {
-  id           String    @id @default(uuid())
+  id           Int       @id @default(autoincrement())
   book_id      Int
-  publisher_id String
+  publisher_id Int
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   book         Book      @relation(fields: [book_id], references: [id])
