@@ -12,7 +12,10 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.4.1",
-    "express": "^4.21.2"
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

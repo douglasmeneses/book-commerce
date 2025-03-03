@@ -1,7 +1,7 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "vscode-webview://0gutcrfmq9hob2k7u1ef8dielp5lakf0sefndqcu4n2us07tf1r6",
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
     {
       "type": "rectangle",
@@ -23,6 +23,7 @@
       "height": 346,
       "seed": 945050113,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -56,6 +57,7 @@
       "height": 288,
       "seed": 417098209,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740680350718,
@@ -67,12 +69,14 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "xUY457Oe1ROGZQ-yyvO83",
-      "originalText": "Resources\n \n id (Int) PK, auto-increment \n uuid: UUID (UNIQUE, NOT NULL)\n username (String) NOT NULL\n email  (String)  UNIQUE, NOT NULL\n password (String) NOT NULL\n avatar (Blob/byte)\n cpf: (String) UNIQUE, NOT NULL\n fone(String)\n age: (Int)\n createdAt Date() default(now())\n updated_at DateTime \n "
+      "originalText": "Resources\n \n id (Int) PK, auto-increment \n uuid: UUID (UNIQUE, NOT NULL)\n username (String) NOT NULL\n email  (String)  UNIQUE, NOT NULL\n password (String) NOT NULL\n avatar (Blob/byte)\n cpf: (String) UNIQUE, NOT NULL\n fone(String)\n age: (Int)\n createdAt Date() default(now())\n updated_at DateTime \n ",
+      "lineHeight": 1.2,
+      "baseline": 284
     },
     {
       "type": "text",
-      "version": 452,
-      "versionNonce": 1032898550,
+      "version": 455,
+      "versionNonce": 2126802526,
       "isDeleted": false,
       "id": "67CQMQgalNS4BeKW9nWnQ",
       "fillStyle": "solid",
@@ -89,9 +93,10 @@
       "height": 24,
       "seed": 72779201,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740448993454,
+      "updated": 1741036348475,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -100,7 +105,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Backend - users"
+      "originalText": "Backend - users",
+      "lineHeight": 1.2,
+      "baseline": 17
     },
     {
       "type": "rectangle",
@@ -122,6 +129,7 @@
       "height": 1130.0000381469724,
       "seed": 1440884129,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -132,8 +140,8 @@
     },
     {
       "type": "text",
-      "version": 281,
-      "versionNonce": 918051434,
+      "version": 284,
+      "versionNonce": 281456258,
       "isDeleted": false,
       "id": "mFe79B0c7iu6GFh6HguSh",
       "fillStyle": "hachure",
@@ -150,9 +158,10 @@
       "height": 33.6,
       "seed": 1487849857,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740448993456,
+      "updated": 1741036348476,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -161,7 +170,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "API"
+      "originalText": "API",
+      "lineHeight": 1.2,
+      "baseline": 24
     },
     {
       "type": "rectangle",
@@ -183,6 +194,7 @@
       "height": 147.10056599349178,
       "seed": 1174139233,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -216,6 +228,7 @@
       "height": 37.199999999999996,
       "seed": 51977537,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496228,
@@ -227,7 +240,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "XM9eBD0__znU0e-zURRoJ",
-      "originalText": "Routes/userRouter.ts"
+      "originalText": "Routes/userRouter.ts",
+      "lineHeight": 1.1921870377739072,
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -249,6 +264,7 @@
       "height": 147.10056599349178,
       "seed": 526765345,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -282,6 +298,7 @@
       "height": 37.199999999999996,
       "seed": 307331329,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496228,
@@ -293,7 +310,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "sckQC-n-f14P4DZ2NiMP-",
-      "originalText": "Controller/suserController.ts"
+      "originalText": "Controller/suserController.ts",
+      "lineHeight": 1.1921870377739072,
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -315,6 +334,7 @@
       "height": 147.10056599349178,
       "seed": 962312417,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -348,6 +368,7 @@
       "height": 37.199999999999996,
       "seed": 370406593,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496229,
@@ -359,7 +380,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "sAzYftdvqT4yalw7IDgrw",
-      "originalText": "services/userService.ts"
+      "originalText": "services/userService.ts",
+      "lineHeight": 1.1921870377739072,
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -381,6 +404,7 @@
       "height": 147.10056599349178,
       "seed": 1276753057,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -414,6 +438,7 @@
       "height": 37.199999999999996,
       "seed": 1595701377,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496229,
@@ -425,7 +450,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "_qdDpDX7zNfxngkeIhxH3",
-      "originalText": "models"
+      "originalText": "models",
+      "lineHeight": 1.1921870377739072,
+      "baseline": 31
     },
     {
       "type": "rectangle",
@@ -447,6 +474,7 @@
       "height": 822.0001983642576,
       "seed": 819708001,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -480,6 +508,7 @@
       "height": 33.6,
       "seed": 1059523649,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496229,
@@ -491,7 +520,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": "64ROXmC3onTYJ6k2IGVfz",
-      "originalText": "Requests/users"
+      "originalText": "Requests/users",
+      "lineHeight": 1.2,
+      "baseline": 28
     },
     {
       "type": "rectangle",
@@ -513,6 +544,7 @@
       "height": 178,
       "seed": 568187937,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -528,8 +560,8 @@
     },
     {
       "type": "text",
-      "version": 775,
-      "versionNonce": 1192834226,
+      "version": 776,
+      "versionNonce": 2057585109,
       "isDeleted": false,
       "id": "4aI2iYaMPew2rjwYOWu5y",
       "fillStyle": "solid",
@@ -546,9 +578,10 @@
       "height": 168,
       "seed": 1223667713,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740438496229,
+      "updated": 1741022471475,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -557,7 +590,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "vzSa7DEwv3_rU9LNyFmCv",
-      "originalText": "POST: \"/\"; (REGISTER)\n -Req: {username, email, password};\n -Res: {userDTO} HTTP:201\n -Validações: username, email (único, formato válido), \n password (≥8 caracteres, letra e número)"
+      "originalText": "POST: \"/\"; (REGISTER)\n -Req: {username, email, password};\n -Res: {userDTO} HTTP:201\n -Validações: username, email (único, formato válido), \n password (≥8 caracteres, letra e número)",
+      "lineHeight": 1.2,
+      "baseline": 162
     },
     {
       "type": "rectangle",
@@ -579,6 +614,7 @@
       "height": 212,
       "seed": 2052851681,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -612,6 +648,7 @@
       "height": 168,
       "seed": 271737793,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496229,
@@ -623,7 +660,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "MpTMo5gONFwHycajhP__v",
-      "originalText": "PUT: \"/:uuid\"; (ATUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json) {username || email || password || avatar || CPF || age || fone || andress}; \n -Res: HTTP:200\n validações: mesma de register"
+      "originalText": "PUT: \"/:uuid\"; (ATUALIZAR PERFIL)\n -Req: PARAMS: autorization(token), content-type(application.json) {username || email || password || avatar || CPF || age || fone || andress}; \n -Res: HTTP:200\n validações: mesma de register",
+      "lineHeight": 1.2,
+      "baseline": 162
     },
     {
       "type": "rectangle",
@@ -645,6 +684,7 @@
       "height": 185.99998474121094,
       "seed": 1989297057,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -660,8 +700,8 @@
     },
     {
       "type": "text",
-      "version": 1151,
-      "versionNonce": 609562674,
+      "version": 1152,
+      "versionNonce": 1932441077,
       "isDeleted": false,
       "id": "W6-t_3pqSa3LhZIsZImnP",
       "fillStyle": "solid",
@@ -678,9 +718,10 @@
       "height": 134.4,
       "seed": 1772824449,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740438496230,
+      "updated": 1741022571878,
       "link": null,
       "locked": false,
       "fontSize": 28,
@@ -689,7 +730,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "iLuPhPCCCVqhUJQ_HC-ek",
-      "originalText": "POST: \"/login\"; (LOGIN)\n -Req: {email, password}; \n -Res: {userDTO, token}; HTTP:200 \n -validações: email (exitente), password(correta)"
+      "originalText": "POST: \"/login\"; (LOGIN)\n -Req: {email, password}; \n -Res: {userDTO, token}; HTTP:200 \n -validações: email (exitente), password(correta)",
+      "lineHeight": 1.2,
+      "baseline": 129
     },
     {
       "type": "rectangle",
@@ -711,6 +754,7 @@
       "height": 181,
       "seed": 1941737313,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -744,6 +788,7 @@
       "height": 134.4,
       "seed": 722860865,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496230,
@@ -755,7 +800,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "1Ki0mPtQsxbP1MBk_j8pR",
-      "originalText": "DELETE: \"/:uuid\"; (REMOVER CONTA)\n -Req: PARAMS: autorization(token)\n -Res: {} HTTP:204 \n validações: verificar se está logado e se user existe"
+      "originalText": "DELETE: \"/:uuid\"; (REMOVER CONTA)\n -Req: PARAMS: autorization(token)\n -Res: {} HTTP:204 \n validações: verificar se está logado e se user existe",
+      "lineHeight": 1.2,
+      "baseline": 129
     },
     {
       "type": "rectangle",
@@ -777,6 +824,7 @@
       "height": 212,
       "seed": 806808353,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -810,6 +858,7 @@
       "height": 168,
       "seed": 1798233857,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
       "updated": 1740438496230,
@@ -821,7 +870,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "xqBk4r0ej6TUtS_jMLac2",
-      "originalText": "GET: \"/:uuid\"; (VISUALIZAR PERFIL)\n -Req: PARAMS: autorization(token)\n -Res: {userProfileDTO} HTTP:200 \n -validações: verificar exitencia de token e \n user"
+      "originalText": "GET: \"/:uuid\"; (VISUALIZAR PERFIL)\n -Req: PARAMS: autorization(token)\n -Res: {userProfileDTO} HTTP:200 \n -validações: verificar exitencia de token e \n user",
+      "lineHeight": 1.2,
+      "baseline": 162
     },
     {
       "type": "rectangle",
@@ -843,6 +894,7 @@
       "height": 506.6666666666664,
       "seed": 1033789025,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -853,8 +905,8 @@
     },
     {
       "type": "text",
-      "version": 126,
-      "versionNonce": 1313419282,
+      "version": 129,
+      "versionNonce": 1193472670,
       "isDeleted": false,
       "id": "Ziskwy7BGG1s2XlK4vlrp",
       "fillStyle": "solid",
@@ -867,13 +919,14 @@
       "y": -1019.5238095238091,
       "strokeColor": "#2f9e44",
       "backgroundColor": "transparent",
-      "width": 851.5392456054688,
+      "width": 848.7951049804688,
       "height": 360,
       "seed": 114580847,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740680350725,
+      "updated": 1741036348479,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -882,7 +935,9 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Relacionamentos:\n\nN:M → addresses (user_id)\n\nN:M → favorites (product_id | user_id)\n\n1:1 → cart(user_id)\n\n1:N → reviews (user_id)\n\n1:N → payments(user_id)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)\n\nN:M → credit_card (user_id | number)"
+      "originalText": "Relacionamentos:\n\nN:M → addresses (user_id)\n\nN:M → favorites (product_id | user_id)\n\n1:1 → cart(user_id)\n\n1:N → reviews (user_id)\n\n1:N → payments(user_id)\n\n1:N → orders (user_id) (relacionamento adicionado para gestão de compras e status)\n\nN:M → credit_card (user_id | number)",
+      "lineHeight": 1.2,
+      "baseline": 353
     },
     {
       "type": "rectangle",
@@ -904,6 +959,7 @@
       "height": 311.8750000000002,
       "seed": 1728137313,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -932,6 +988,7 @@
       "height": 311.8750000000002,
       "seed": 262111279,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -942,8 +999,8 @@
     },
     {
       "type": "text",
-      "version": 47,
-      "versionNonce": 2049905166,
+      "version": 50,
+      "versionNonce": 1722912322,
       "isDeleted": false,
       "id": "XAb3p564zuuHyaPq0E2Kg",
       "fillStyle": "solid",
@@ -960,9 +1017,10 @@
       "height": 24,
       "seed": 187087713,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740680350726,
+      "updated": 1741036348481,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -971,12 +1029,14 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "UserDTO"
+      "originalText": "UserDTO",
+      "lineHeight": 1.2,
+      "baseline": 17
     },
     {
       "type": "text",
-      "version": 53,
-      "versionNonce": 1368219090,
+      "version": 56,
+      "versionNonce": 1101459166,
       "isDeleted": false,
       "id": "L7lbnj5UdKj5PnwN0Mz-V",
       "fillStyle": "solid",
@@ -993,9 +1053,10 @@
       "height": 24,
       "seed": 622025057,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740680350726,
+      "updated": 1741036348482,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1004,12 +1065,14 @@
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "UserProfileDTO"
+      "originalText": "UserProfileDTO",
+      "lineHeight": 1.2,
+      "baseline": 17
     },
     {
       "type": "text",
-      "version": 137,
-      "versionNonce": 1591582798,
+      "version": 140,
+      "versionNonce": 1135244802,
       "isDeleted": false,
       "id": "peC8VNW7U-YmAh2eujb1n",
       "fillStyle": "solid",
@@ -1026,9 +1089,10 @@
       "height": 72,
       "seed": 758145857,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740680350727,
+      "updated": 1741036348483,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1037,12 +1101,14 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "UUID\nUsername\nemail"
+      "originalText": "UUID\nUsername\nemail",
+      "lineHeight": 1.2,
+      "baseline": 65
     },
     {
       "type": "text",
-      "version": 80,
-      "versionNonce": 1065735058,
+      "version": 83,
+      "versionNonce": 2061591326,
       "isDeleted": false,
       "id": "GA8xvrvxskenlRBoJGEGX",
       "fillStyle": "solid",
@@ -1059,9 +1125,10 @@
       "height": 192,
       "seed": 1644129985,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740680350727,
+      "updated": 1741036348484,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1070,7 +1137,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "UUID\nUsername\nemail\navatar\nCPF\nAge\nfone\ncreatedAt"
+      "originalText": "UUID\nUsername\nemail\navatar\nCPF\nAge\nfone\ncreatedAt",
+      "lineHeight": 1.2,
+      "baseline": 185
     },
     {
       "type": "rectangle",
@@ -1092,6 +1161,7 @@
       "height": 330.93755086263025,
       "seed": 581400399,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 3
       },
@@ -1102,8 +1172,8 @@
     },
     {
       "type": "text",
-      "version": 101,
-      "versionNonce": 1126196878,
+      "version": 104,
+      "versionNonce": 682649026,
       "isDeleted": false,
       "id": "D7HYAGlXdV50HvZ4pM8cR",
       "fillStyle": "solid",
@@ -1120,9 +1190,10 @@
       "height": 192,
       "seed": 1167808961,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1740680350728,
+      "updated": 1741036348485,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1131,12 +1202,14 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Credit_card\n\nuser_id\nnumber\nexpire_date\nfull_name\n\nPK(user_id | number)"
+      "originalText": "Credit_card\n\nuser_id\nnumber\nexpire_date\nfull_name\n\nPK(user_id | number)",
+      "lineHeight": 1.2,
+      "baseline": 185
     },
     {
       "type": "text",
-      "version": 35,
-      "versionNonce": 1248432466,
+      "version": 38,
+      "versionNonce": 1162039134,
       "isDeleted": false,
       "id": "b6ysotaljKSses6QxACl4",
       "fillStyle": "solid",
@@ -1153,6 +1226,7 @@
       "height": 24,
       "seed": 121442209,
       "groupIds": [],
+      "frameId": null,
       "roundness": null,
       "boundElements": [
         {
@@ -1160,7 +1234,7 @@
           "type": "arrow"
         }
       ],
-      "updated": 1740680350728,
+      "updated": 1741036348486,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1169,7 +1243,9 @@
       "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "PK COMPOSTA"
+      "originalText": "PK COMPOSTA",
+      "lineHeight": 1.2,
+      "baseline": 17
     },
     {
       "type": "arrow",
@@ -1191,6 +1267,7 @@
       "height": 24.937540690104242,
       "seed": 678068353,
       "groupIds": [],
+      "frameId": null,
       "roundness": {
         "type": 2
       },
