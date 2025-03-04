@@ -1,4 +1,5 @@
-import { registerBook, error } from "../types/bookTypes";
+import { RegisterBook, Filter } from "../types/bookTypes";
+import { BookResponseDTO } from "../dtos/booksDTOs";
 import { Book, PrismaClient } from "@prisma/client";
 import userService from "./userService";
 import validator from "validator";
@@ -7,7 +8,7 @@ const prisma = new PrismaClient();
 
 const bookService = {
   bookRegister: async (
-    book: registerBook,
+    book: RegisterBook,
     user_id: number
   ): Promise<Book | object> => {
     try {
@@ -76,7 +77,6 @@ const bookService = {
               quantity: book.stock_quantity || 0,
             },
           },
-          // Relacionamentos
           authors: {
             create: book.authors.map((authorName) => ({
               author: {
@@ -115,17 +115,40 @@ const bookService = {
         },
       });
 
-      return newBook;
+      return new BookResponseDTO(newBook);
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
       };
     }
   },
+  getBooks: async (filter: Filter) => {
+    const { title, mostLiked, mostRecent } = filter;
+    try {
+      const books = await prisma.book.findMany({
+        where: {
+          title: title ? { contains: title, mode: "insensitive" } : undefined,
+        },
+        orderBy: [
+          mostLiked ? { favorite_count: "desc" } : {},
+          mostRecent ? { created_at: "desc" } : {},
+        ],
+        include: {
+          authors: { include: { author: true } },
+          genres: { include: { genre: true } },
+        },
+      });
+
+      return books;
+    } catch (error) {
+      {
+        error: error instanceof Error ? error.message : "An error occurred";
+      }
+    }
+  },
   /**
    
-  bookSearch: async (){},
-  bookCarousel: async (){},
+  getBookById: async (){},
   bookUpdate: async (){},
   bookDelete: async (){},
   */

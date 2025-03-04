@@ -1,5 +1,6 @@
 import bookService from "../services/bookService";
 import Book from "@prisma/client";
+import { Filter } from "../types/bookTypes";
 import { Request, Response } from "express";
 
 const bookController = {
@@ -19,9 +20,25 @@ const bookController = {
       });
     }
   },
+  getBooks: async (req: Request, res: Response) => {
+    try {
+      const filter: Filter = {
+        title: req.query.title as string,
+        mostLiked: req.query.mostLiked === "true",
+        mostRecent: req.query.mostRecent === "true",
+      };
+
+      const response = await bookService.getBooks(filter);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(400).json({
+        error: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  },
+
   /**
      
-    bookSearch: async (){},
     bookCarousel: async (){},
     bookUpdate: async (){},
     bookDelete: async (){},

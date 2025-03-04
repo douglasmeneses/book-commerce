@@ -8,4 +8,7 @@ router.post("/", (req: Request, res: Response) => {
   bookController.registerBook(req, res);
 });
 
+router.get("/", (req: Request, res: Response) => {
+  bookController.getBooks(req, res);
+});
 export default router;
