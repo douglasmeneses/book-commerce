@@ -15,4 +15,8 @@ router.get("/", (req: Request, res: Response) => {
 router.get("/:uuid", (req: Request, res: Response) => {
   bookController.getBookById(req, res);
 });
+
+router.put("/:uuid", (req: Request, res: Response) => {
+  bookController.bookUpdate(req, res);
+});
 export default router;

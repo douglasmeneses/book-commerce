@@ -51,10 +51,24 @@ const bookController = {
       });
     }
   },
+  bookUpdate: async (req: Request, res: Response) => {
+    const uuid = req.params.uuid;
+    const updateBbook = req.body;
+    try {
+      const response = await bookService.updateBook(uuid, updateBbook);
+      if ("error" in response) {
+        return res.status(400).json({ error: response.error });
+      }
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(400).json({
+        error: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  },
 
   /**
      
-    bookUpdate: async (){},
     bookDelete: async (){},
     */
 };

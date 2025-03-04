@@ -1,4 +1,4 @@
-import { RegisterBook, Filter } from "../types/bookTypes";
+import { RegisterBook, Filter, UpdateBook } from "../types/bookTypes";
 import { BookResponseDTO } from "../dtos/booksDTOs";
 import { Book, PrismaClient } from "@prisma/client";
 import userService from "./userService";
@@ -138,7 +138,6 @@ const bookService = {
           genres: { include: { genre: true } },
         },
       });
-
       return books;
     } catch (error) {
       return {
@@ -167,7 +166,63 @@ const bookService = {
         return { error: "Book not found" };
       }
 
-      return book;
+      return new BookResponseDTO(book);
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+  updateBook: async (
+    uuid: string,
+    updatedBook: UpdateBook
+  ): Promise<Book | object> => {
+    if (!uuid || typeof uuid !== "string") {
+      return { error: "Invalid UUID" };
+    }
+
+    try {
+      const existingBook = await prisma.book.findUnique({
+        where: { uuid: uuid },
+      });
+
+      if (!existingBook) {
+        return { error: "Book not found" };
+      }
+
+      const updatedData: any = {};
+
+      if (updatedBook.title && validator.isAscii(updatedBook.title)) {
+        updatedData.title = updatedBook.title;
+      }
+      if (updatedBook.synopsis && validator.isAscii(updatedBook.synopsis)) {
+        updatedData.synopsis = updatedBook.synopsis;
+      }
+      if (updatedBook.ISBN && validator.isISBN(updatedBook.ISBN)) {
+        updatedData.ISBN = updatedBook.ISBN;
+      }
+      if (updatedBook.language && validator.isAlpha(updatedBook.language)) {
+        updatedData.language = updatedBook.language;
+      }
+      if (updatedBook.price && updatedBook.price > 0) {
+        updatedData.price = updatedBook.price;
+      }
+      if (updatedBook.page_count && updatedBook.page_count > 0) {
+        updatedData.page_count = updatedBook.page_count;
+      }
+      if (updatedBook.release_date) {
+        const releaseDate = new Date(updatedBook.release_date);
+        if (!isNaN(releaseDate.getTime())) {
+          updatedData.release_date = releaseDate;
+        }
+      }
+
+      const updatedBookRecord = await prisma.book.update({
+        where: { uuid: uuid },
+        data: updatedData,
+      });
+
+      return updatedBookRecord;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
@@ -176,7 +231,6 @@ const bookService = {
   },
   /**
    
-  bookUpdate: async (){},
   bookDelete: async (){},
   */
 };
