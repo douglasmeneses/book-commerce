@@ -36,10 +36,24 @@ const bookController = {
       });
     }
   },
+  getBookById: async (req: Request, res: Response): Promise<Response> => {
+    const uuid = req.params.uuid;
+    try {
+      const response = await bookService.getBookById(uuid);
+
+      if (!response) {
+        return res.status(404).json({ error: "Book not found" });
+      }
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(400).json({
+        error: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  },
 
   /**
      
-    bookCarousel: async (){},
     bookUpdate: async (){},
     bookDelete: async (){},
     */

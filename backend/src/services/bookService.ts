@@ -122,7 +122,7 @@ const bookService = {
       };
     }
   },
-  getBooks: async (filter: Filter) => {
+  getBooks: async (filter: Filter): Promise<Book[] | object> => {
     const { title, mostLiked, mostRecent } = filter;
     try {
       const books = await prisma.book.findMany({
@@ -141,14 +141,41 @@ const bookService = {
 
       return books;
     } catch (error) {
-      {
-        error: error instanceof Error ? error.message : "An error occurred";
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+  getBookById: async (uuid: string): Promise<Book | object> => {
+    if (!uuid || typeof uuid !== "string") {
+      return { error: "Invalid UUID" };
+    }
+
+    try {
+      const book = await prisma.book.findUnique({
+        where: {
+          uuid: uuid,
+        },
+        include: {
+          authors: { include: { author: true } },
+          genres: { include: { genre: true } },
+          publishers: { include: { publisher: true } },
+        },
+      });
+
+      if (!book) {
+        return { error: "Book not found" };
       }
+
+      return book;
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
     }
   },
   /**
    
-  getBookById: async (){},
   bookUpdate: async (){},
   bookDelete: async (){},
   */
