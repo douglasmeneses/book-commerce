@@ -3,10 +3,10 @@ import { PrismaClient, User } from "@prisma/client";
 const users = new PrismaClient().user;
 
 const userService = {
-  getUserById: async (id: number): Promise<User | null> => {
+  getUserByUUID: async (uuid: string): Promise<User | null> => {
     const user = await users.findUnique({
       where: {
-        id: id,
+        uuid: uuid,
       },
     });
 
