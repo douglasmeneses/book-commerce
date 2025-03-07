@@ -19,10 +19,6 @@ export default function RegisterPage() {
     },
   });
 
-  const onSubmit = () => {
-    console.log(form.getValues());
-  };
-
   return (
     <div className="w-full max-w-xl space-y-8">
       <div className="text-center">
@@ -33,7 +29,7 @@ export default function RegisterPage() {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form className="space-y-6">
           <FormField
             control={form.control}
             name="username"
@@ -49,8 +45,9 @@ export default function RegisterPage() {
                     </div>
                     <Input
                       id="username"
-                      className="pl-10 bg-gray-100 border-none h-12 focus:border-[#e67e22]"
+                      className="pl-10 bg-gray-100 border border-gray-300 h-12"
                       placeholder="João"
+                      type="text"
                       required
                       {...field}
                     />
@@ -75,7 +72,7 @@ export default function RegisterPage() {
                     </div>
                     <Input
                       id="email"
-                      className="pl-10 bg-gray-100 border-none h-12 focus:border-[#e67e22]"
+                      className="pl-10 bg-gray-100 border-none h-12"
                       placeholder="seuemail@gmail.com"
                       type="email"
                       required
@@ -102,7 +99,7 @@ export default function RegisterPage() {
                     </div>
                     <Input
                       id="password"
-                      className="pl-10 bg-gray-100 border-none h-12 focus:border-[#e67e22]"
+                      className="pl-10 bg-gray-100 border-none h-12"
                       placeholder="••••••••••"
                       type={showPassword ? "text" : "password"}
                       required
