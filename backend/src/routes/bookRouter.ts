@@ -19,4 +19,8 @@ router.get("/:uuid", (req: Request, res: Response) => {
 router.put("/:uuid", (req: Request, res: Response) => {
   bookController.bookUpdate(req, res);
 });
+
+router.delete("/:uuid", (req: Request, res: Response) => {
+  bookController.bookDelete(req, res);
+});
 export default router;

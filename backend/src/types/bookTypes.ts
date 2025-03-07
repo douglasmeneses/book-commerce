@@ -5,12 +5,12 @@ export interface RegisterBook {
   price: number;
   ISBN: string;
   page_count: number;
-  image: Uint8Array<ArrayBufferLike>;
+  image?: Uint8Array<ArrayBufferLike>;
   release_date: Date;
   stock_quantity: number;
-  authors: string[]; // Lista de nomes dos autores
-  genres: string[]; // Lista de gêneros
-  publishers: string[]; // Lista de editoras
+  authors: string[];
+  genres: string[];
+  publishers: string[];
 }
 
 export interface UpdateBook {

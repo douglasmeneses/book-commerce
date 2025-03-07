@@ -53,9 +53,14 @@ const bookController = {
   },
   bookUpdate: async (req: Request, res: Response) => {
     const uuid = req.params.uuid;
-    const updateBbook = req.body;
+    const user_uuid = req.body.user_uuid;
+    const updateBook = req.body;
     try {
-      const response = await bookService.updateBook(uuid, updateBbook);
+      const response = await bookService.updateBook(
+        uuid,
+        user_uuid,
+        updateBook
+      );
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
       }
@@ -66,11 +71,21 @@ const bookController = {
       });
     }
   },
-
-  /**
-     
-    bookDelete: async (){},
-    */
+  bookDelete: async (req: Request, res: Response): Promise<Response> => {
+    const uuid = req.params.uuid as string;
+    const user_uuid = req.body.user_uuid as string;
+    try {
+      const response = await bookService.bookDelete(uuid, user_uuid);
+      if ("error" in response) {
+        return res.status(400).json({ error: response.error });
+      }
+      return res.status(200).json({ message: "Book deleted successfully" });
+    } catch (error) {
+      return res.status(400).json({
+        error: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  },
 };
 
 export default bookController;
