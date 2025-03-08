@@ -1,8 +1,14 @@
 import { RegisterBook, Filter, UpdateBook } from "../types/bookTypes";
-import { BookResponseDTO } from "../dtos/booksDTOs";
 import { Book, PrismaClient } from "@prisma/client";
-import userService from "./userService";
-import validator from "validator";
+import {
+  bookExists,
+  bookValidates,
+  extractBookData,
+  updateAuthors,
+  updateGenres,
+  updatePublishers,
+} from "../middlewares/bookValidators";
+import { validUser } from "../middlewares/userValidators";
 
 const prisma = new PrismaClient();
 
@@ -12,64 +18,16 @@ const bookService = {
     user_uuid: string
   ): Promise<Book | object> => {
     try {
-      if (book.title.trim() === "") {
-        return { error: "Title is required" };
-      }
-      if (book.synopsis.trim() === "") {
-        return { error: "Synopsis is required" };
+      const validation = await bookValidates(book);
+      if (validation && "error" in validation) {
+        return { error: validation.error };
       }
 
-      if (book.ISBN.trim() === "" || !validator.isISBN(book.ISBN)) {
-        return { error: "ISBN is required" };
+      const userValidation = await validUser(user_uuid);
+      if (userValidation && "error" in userValidation) {
+        return { error: userValidation.error };
       }
 
-      if (book.language.trim() === "" || !validator.isAlpha(book.language)) {
-        return { error: "Language is required" };
-      }
-
-      if (book.price <= 0) {
-        return { error: "Price is required" };
-      }
-
-      if (book.page_count <= 0) {
-        return { error: "Page count is required" };
-      }
-
-      if (book.stock_quantity < 0 || !Number.isInteger(book.stock_quantity)) {
-        return { error: "Stock quantity is required" };
-      }
-
-      if (book.image && !(book.image instanceof Uint8Array)) {
-        return { error: "Valid image is required" };
-      }
-      const releaseDate = new Date(book.release_date);
-      if (isNaN(releaseDate.getTime())) {
-        return { error: "Invalid release date" };
-      }
-
-      if (book.authors.length === 0) {
-        return { error: "Authors are required" };
-      }
-      if (book.genres.length === 0) {
-        return { error: "Genres are required" };
-      }
-
-      if (!user_uuid || typeof user_uuid !== "string") {
-        return { error: "User ID is required" };
-      }
-      const user = await userService.getUserByUUID(user_uuid);
-      if (!user) {
-        return { error: "User not found" };
-      }
-      if (!user.isAdmin) {
-        return { error: "User Unauthorized" };
-      }
-      const existingBook = await prisma.book.findFirst({
-        where: { ISBN: book.ISBN },
-      });
-      if (existingBook) {
-        return { error: "ISBN already exists" };
-      }
       const newBook = await prisma.book.create({
         data: {
           title: book.title,
@@ -80,7 +38,7 @@ const bookService = {
           page_count: book.page_count,
           stock_quantity: book.stock_quantity || 0,
           image: book.image || null,
-          release_date: releaseDate,
+          release_date: new Date(book.release_date),
           stocks: {
             create: {
               quantity: book.stock_quantity || 0,
@@ -175,7 +133,7 @@ const bookService = {
         return { error: "Book not found" };
       }
 
-      return new BookResponseDTO(book);
+      return book;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
@@ -185,67 +143,39 @@ const bookService = {
   updateBook: async (
     uuid: string,
     user_uuid: string,
-    book: UpdateBook
+    bookData: UpdateBook
   ): Promise<Book | object> => {
     try {
-      if (!uuid || typeof uuid !== "string") {
-        return { error: "Invalid UUID" };
+      const userValidation = await validUser(user_uuid);
+      if (userValidation && "error" in userValidation) {
+        return { error: userValidation.error };
       }
 
-      if (!user_uuid || typeof user_uuid !== "string") {
-        return { error: "User ID is required" };
+      const book = await bookExists(uuid);
+      if (book && "error" in book) {
+        return { error: book.error };
       }
-      const user = await userService.getUserByUUID(user_uuid);
-      if (!user) {
-        return { error: "User not found" };
-      }
-      if (!user.isAdmin) {
-        return { error: "User Unauthorized" };
-      }
-      const existingBook = await prisma.book.findUnique({
-        where: { uuid: uuid },
-      });
+      const updatedData: any = await extractBookData(uuid, bookData);
 
-      if (!existingBook) {
-        return { error: "Book not found" };
-      }
-
-      const updatedData: any = {};
-
-      if (book.title && validator.isAscii(book.title)) {
-        updatedData.title = book.title;
-      }
-      if (book.synopsis && validator.isAscii(book.synopsis)) {
-        updatedData.synopsis = book.synopsis;
-      }
-      if (book.ISBN && validator.isISBN(book.ISBN)) {
-        updatedData.ISBN = book.ISBN;
-      }
-      if (book.language && validator.isAlpha(book.language)) {
-        updatedData.language = book.language;
-      }
-      if (book.price && book.price > 0) {
-        updatedData.price = book.price;
-      }
-      if (book.page_count && book.page_count > 0) {
-        updatedData.page_count = book.page_count;
-      }
-      if (book.stock_quantity && book.stock_quantity >= 0) {
-        updatedData.stock_quantity = book.stock_quantity;
-      }
-      if (book.release_date) {
-        const releaseDate = new Date(book.release_date);
-        if (!isNaN(releaseDate.getTime())) {
-          updatedData.release_date = releaseDate;
-        }
-      }
-
-      const bookRecord = await prisma.book.update({
+      await prisma.book.update({
         where: { uuid: uuid },
         data: updatedData,
       });
 
-      return bookRecord;
+      await updateAuthors(book.id, bookData.authors);
+      await updateGenres(book.id, bookData.genres);
+      await updatePublishers(book.id, bookData.publishers);
+
+      const updatedBook = await prisma.book.findUnique({
+        where: { id: book.id },
+        include: {
+          authors: { include: { author: true } },
+          genres: { include: { genre: true } },
+          publishers: { include: { publisher: true } },
+        },
+      });
+
+      return updatedBook as Book;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
@@ -255,31 +185,15 @@ const bookService = {
 
   bookDelete: async (uuid: string, user_uuid: string) => {
     try {
-      if (!uuid || typeof uuid !== "string") {
-        return { error: "Invalid UUID" };
+      const userValidation = await validUser(user_uuid);
+      if (userValidation && "error" in userValidation) {
+        return { error: userValidation.error };
       }
 
-      if (!user_uuid || typeof user_uuid !== "string") {
-        return { error: "User ID is required" };
+      const book = await bookExists(uuid);
+      if (book && "error" in book) {
+        return { error: book.error };
       }
-
-      const user = await userService.getUserByUUID(user_uuid);
-      if (!user) {
-        return { error: "User not found" };
-      }
-
-      if (!user.isAdmin) {
-        return { error: "User Unauthorized" };
-      }
-
-      const book = await prisma.book.findUnique({
-        where: { uuid: uuid },
-      });
-
-      if (!book) {
-        return { error: "Book not found" };
-      }
-
       await prisma.book.delete({
         where: { uuid: uuid },
       });
@@ -294,19 +208,3 @@ const bookService = {
 };
 
 export default bookService;
-/**
-  exemplo de requisição:
-  {
-      "title": "Harry Potter",
-      "synopsis": "Harry Potter is a series of seven fantasy novels written by British author, J. K. Rowling.",
-      "image": "https://www.google.com.br",
-      "language": "English",
-      "price": 50,
-      "ISBN": "978-85-359-0277-8",
-      "page_count": 500,
-      "release_date": "1997-06-26",
-      "genres": [1, 2],
-      "authors": [1],
-      "publisher": [1]
-  }
-*/

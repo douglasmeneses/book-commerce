@@ -15,22 +15,20 @@ export interface RegisterBook {
 
 export interface UpdateBook {
   uuid: string;
-  title: string;
-  synopsis: string;
-  image: Uint8Array<ArrayBufferLike> | null;
-  language: string;
-  price: number;
-  ISBN: string;
-  rating: string;
-  favorite_count: number;
-  page_count: number;
-  release_date: Date;
-  created_at: Date;
-  updated_at: Date;
-  stock_quantity: number;
-  authors: string[];
-  genres: string[];
-  publishers: string[];
+  title?: string;
+  synopsis?: string;
+  image?: Uint8Array;
+  language?: string;
+  price?: number;
+  ISBN?: string;
+  rating?: string;
+  favorite_count?: number;
+  page_count?: number;
+  release_date?: Date;
+  stock_quantity?: number;
+  authors?: string[];
+  genres?: string[];
+  publishers?: string[];
 }
 
 export interface Filter {
