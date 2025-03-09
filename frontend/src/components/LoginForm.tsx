@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
@@ -23,40 +23,13 @@ export default function RegisterPage() {
     <div className="w-full max-w-xl space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-semibold">
-          Registre sua conta na{" "}
+          Entre na sua conta da{" "}
           <span className="text-[#e67e22]">BookStore</span>
         </h1>
       </div>
 
       <Form {...form}>
         <form className="space-y-6">
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <Label htmlFor="username" className="mb-1 block">
-                  Nome{" "}
-                </Label>
-                <FormControl>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                      <User className="h-5 w-5 text-gray-500" />
-                    </div>
-                    <Input
-                      id="username"
-                      className="pl-10 bg-gray-100 border border-gray-300 h-12"
-                      placeholder="João"
-                      type="text"
-                      required
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
           <FormField
             control={form.control}
             name="email"
@@ -126,13 +99,13 @@ export default function RegisterPage() {
             type="submit"
             className="w-full h-12 bg-[#e67e22] hover:bg-[#d35400] text-white font-medium"
           >
-            Cadastrar
+            Login
           </Button>
 
           <div className="text-center text-sm text-gray-500">
-            Já tem uma conta?{" "}
-            <a href="/login" className="text-[#e67e22]">
-              Faça login
+            Não tem uma conta?{" "}
+            <a href="/register" className="text-[#e67e22]">
+              Registre-se
             </a>
           </div>
         </form>
