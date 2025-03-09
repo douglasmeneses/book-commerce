@@ -12,7 +12,9 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.4.1",
-    "express": "^4.21.2"
+    "@types/validator": "^13.12.2",
+    "express": "^4.21.2",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
