@@ -56,15 +56,13 @@ model Review {
   uuid       String   @unique @default(uuid())
   user_id    Int
   book_id    Int
-  cart_id    Int?
   content    String   @db.Text
   rating     Decimal  @default(0.0) @db.Decimal(1, 1)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  book Book  @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  cart Cart? @relation(fields: [cart_id], references: [id], onDelete: SetNull)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
 }
 
 model Order {
@@ -101,7 +99,6 @@ model Cart {
   CartItem CartItem[]
   Book     Book?      @relation(fields: [bookId], references: [id])
   bookId   Int?
-  Review   Review[]
 }
 
 model CartItem {
