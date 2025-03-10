@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import userService from '../services/userService';
-import axios from 'axios'; //consumir auth de Gabriel via http
+import axios from 'axios'; 
 import bcrypt from 'bcryptjs'; 
 
+
+const AUTH_SERVICE_URL = 'http://auth-service:3001/api/auth';
 export const registerUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
@@ -58,9 +60,9 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
-    const authResponse = await axios.post('http://auth-service/login', { email, password }); // URL do serviço externo de validação de Gabriel(modificar depois)
+    const authResponse = await axios.post<{ token: string; error?: boolean }>(`${AUTH_SERVICE_URL}/login`, { email, password }); // URL do serviço externo de validação de Gabriel(modificar depois)
 
-    if (authResponse.data.error) {
+    if ((authResponse.data as { error: boolean }).error) {
       return res.status(500).json({
         error: 'Erro na autenticação',
         message: 'Erro ao autenticar. Tente novamente mais tarde.',
@@ -86,11 +88,12 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
   try {
     const authResponse = await axios.post(
-      'http://auth-service/validate-token', // URL do serviço externo de validação de Gabriel(modificar depois)
+      `${AUTH_SERVICE_URL}/validate-token`, // URL do serviço externo de validação de Gabriel(modificar depois)
       { token }
     );
 
-    if (authResponse.data.error) {
+    const authData = authResponse.data as { error: boolean };
+    if (authData.error) {
       return res.status(401).json({
         error: 'Token inválido',
         message: 'Token não autorizado. Faça login novamente.',
@@ -124,11 +127,12 @@ export const deleteUser = async (req: Request, res: Response) => {
 
   try {
     const authResponse = await axios.post(
-      'http://auth-service/validate-token', // URL do serviço externo de validação de Gabriel(modificar depois)
+      `${AUTH_SERVICE_URL}/validate-token`,// URL do serviço externo de validação de Gabriel(modificar depois)
       { token }
     );
 
-    if (authResponse.data.error) {
+    const authData = authResponse.data as { error: boolean };
+    if (authData.error) {
       return res.status(401).json({
         error: 'Token inválido',
         message: 'Token não autorizado. Faça login novamente.',
@@ -160,8 +164,8 @@ export const updateUserProfile = async (req: Request, res: Response) => {
   const { username, name, email, password, avatar, cpf, phone, address, birth_date } = req.body;
 
   try {
-    const authResponse = await axios.post(
-      'http://auth-service/validate-token', // URL do serviço externo de validação de Gabriel(modificar depois)
+    const authResponse = await axios.post<{ error: boolean }>(
+      `${AUTH_SERVICE_URL}/validate-token`, // URL do serviço externo de validação de Gabriel(modificar depois)
       { token }
     );
 
