@@ -46,7 +46,7 @@ model Credit_card {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, number])
 }
@@ -151,13 +151,14 @@ model Book {
   id             Int      @id @default(autoincrement())
   title          String
   synopsis       String   @db.Text
-  image          Bytes
+  image          Bytes?
   language       String
   price          Decimal
   ISBN           String   @unique
   rating         Decimal  @default(0) @db.Decimal(1, 1)
   favorite_count Int      @default(0)
   page_count     Int
+  stock_quantity Int      @default(0)
   release_date   DateTime
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
@@ -174,16 +175,16 @@ model Book {
 }
 
 model Genre {
-  id         String      @id @default(uuid())
-  name       String
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   books      bookGenre[]
 }
 
 model Author {
-  id            String       @id @default(uuid())
-  name          String
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
   bio           String       @db.Text
   year_of_birth DateTime
   image         Bytes
@@ -193,52 +194,52 @@ model Author {
 }
 
 model Publisher {
-  id         String          @id @default(uuid())
-  name       String
+  id         Int             @id @default(autoincrement())
+  name       String          @unique
   created_at DateTime        @default(now())
   updated_at DateTime        @updatedAt
   books      bookPublisher[]
 }
 
 model bookGenre {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   book_id    Int
-  genre_id   String
+  genre_id   Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  book  Book  @relation(fields: [book_id], references: [id])
-  genre Genre @relation(fields: [genre_id], references: [id])
+  book  Book  @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genre_id], references: [id], onDelete: Cascade)
 }
 
 model bookAuthor {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   book_id    Int
-  author_id  String
+  author_id  Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  book       Book     @relation(fields: [book_id], references: [id])
-  author     Author   @relation(fields: [author_id], references: [id])
+  book       Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  author     Author   @relation(fields: [author_id], references: [id], onDelete: Cascade)
 }
 
 model bookPublisher {
-  id           String    @id @default(uuid())
+  id           Int       @id @default(autoincrement())
   book_id      Int
-  publisher_id String
+  publisher_id Int
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
-  book         Book      @relation(fields: [book_id], references: [id])
-  publisher    Publisher @relation(fields: [publisher_id], references: [id])
+  book         Book      @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  publisher    Publisher @relation(fields: [publisher_id], references: [id], onDelete: Cascade)
 }
 
 model Stock {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   book_id    Int
   quantity   Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  book Book @relation(fields: [book_id], references: [id])
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
 }
 
 model Favorites {
@@ -248,8 +249,8 @@ model Favorites {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user User @relation(fields: [user_id], references: [id])
-  book Book @relation(fields: [book_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, book_id])
 }
