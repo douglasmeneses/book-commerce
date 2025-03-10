@@ -32,9 +32,9 @@ model User {
   Review      Review[]
   Order       Order[]
   Cart        Cart[]
-  Adress      Adress[]
-  userAdress  userAdress[]
-  Credit_card Credit_card[]
+  address     Address[]
+  userAddress userAddress[]
+  creditCard  Credit_card[]
 }
 
 model Credit_card {
@@ -56,8 +56,8 @@ model Review {
   uuid       String   @unique @default(uuid())
   user_id    Int
   book_id    Int
-  rating     Decimal
   content    String   @db.Text
+  rating     Decimal  @default(0.0) @db.Decimal(1, 1)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -91,6 +91,7 @@ model OrderItem {
 model Cart {
   id         Int      @id @default(autoincrement())
   user_id    Int
+  totalPrice Decimal  @default(0.00) @db.Decimal(10, 2)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -105,6 +106,7 @@ model CartItem {
   cart_id    Int
   book_id    Int
   quantity   Int
+  price      Decimal  @db.Decimal(10, 2)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -112,7 +114,7 @@ model CartItem {
   book Book @relation(fields: [book_id], references: [id])
 }
 
-model Adress {
+model Address {
   id           Int      @id @default(autoincrement())
   user_id      Int
   street       String
@@ -126,19 +128,19 @@ model Adress {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  user       User         @relation(fields: [user_id], references: [id])
-  userAdress userAdress[]
+  user        User          @relation(fields: [user_id], references: [id])
+  userAddress userAddress[]
 }
 
-model userAdress {
+model userAddress {
   id         String   @id @default(uuid())
   user_id    Int
-  adress_id  Int
+  address_id Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user   User   @relation(fields: [user_id], references: [id])
-  adress Adress @relation(fields: [adress_id], references: [id])
+  user    User    @relation(fields: [user_id], references: [id])
+  address Address @relation(fields: [address_id], references: [id])
 }
 
 model Book {
@@ -228,7 +230,7 @@ model bookPublisher {
 }
 
 model Stock {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   book_id    Int
   quantity   Int
   created_at DateTime @default(now())
