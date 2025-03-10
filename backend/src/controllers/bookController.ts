@@ -26,6 +26,8 @@ const bookController = {
         title: req.query.title as string,
         mostLiked: req.query.mostLiked === "true",
         mostRecent: req.query.mostRecent === "true",
+        page: parseInt(req.query.page as string) || 1,
+        limit: parseInt(req.query.limit as string) || 10,
       };
 
       const response = await bookService.getBooks(filter);

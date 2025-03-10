@@ -90,7 +90,8 @@ const bookService = {
     }
   },
   getBooks: async (filter: Filter): Promise<Book[] | object> => {
-    const { title, mostLiked, mostRecent } = filter;
+    const { title, mostLiked, mostRecent, page, limit } = filter;
+    const skip = page && limit ? (page - 1) * limit : 0;
     try {
       const books = await prisma.book.findMany({
         where: {
@@ -104,6 +105,8 @@ const bookService = {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
         },
+        take: limit,
+        skip: skip,
       });
       return books;
     } catch (error) {

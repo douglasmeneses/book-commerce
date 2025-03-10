@@ -35,6 +35,8 @@ export interface Filter {
   title?: string;
   mostLiked?: boolean;
   mostRecent?: boolean;
+  page?: number;
+  limit?: number;
 }
 
 export interface error {
