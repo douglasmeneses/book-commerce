@@ -90,24 +90,74 @@ const bookService = {
     }
   },
   getBooks: async (filter: Filter): Promise<Book[] | object> => {
-    const { title, mostLiked, mostRecent, page, limit } = filter;
+    const {
+      search,
+      author,
+      genre,
+      publisher,
+      isbn,
+      mostLiked,
+      mostRecent,
+      orderByPrice,
+      minPrice,
+      maxPrice,
+      page,
+      limit,
+    } = filter;
+
     const skip = page && limit ? (page - 1) * limit : 0;
+
     try {
       const books = await prisma.book.findMany({
         where: {
-          title: title ? { contains: title, mode: "insensitive" } : undefined,
+          title: search ? { contains: search, mode: "insensitive" } : undefined,
+          authors: author
+            ? {
+                some: {
+                  author: {
+                    name: { contains: author, mode: "insensitive" },
+                  },
+                },
+              }
+            : undefined,
+          genres: genre
+            ? {
+                some: {
+                  genre: {
+                    name: { contains: genre, mode: "insensitive" },
+                  },
+                },
+              }
+            : undefined,
+          publishers: publisher
+            ? {
+                some: {
+                  publisher: {
+                    name: { contains: publisher, mode: "insensitive" },
+                  },
+                },
+              }
+            : undefined,
+          ISBN: isbn ? { contains: isbn, mode: "insensitive" } : undefined,
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
+          },
         },
         orderBy: [
           mostLiked ? { favorite_count: "desc" } : {},
           mostRecent ? { created_at: "desc" } : {},
+          orderByPrice ? { price: orderByPrice } : {},
         ],
         include: {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
+          publishers: { include: { publisher: true } },
         },
         take: limit,
         skip: skip,
       });
+
       return books;
     } catch (error) {
       return {
