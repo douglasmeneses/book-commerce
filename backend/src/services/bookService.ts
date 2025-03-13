@@ -1,4 +1,4 @@
-import { RegisterBook, Filter, UpdateBook } from "../types/bookTypes";
+import { RegisterBook, Filter, UpdateBook, error } from "../types/bookTypes";
 import { Book, PrismaClient } from "@prisma/client";
 import {
   bookExists,
@@ -161,11 +161,11 @@ const bookService = {
     }
   },
   getBookById: async (
-    uuid: string,
-    user_uuid?: string
+    id: number,
+    user_uuid: string
   ): Promise<Book | object> => {
-    if (!uuid || typeof uuid !== "string") {
-      return { error: "Invalid UUID" };
+    if (!id || typeof id !== "number") {
+      return { error: "Invalid ID" };
     }
 
     if (user_uuid && typeof user_uuid !== "string") {
@@ -179,7 +179,7 @@ const bookService = {
     try {
       const book = await prisma.book.findUnique({
         where: {
-          uuid: uuid,
+          id: id,
         },
         include: {
           authors: { include: { author: true } },
@@ -200,7 +200,11 @@ const bookService = {
       };
     }
   },
-  getBookByUUID: async (uuid: string): Promise<Book | null> => {
+  getBookByUUID: async (uuid: string): Promise<Book | error> => {
+    if (!uuid || typeof uuid !== "string") {
+      return { error: "Invalid UUID" };
+    }
+
     const book = await prisma.book.findUnique({
       where: { uuid: uuid },
       include: {
@@ -211,7 +215,7 @@ const bookService = {
     });
 
     if (!book) {
-      return null;
+      return { error: "Book not found" };
     }
 
     return book;

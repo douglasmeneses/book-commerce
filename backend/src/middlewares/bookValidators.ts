@@ -37,7 +37,7 @@ export const bookExists = async (uuid: string): Promise<error | Book> => {
     return { error: "Book ID is required" };
 
   const book = await bookService.getBookByUUID(uuid);
-  if (!book) return { error: "Book not found" };
+  if ("error" in book) return { error: "Book not found" };
 
   return book;
 };
