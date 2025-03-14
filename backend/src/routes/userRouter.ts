@@ -1,22 +1,27 @@
-import { Router, Request, Response } from "express";
-import userController from "../controllers/userController";
+import { Router, Request, Response } from 'express';
+import * as userController from '../controllers/userController'; 
 
 const router = Router();
 
-router.post("/", (req: Request, res: Response) => {
-  userController.register(req, res);
+router.post('/register', (req: Request, res: Response) => {
+  userController.registerUser(req, res);
 });
-router.post("/login", (req: Request, res: Response) => {
-    userController.login(req, res);
-})
-router.get("/:uuid", (req: Request, res: Response) => {
-    userController.getProfile(req, res)
-})
-router.put("/:uuid", (req: Request, res: Response) =>{
-    userController.updateProfile(req, res)
-})
-router.get("/:uuid", (req: Request, res: Response) => {
-    userController.deleteProfile(req, res)
-})
+
+// Rota de login de usuário
+router.post('/login', (req: Request, res: Response) => {
+  userController.loginUser(req, res);
+});
+
+router.get('/:uuid', (req: Request, res: Response) => {
+  userController.getUserProfile(req, res);
+});
+
+router.put('/:uuid', (req: Request, res: Response) => {
+  userController.updateUserProfile(req, res);
+});
+
+router.delete('/:uuid', (req: Request, res: Response) => {
+  userController.deleteUser(req, res);
+});
 
 export default router;
