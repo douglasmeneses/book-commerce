@@ -8,7 +8,6 @@ export interface RegisterUser {
 export interface UpdateUser {
   name?: string;
   username?: string;
-  email?: string;
   password?: string;
   avatar?: Uint8Array;
   birth_date?: Date;
