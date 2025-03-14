@@ -160,22 +160,11 @@ const bookService = {
       };
     }
   },
-  getBookById: async (
-    id: number,
-    user_uuid: string
-  ): Promise<Book | object> => {
+  getBookById: async (id: number): Promise<Book | object> => {
     if (!id || typeof id !== "number") {
       return { error: "Invalid ID" };
     }
 
-    if (user_uuid && typeof user_uuid !== "string") {
-      return { error: "Invalid UUID" };
-    }
-
-    const user = user_uuid && (await userExists(user_uuid));
-    if (user && "error" in user) {
-      return { error: user.error };
-    }
     try {
       const book = await prisma.book.findUnique({
         where: {
@@ -185,7 +174,6 @@ const bookService = {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
           publishers: { include: { publisher: true } },
-          favorites: user ? { where: { user_id: user.id } } : undefined,
         },
       });
 
@@ -200,9 +188,20 @@ const bookService = {
       };
     }
   },
-  getBookByUUID: async (uuid: string): Promise<Book | error> => {
+  getBookByUUID: async (
+    uuid: string,
+    user_uuid?: string
+  ): Promise<Book | error> => {
     if (!uuid || typeof uuid !== "string") {
       return { error: "Invalid UUID" };
+    }
+    if (user_uuid && typeof user_uuid !== "string") {
+      return { error: "Invalid UUID" };
+    }
+
+    const user = user_uuid && (await userExists(user_uuid));
+    if (user && "error" in user) {
+      return { error: user.error };
     }
 
     const book = await prisma.book.findUnique({
@@ -211,6 +210,7 @@ const bookService = {
         authors: { include: { author: true } },
         genres: { include: { genre: true } },
         publishers: { include: { publisher: true } },
+        favorites: user ? { where: { user_id: user.id } } : undefined,
       },
     });
 
