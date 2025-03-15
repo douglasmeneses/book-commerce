@@ -5,7 +5,7 @@ export interface RegisterBook {
   price: number;
   ISBN: string;
   page_count: number;
-  image?: Uint8Array<ArrayBufferLike>;
+  image?: Buffer;
   release_date: Date;
   stock_quantity: number;
   authors: string[];
@@ -17,7 +17,7 @@ export interface UpdateBook {
   uuid: string;
   title?: string;
   synopsis?: string;
-  image?: Uint8Array;
+  image?: Buffer;
   language?: string;
   price?: number;
   ISBN?: string;
