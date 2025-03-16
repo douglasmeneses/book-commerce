@@ -5,11 +5,7 @@ import bcrypt from "bcryptjs";
 
 
 const AUTH_SERVICE_URL = "http://localhost:3001/api/auth";
-//registerUser passed
-//loginUser passed
-//deleteUser passed
-//getUserProfile passed
-//ajuste em updateUserProfile para data e avatar
+
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, username, email, password } = req.body;
