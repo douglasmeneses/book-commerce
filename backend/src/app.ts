@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bookRouter from "./routes/bookRouter";
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 

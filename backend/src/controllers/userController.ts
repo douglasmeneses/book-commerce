@@ -4,7 +4,7 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 
 
-const AUTH_SERVICE_URL = "http://localhost:3001/api/auth";
+const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
 
 
 export const registerUser = async (req: Request, res: Response) => {
