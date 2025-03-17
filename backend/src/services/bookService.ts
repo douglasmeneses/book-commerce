@@ -4,11 +4,12 @@ import {
   bookExists,
   bookValidates,
   extractBookData,
-  updateAuthors,
-  updateGenres,
-  updatePublishers,
 } from "../middlewares/bookValidators";
+import { updateAuthors } from "./authorService";
+import { updateGenres } from "./genreService";
+import { updatePublishers } from "./publisherService";
 import { userExists, validUser } from "../middlewares/userValidators";
+import { get } from "http";
 
 const prisma = new PrismaClient();
 
@@ -107,58 +108,52 @@ const bookService = {
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    try {
-      const books = await prisma.book.findMany({
-        where: {
-          title: search ? { contains: search, mode: "insensitive" } : undefined,
-          authors: author
-            ? {
-                some: {
-                  author: {
-                    name: { contains: author, mode: "insensitive" },
-                  },
-                },
-              }
-            : undefined,
-          genres: genre
-            ? {
-                some: {
-                  genre: {
-                    name: { contains: genre, mode: "insensitive" },
-                  },
-                },
-              }
-            : undefined,
-          publishers: publisher
-            ? {
-                some: {
-                  publisher: {
-                    name: { contains: publisher, mode: "insensitive" },
-                  },
-                },
-              }
-            : undefined,
-          ISBN: isbn ? { contains: isbn, mode: "insensitive" } : undefined,
-          price: {
-            gte: minPrice,
-            lte: maxPrice,
-          },
+    const where: any = {
+      title: search ? { contains: search, mode: "insensitive" } : undefined,
+      ISBN: isbn ? { contains: isbn, mode: "insensitive" } : undefined,
+      price: {
+        gte: minPrice,
+        lte: maxPrice,
+      },
+    };
+
+    if (author) {
+      where.authors = {
+        some: { author: { name: { contains: author, mode: "insensitive" } } },
+      };
+    }
+
+    if (genre) {
+      where.genres = {
+        some: { genre: { name: { contains: genre, mode: "insensitive" } } },
+      };
+    }
+
+    if (publisher) {
+      where.publishers = {
+        some: {
+          publisher: { name: { contains: publisher, mode: "insensitive" } },
         },
-        orderBy: [
-          mostLiked ? { favorite_count: "desc" } : {},
-          mostRecent ? { created_at: "desc" } : {},
-          orderByPrice ? { price: orderByPrice } : {},
-        ],
+      };
+    }
+
+    const orderBy: any[] = [];
+    if (mostLiked) orderBy.push({ favorite_count: "desc" });
+    if (mostRecent) orderBy.push({ created_at: "desc" });
+    if (orderByPrice) orderBy.push({ price: orderByPrice });
+
+    try {
+      return await prisma.book.findMany({
+        where,
+        orderBy,
         include: {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
           publishers: { include: { publisher: true } },
         },
         take: limit,
-        skip: skip,
+        skip,
       });
-
-      return books;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
@@ -204,6 +199,38 @@ const bookService = {
         error: error instanceof Error ? error.message : "An error occurred",
       };
     }
+  },
+  getBookByUUID: async (uuid: string): Promise<Book | null> => {
+    const book = await prisma.book.findUnique({
+      where: { uuid: uuid },
+      include: {
+        authors: { include: { author: true } },
+        genres: { include: { genre: true } },
+        publishers: { include: { publisher: true } },
+      },
+    });
+
+    if (!book) {
+      return null;
+    }
+
+    return book;
+  },
+  getBookByISBN: async (isbn: string): Promise<Book | null> => {
+    const book = await prisma.book.findFirst({
+      where: { ISBN: isbn },
+      include: {
+        authors: { include: { author: true } },
+        genres: { include: { genre: true } },
+        publishers: { include: { publisher: true } },
+      },
+    });
+
+    if (!book) {
+      return null;
+    }
+
+    return book;
   },
   updateBook: async (
     uuid: string,
