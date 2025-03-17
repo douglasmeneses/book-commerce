@@ -8,7 +8,7 @@ import {
   updateGenres,
   updatePublishers,
 } from "../middlewares/bookValidators";
-import { validUser } from "../middlewares/userValidators";
+import { userExists, validUser } from "../middlewares/userValidators";
 
 const prisma = new PrismaClient();
 
@@ -90,21 +90,74 @@ const bookService = {
     }
   },
   getBooks: async (filter: Filter): Promise<Book[] | object> => {
-    const { title, mostLiked, mostRecent } = filter;
+    const {
+      search,
+      author,
+      genre,
+      publisher,
+      isbn,
+      mostLiked,
+      mostRecent,
+      orderByPrice,
+      minPrice,
+      maxPrice,
+      page,
+      limit,
+    } = filter;
+
+    const skip = page && limit ? (page - 1) * limit : 0;
+
     try {
       const books = await prisma.book.findMany({
         where: {
-          title: title ? { contains: title, mode: "insensitive" } : undefined,
+          title: search ? { contains: search, mode: "insensitive" } : undefined,
+          authors: author
+            ? {
+                some: {
+                  author: {
+                    name: { contains: author, mode: "insensitive" },
+                  },
+                },
+              }
+            : undefined,
+          genres: genre
+            ? {
+                some: {
+                  genre: {
+                    name: { contains: genre, mode: "insensitive" },
+                  },
+                },
+              }
+            : undefined,
+          publishers: publisher
+            ? {
+                some: {
+                  publisher: {
+                    name: { contains: publisher, mode: "insensitive" },
+                  },
+                },
+              }
+            : undefined,
+          ISBN: isbn ? { contains: isbn, mode: "insensitive" } : undefined,
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
+          },
         },
         orderBy: [
           mostLiked ? { favorite_count: "desc" } : {},
           mostRecent ? { created_at: "desc" } : {},
+          orderByPrice ? { price: orderByPrice } : {},
         ],
         include: {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
+          publishers: { include: { publisher: true } },
         },
+        take: limit,
+        skip: skip,
       });
+
       return books;
     } catch (error) {
       return {
@@ -112,11 +165,22 @@ const bookService = {
       };
     }
   },
-  getBookById: async (uuid: string): Promise<Book | object> => {
+  getBookById: async (
+    uuid: string,
+    user_uuid?: string
+  ): Promise<Book | object> => {
     if (!uuid || typeof uuid !== "string") {
       return { error: "Invalid UUID" };
     }
 
+    if (user_uuid && typeof user_uuid !== "string") {
+      return { error: "Invalid UUID" };
+    }
+
+    const user = user_uuid && (await userExists(user_uuid));
+    if (user && "error" in user) {
+      return { error: user.error };
+    }
     try {
       const book = await prisma.book.findUnique({
         where: {
@@ -126,6 +190,7 @@ const bookService = {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
           publishers: { include: { publisher: true } },
+          favorites: user ? { where: { user_id: user.id } } : undefined,
         },
       });
 
@@ -199,6 +264,38 @@ const bookService = {
       });
 
       return { message: "Book deleted successfully" };
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+  bookFavorite: async (uuid: string, user_uuid: string) => {
+    try {
+      const book = await bookExists(uuid);
+      if (book && "error" in book) {
+        return { error: book.error };
+      }
+      const user = await userExists(user_uuid);
+      if (user && "error" in user) {
+        return { error: user.error };
+      }
+
+      const favorite = await prisma.favorites.findFirst({
+        where: { user_id: user.id, book_id: book.id },
+      });
+
+      if (!favorite) {
+        await prisma.book.update({
+          where: { id: book.id },
+          data: { favorite_count: book.favorite_count - 1 },
+        });
+      } else {
+        await prisma.book.update({
+          where: { id: book.id },
+          data: { favorite_count: book.favorite_count + 1 },
+        });
+      }
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",

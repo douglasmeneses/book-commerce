@@ -32,9 +32,18 @@ export interface UpdateBook {
 }
 
 export interface Filter {
-  title?: string;
+  search?: string;
+  author?: string;
+  genre?: string;
+  publisher?: string;
+  isbn?: string;
   mostLiked?: boolean;
   mostRecent?: boolean;
+  orderByPrice?: "asc" | "desc";
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface error {
