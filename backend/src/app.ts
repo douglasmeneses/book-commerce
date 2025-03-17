@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import bookRouter from "./routes/bookRouter";
 import favoriteRouter from "./routes/favoriteRouter";
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 
