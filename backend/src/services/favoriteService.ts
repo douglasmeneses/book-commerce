@@ -1,0 +1,73 @@
+import { Favorites, PrismaClient } from "@prisma/client";
+import { bookExists } from "../middlewares/bookValidators";
+import { userExists } from "../middlewares/userValidators";
+import bookService from "./bookService";
+import { error, Filter } from "../types/bookTypes";
+
+const prisma = new PrismaClient();
+
+const favoriteService = {
+  favoriteBook: async (
+    book_uuid: string,
+    user_uuid: string
+  ): Promise<error | Favorites | null> => {
+    try {
+      const user = await userExists(user_uuid);
+      if ("error" in user) {
+        return { error: user.error };
+      }
+
+      const book = await bookExists(book_uuid);
+      if ("error" in book) {
+        return { error: book.error };
+      }
+
+      const favorite = await prisma.favorites.findFirst({
+        where: { book_id: book.id, user_id: user.id },
+      });
+
+      if (!favorite) {
+        const favorited = await prisma.favorites.create({
+          data: {
+            book_id: book.id,
+            user_id: user.id,
+          },
+        });
+        await bookService.bookFavorite(book_uuid, user_uuid);
+        return favorited;
+      } else {
+        await prisma.favorites.delete({
+          where: { user_id_book_id: { user_id: user.id, book_id: book.id } },
+        });
+        await bookService.bookFavorite(book_uuid, user_uuid);
+        return null;
+      }
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+  getFavorites: async (username: string) => {
+    try {
+      const user = await userExists(username);
+      if ("error" in user) {
+        return { error: user.error };
+      }
+
+      const favorites = await prisma.favorites.findMany({
+        where: { user_id: user.id },
+        include: { book: true },
+        orderBy: { created_at: "desc" },
+      });
+
+      return favorites;
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+};
+
+export default favoriteService;
