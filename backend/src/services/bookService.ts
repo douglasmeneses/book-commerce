@@ -161,6 +161,7 @@ const bookService = {
     }
   },
   getBookById: async (id: number): Promise<Book | error> => {
+
     if (!id || typeof id !== "number") {
       return { error: "Invalid ID" };
     }
