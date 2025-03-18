@@ -105,7 +105,7 @@ export default function Home() {
         </section>
         <section id="catalog" className="flex flex-col pt-40">
           <ul className="flex mt-2 gap-10">
-            <h1 className="font-bold text-2xl w-2/6 mr-10 leading-none">
+            <h1 className="font-bold text-2xl w-2/6  pl-16 leading-none">
               Mais curtidos
             </h1>
             <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
