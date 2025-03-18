@@ -41,7 +41,7 @@ export default function Home() {
           setMostRecentBooks(mostRecentBooks);
         }
       } catch (error) {
-        console.error("Erro ao buscar livros:", error);
+        console.log("Erro ao buscar livros:", error);
       } finally {
         setLoading(false);
       }
@@ -60,7 +60,15 @@ export default function Home() {
               Em nossa loja você encontra um livro para todos os gostos. Grande
               variedade. Preços agradáveis. Histórias interessantes.
             </p>
-            <Button className="w-1/4 text-base mt-4 h-12 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold">
+            <Button
+              className="w-1/4 text-base mt-4 h-12 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold transition transform active:scale-95"
+              onClick={() => {
+                const catalogSection = document.getElementById("catalog");
+                if (catalogSection) {
+                  catalogSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
               Veja nosso catálogo
             </Button>
           </div>
@@ -95,7 +103,7 @@ export default function Home() {
             />
           </div>
         </section>
-        <section className="flex flex-col mt-40">
+        <section id="catalog" className="flex flex-col pt-40">
           <ul className="flex mt-2 gap-10">
             <h1 className="font-bold text-2xl w-2/6 mr-10 leading-none">
               Mais curtidos
@@ -192,7 +200,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="flex flex-col mt-40">
+        <section className="flex flex-col mt-20">
           <h1 className="font-bold text-2xl leading-none mt-10 w-full text-center">
             Mais recentes
           </h1>
