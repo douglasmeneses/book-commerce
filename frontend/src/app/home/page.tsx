@@ -1,25 +1,25 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import NavBar from "@/components/NavBar";
 
 export default function Home() {
   return (
     <>
-      {/* <header>
-        <nav></nav>
-      </header> */}
+      <NavBar />
       <main className="min-h-screen p-40">
         <section className="flex items-center justify-center">
           <div className="flex flex-col">
             <h1 className="font-bold text-4xl">Bem vindo à BookStore</h1>
-            <p className="font-light text-xl w-3/4 mt-4">
+            <p className="font-light text-xl w-3/4 mt-4 text-[13px] font-semibold w-[350px]">
               Em nossa loja você encontra um livro para todos os gostos. Grande
               variedade. Preços agradáveis. Histórias interessantes.
             </p>
-            <Button className="w-1/4 text-base mt-4 h-12 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold">
+            <Button className="w-1/4 text-base mt-4 h-12 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold px-[100px]">
               Veja nosso catálogo
             </Button>
           </div>
-          <div className="relative flex">
+          <div className="flex ml-[140px]">
             <Image
               className="relative top-16 z-10"
               src="/livro-1.png"
