@@ -12,6 +12,10 @@ router.get("/", (req: Request, res: Response) => {
   bookController.getBooks(req, res);
 });
 
+router.get("/search", (req: Request, res: Response) => {
+  bookController.searchBook(req, res);
+});
+
 router.get("/:uuid", (req: Request, res: Response) => {
   bookController.getBookByUUID(req, res);
 });
@@ -23,4 +27,5 @@ router.put("/:uuid", (req: Request, res: Response) => {
 router.delete("/:uuid", (req: Request, res: Response) => {
   bookController.bookDelete(req, res);
 });
+
 export default router;

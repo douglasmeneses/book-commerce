@@ -9,7 +9,7 @@ const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, username, email, password } = req.body;
-
+  
   try {
     const existingUser = await userService.getUserByEmail(email);
     if (existingUser) {

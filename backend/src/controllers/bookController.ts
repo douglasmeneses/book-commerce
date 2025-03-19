@@ -103,6 +103,23 @@ const bookController = {
       });
     }
   },
+
+  searchBook: async (req: Request, res: Response) => {
+    const search = req.query.search as string;
+
+    if (!search || typeof search !== "string") {
+      return res.status(400).json({ error: "A valid search query is required" });
+    }
+
+    try {
+      const response = await bookService.searchBook(search);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(400).json({
+        error: error instanceof Error ? error.message : "An error occurred on search",
+      });
+    }
+  }
 };
 
 export default bookController;

@@ -7,7 +7,6 @@ router.post('/register', (req: Request, res: Response) => {
   userController.registerUser(req, res);
 });
 
-// Rota de login de usuário
 router.post('/login', (req: Request, res: Response) => {
   userController.loginUser(req, res);
 });

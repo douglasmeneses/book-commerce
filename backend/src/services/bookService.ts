@@ -161,7 +161,6 @@ const bookService = {
     }
   },
   getBookById: async (id: number): Promise<Book | error> => {
-
     if (!id || typeof id !== "number") {
       return { error: "Invalid ID" };
     }
@@ -328,6 +327,55 @@ const bookService = {
           data: { favorite_count: book.favorite_count + 1 },
         });
       }
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+
+  searchBook: async (search: string) => {
+    try {
+      const searchResult = await prisma.book.findMany({
+        where: {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { synopsis: { contains: search, mode: "insensitive" } },
+            { ISBN: { contains: search, mode: "insensitive" } },
+            { language: { contains: search, mode: "insensitive" } },
+            {
+              authors: {
+                some: {
+                  author: { name: { contains: search, mode: "insensitive" } },
+                },
+              },
+            },
+            {
+              genres: {
+                some: {
+                  genre: { name: { contains: search, mode: "insensitive" } },
+                },
+              },
+            },
+            {
+              publishers: {
+                some: {
+                  publisher: {
+                    name: { contains: search, mode: "insensitive" },
+                  },
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          authors: { include: { author: true } },
+          genres: { include: { genre: true } },
+          publishers: { include: { publisher: true } },
+        },
+      });
+
+      return searchResult;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
