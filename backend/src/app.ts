@@ -3,7 +3,8 @@ import cors from "cors";
 import bookRouter from "./routes/bookRouter";
 import favoriteRouter from "./routes/favoriteRouter";
 import cartRouter from "./routes/cartRouter";
-const PORT = process.env.PORT || 3000;
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 
