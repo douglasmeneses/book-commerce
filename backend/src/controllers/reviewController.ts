@@ -41,6 +41,26 @@ const reviewController = {
       });
     }
   },
+
+  deleteReview: async (req: Request, res: Response) => {
+    const { review_uuid } = req.params;
+
+    try {
+      const deletedReview = await reviewService.deleteReview(review_uuid);
+
+      if ("error" in deletedReview) {
+        return res.status(deletedReview.error).json({
+          message: deletedReview.message,
+        });
+      }
+
+      return res.status(200).json(deletedReview);
+    } catch (error) {
+      return res.status(500).json({
+        message: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  },
 };
 
 export default reviewController;

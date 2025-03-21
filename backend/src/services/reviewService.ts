@@ -114,6 +114,40 @@ const reviewService = {
       };
     }
   },
+
+  deleteReview: async (
+    review_uuid: string
+  ): Promise<{ message: string } | { error: number; message: string }> => {
+    try {
+      const review = await prisma.review.findFirst({
+        where: { uuid: review_uuid },
+      });
+
+      if (!review) return { message: "Review not found", error: 404 };
+
+      await prisma.review.delete({ where: { uuid: review_uuid } });
+
+      const allReviews = await prisma.review.findMany({
+        where: { book_id: review.book_id },
+      });
+
+      const averageRating =
+        allReviews.reduce((acc, review) => acc + Number(review.rating), 0) /
+        allReviews.length;
+
+      await prisma.book.update({
+        where: { id: review.book_id },
+        data: { rating: averageRating },
+      });
+
+      return { message: "Review deleted successfully" };
+    } catch (error) {
+      return {
+        message: error instanceof Error ? error.message : "An error occurred",
+        error: 500,
+      };
+    }
+  },
 };
 
 export default reviewService;
