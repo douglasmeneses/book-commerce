@@ -14,3 +14,15 @@ export interface ReviewWithUser {
     avatar: Uint8Array | null;
   };
 }
+
+export interface newReview {
+  book_id: number;
+  user_id: number;
+  content: string;
+  rating: number;
+}
+
+export interface CreateReview {
+  message: string;
+  data: newReview;
+}
