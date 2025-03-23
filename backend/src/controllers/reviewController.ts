@@ -28,8 +28,17 @@ const reviewController = {
   getReviews: async (req: Request, res: Response) => {
     const { book_uuid } = req.params;
 
+    const filter = {
+      limit: req.query.limit ? Number(req.query.limit) : 10,
+      offset: req.query.offset ? Number(req.query.offset) : 0,
+      byRating: req.query.byRating ? Number(req.query.byRating) : undefined,
+      orderBy: ["asc", "desc"].includes(req.query.orderBy as string)
+        ? (req.query.orderBy as "asc" | "desc")
+        : "desc",
+    };
+
     try {
-      const reviews = await reviewService.getReviews(book_uuid);
+      const reviews = await reviewService.getReviews(book_uuid, filter);
 
       if ("error" in reviews) {
         return res.status(reviews.error).json({ message: reviews.message });

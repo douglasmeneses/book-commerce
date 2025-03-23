@@ -58,7 +58,13 @@ const reviewService = {
   },
 
   getReviews: async (
-    book_uuid: string
+    book_uuid: string,
+    filter: {
+      limit: number;
+      offset: number;
+      byRating?: number;
+      orderBy: "asc" | "desc";
+    }
   ): Promise<ReviewWithUser[] | { error: number; message: string }> => {
     try {
       const bookExists = await prisma.book.findFirst({
@@ -68,8 +74,13 @@ const reviewService = {
       if (!bookExists) return { message: "Book not found", error: 404 };
 
       const reviews = await prisma.review.findMany({
-        where: { book: { uuid: book_uuid } },
-        orderBy: { created_at: "desc" },
+        where: {
+          book: { uuid: book_uuid },
+          ...(filter.byRating !== undefined && { rating: filter.byRating }),
+        },
+        orderBy: { created_at: filter.orderBy },
+        skip: filter.offset,
+        take: filter.limit,
         include: {
           user: {
             select: {
