@@ -12,6 +12,10 @@ router.get("/:book_uuid", (req: Request, res: Response) => {
   reviewController.getReviews(req, res);
 });
 
+router.put("/:review_uuid", (req: Request, res: Response) => {
+  reviewController.updateReview(req, res);
+});
+
 router.delete("/:review_uuid", (req: Request, res: Response) => {
   reviewController.deleteReview(req, res);
 });

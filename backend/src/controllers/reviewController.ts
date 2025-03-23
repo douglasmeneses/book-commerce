@@ -27,6 +27,7 @@ const reviewController = {
 
   getReviews: async (req: Request, res: Response) => {
     const { book_uuid } = req.params;
+
     try {
       const reviews = await reviewService.getReviews(book_uuid);
 
@@ -35,6 +36,31 @@ const reviewController = {
       }
 
       return res.status(200).json(reviews);
+    } catch (error) {
+      return res.status(500).json({
+        message: error instanceof Error ? error.message : "An error occurred",
+      });
+    }
+  },
+
+  updateReview: async (req: Request, res: Response) => {
+    const { review_uuid } = req.params;
+    const { review, rating } = req.body;
+
+    try {
+      const updatedReview = await reviewService.updateReview(
+        review_uuid,
+        review,
+        rating
+      );
+
+      if ("error" in updatedReview) {
+        return res.status(updatedReview.error).json({
+          message: updatedReview.message,
+        });
+      }
+
+      return res.status(200).json(updatedReview);
     } catch (error) {
       return res.status(500).json({
         message: error instanceof Error ? error.message : "An error occurred",
