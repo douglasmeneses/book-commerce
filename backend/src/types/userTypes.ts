@@ -9,7 +9,7 @@ export interface UpdateUser {
   name?: string;
   username?: string;
   password?: string;
-  avatar?: Uint8Array;
+  avatar?: Buffer;
   birth_date?: Date;
   cpf?: string;
   phone?: string;
