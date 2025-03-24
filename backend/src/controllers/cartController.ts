@@ -1,20 +1,23 @@
 import { Request, Response } from "express";
 import cartService from "../services/cartService";
+import { processCartItems } from "../utils/cartUtils";
 
 const cartController = {
   addBookToCart: async (req: Request, res: Response) => {
     try {
       const user_uuid = req.params.user_uuid as string;
       const { book_uuid, quantity } = req.body;
+
       const cart = await cartService.addBookToCart(
         user_uuid,
         book_uuid,
         quantity
       );
-      if ("error" in cart) {
-        return res.status(400).json({ error: cart.error });
-      }
-      return res.json(cart);
+      if ("error" in cart) return res.status(400).json({ error: cart.error });
+
+      const cartItems = await processCartItems(cart.CartItem);
+
+      return res.json({ ...cart, CartItem: cartItems });
     } catch (error) {
       return res
         .status(500)
@@ -34,10 +37,11 @@ const cartController = {
         cartItem_id,
         quantity
       );
-      if ("error" in cart) {
-        return res.status(400).json({ error: cart.error });
-      }
-      return res.json(cart);
+      if ("error" in cart) return res.status(400).json({ error: cart.error });
+
+      const cartItems = await processCartItems(cart.CartItem);
+
+      return res.json({ ...cart, CartItem: cartItems });
     } catch (error) {
       return res
         .status(500)
@@ -48,10 +52,11 @@ const cartController = {
     try {
       const user_uuid = req.params.user_uuid as string;
       const cart = await cartService.getCartByUser_UUID(user_uuid);
-      if ("error" in cart) {
-        return res.status(400).json({ error: cart.error });
-      }
-      return res.json(cart);
+      if ("error" in cart) return res.status(400).json({ error: cart.error });
+
+      const cartItems = await processCartItems(cart.CartItem);
+
+      return res.json({ ...cart, CartItem: cartItems });
     } catch (error) {
       return res
         .status(500)
@@ -67,10 +72,12 @@ const cartController = {
       };
 
       const cart = await cartService.deleteCartItem(user_uuid, id, cartItem_id);
-      if ("error" in cart) {
-        return res.status(400).json({ error: cart.error });
-      }
-      return res.json(cart);
+
+      if ("error" in cart) return res.status(400).json({ error: cart.error });
+
+      const cartItems = await processCartItems(cart.CartItem);
+
+      return res.json({ ...cart, CartItem: cartItems });
     } catch (error) {
       return res
         .status(500)

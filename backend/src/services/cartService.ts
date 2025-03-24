@@ -7,6 +7,7 @@ import {
 } from "../middlewares/cartValidators";
 import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
+import { CartResponse } from "../types/cartTypes";
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ const cartService = {
     user_uuid: string,
     book_uuid: string,
     quantity: number
-  ): Promise<error | Cart> => {
+  ): Promise<error | CartResponse> => {
     try {
       const validate = cartValidates(user_uuid, book_uuid, quantity);
       if (validate) return { error: validate.error };
@@ -75,12 +76,12 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
-      return cart;
+      return cart as CartResponse;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
     }
   },
-  getCartById: async (id: number): Promise<Cart | error> => {
+  getCartById: async (id: number): Promise<CartResponse | error> => {
     try {
       const cart = await prisma.cart.findFirst({
         where: {
@@ -130,7 +131,7 @@ const cartService = {
     id: number,
     cartItem_id: number,
     quantity: number
-  ): Promise<error | Cart> => {
+  ): Promise<error | CartResponse> => {
     try {
       const validates = removeBookToCartValidates(id, cartItem_id, quantity);
       if (validates) return { error: validates.error };
@@ -176,7 +177,7 @@ const cartService = {
     user_uuid: string,
     id: number,
     cartItem_id: number
-  ) => {
+  ): Promise<CartResponse | error> => {
     try {
       const user = await userExists(user_uuid);
       if ("error" in user) return { error: user.error };

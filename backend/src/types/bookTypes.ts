@@ -1,3 +1,5 @@
+import { Book } from "@prisma/client";
+
 export interface RegisterBook {
   title: string;
   synopsis: string;
@@ -48,4 +50,8 @@ export interface Filter {
 
 export interface error {
   error: string;
+}
+
+export interface ProcessedBook extends Omit<Book, "image"> {
+  image: string | null;
 }
