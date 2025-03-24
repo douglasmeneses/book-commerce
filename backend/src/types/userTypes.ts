@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 export interface RegisterUser {
   name: string;
   username: string;
@@ -13,4 +14,8 @@ export interface UpdateUser {
   birth_date?: Date;
   cpf?: string;
   phone?: string;
+}
+
+export interface ProcessedUser extends Omit<User, "avatar"> {
+  avatar: string | null;
 }
