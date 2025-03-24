@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 export interface RegisterUser {
   name: string;
   username: string;
@@ -9,8 +10,12 @@ export interface UpdateUser {
   name?: string;
   username?: string;
   password?: string;
-  avatar?: Uint8Array;
+  avatar?: Buffer;
   birth_date?: Date;
   cpf?: string;
   phone?: string;
+}
+
+export interface ProcessedUser extends Omit<User, "avatar"> {
+  avatar: string | null;
 }
