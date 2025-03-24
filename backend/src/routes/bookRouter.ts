@@ -1,6 +1,7 @@
 import bookController from "../controllers/bookController";
 import { Request, Response } from "express";
 import { Router } from "express";
+import upload from "../middlewares/upload";
 
 const router = Router();
 
@@ -23,4 +24,12 @@ router.put("/:uuid", (req: Request, res: Response) => {
 router.delete("/:uuid", (req: Request, res: Response) => {
   bookController.bookDelete(req, res);
 });
+
+router.put(
+  "/:uuid/upload",
+  upload.single("image"),
+  (req: Request, res: Response) => {
+    bookController.uploadBookImage(req, res);
+  }
+);
 export default router;
