@@ -3,9 +3,7 @@ import userService from "../services/userService";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 
-
 const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
-
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, username, email, password } = req.body;
@@ -70,10 +68,11 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     try {
-      const authResponse = await axios.post<{ token: string; error?: boolean }>(
-        `${AUTH_SERVICE_URL}/login`,
-        { email, password }
-      );
+      const authResponse = await axios.post<{
+        token: string;
+        error?: boolean;
+        refreshToken: string;
+      }>(`${AUTH_SERVICE_URL}/login`, { email, password });
 
       if (authResponse.data.error) {
         return res.status(500).json({
@@ -86,6 +85,7 @@ export const loginUser = async (req: Request, res: Response) => {
         message: "Login realizado com sucesso!",
         user: user,
         token: authResponse.data.token,
+        refreshToken: authResponse.data.refreshToken,
       });
     } catch (authError) {
       console.error("Erro ao autenticar no serviço externo:", authError);
@@ -156,8 +156,7 @@ export const updateUserProfile = async (
   res: Response
 ): Promise<Response> => {
   const { uuid } = req.params;
-  const { username, name, password, avatar, cpf, phone, birth_date } =
-    req.body;
+  const { username, name, password, avatar, cpf, phone, birth_date } = req.body;
 
   try {
     if (!uuid) {
@@ -171,7 +170,7 @@ export const updateUserProfile = async (
       username,
       name,
       password,
-      avatar: avatar ? Buffer.from(avatar, "base64") : undefined, 
+      avatar: avatar ? Buffer.from(avatar, "base64") : undefined,
       cpf,
       phone,
       birth_date,
@@ -183,12 +182,10 @@ export const updateUserProfile = async (
       });
     }
 
-   
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       user.password = hashedPassword;
     }
-
 
     return res.status(200).json({
       message: "Perfil atualizado com sucesso!",

@@ -4,6 +4,8 @@ import bookRouter from "./routes/bookRouter";
 import favoriteRouter from "./routes/favoriteRouter";
 import cartRouter from "./routes/cartRouter";
 import userRouter from "./routes/userRouter";
+import reviewRouter from "./routes/reviewRouter";
+
 
 const PORT = process.env.PORT || 3001;
 
@@ -16,7 +18,7 @@ app.use("/books", bookRouter);
 app.use("/favorites", favoriteRouter);
 app.use("/carts", cartRouter);
 app.use("/users", userRouter);
-
+app.use("/reviews", reviewRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

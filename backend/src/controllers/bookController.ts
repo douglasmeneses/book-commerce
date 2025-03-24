@@ -1,18 +1,30 @@
 import bookService from "../services/bookService";
 import { Filter } from "../types/bookTypes";
+import sharp from "sharp";
 import { Request, Response } from "express";
+import { Book } from "@prisma/client";
+import { processImage } from "../utils/bookUtils";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
     const user_id = req.body.user_id;
     const book = req.body.book;
+
     try {
       const response = await bookService.bookRegister(book, user_id);
 
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
       }
-      return res.status(201).json(response);
+
+      const imageBase64 = response.image
+        ? await processImage(Buffer.from(response.image))
+        : null;
+
+      return res.status(200).json({
+        ...response,
+        image: `data:image/png;base64,${imageBase64}`,
+      });
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -45,7 +57,26 @@ const bookController = {
         return res.status(400).json({ error: response.error });
       }
 
-      return res.status(200).json(response);
+      if (!Array.isArray(response)) {
+        return res.status(400).json({ error: "Invalid response format" });
+      }
+      const imagesBuffer = await Promise.all(
+        response.map(async (book: Book) => {
+          const compressedImage = book.image
+            ? await sharp(book.image)
+                .resize(100)
+                .jpeg({ quality: 70 })
+                .toBuffer()
+            : null;
+
+          const imageBase64 = compressedImage
+            ? Buffer.from(compressedImage).toString("base64")
+            : null;
+          return { ...book, image: `data:image/png;base64,${imageBase64}` };
+        })
+      );
+
+      return res.status(200).json(imagesBuffer);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -61,7 +92,19 @@ const bookController = {
       if (!response) {
         return res.status(404).json({ error: "Book not found" });
       }
-      return res.status(200).json(response);
+
+      if ("error" in response) {
+        return res.status(400).json({ error: response.error });
+      }
+
+      const imageBase64 = response.image
+        ? await processImage(Buffer.from(response.image))
+        : null;
+
+      return res.status(200).json({
+        ...response,
+        image: `data:image/png;base64,${imageBase64}`,
+      });
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -81,7 +124,14 @@ const bookController = {
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
       }
-      return res.status(200).json(response);
+
+      const imageBase64 = response.image
+        ? await processImage(Buffer.from(response.image))
+        : null;
+
+      return res
+        .status(200)
+        .json({ ...response, image: `data:image/png;base64,${imageBase64}` });
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -103,23 +153,39 @@ const bookController = {
       });
     }
   },
-
-  searchBook: async (req: Request, res: Response) => {
-    const search = req.query.search as string;
-
-    if (!search || typeof search !== "string") {
-      return res.status(400).json({ error: "A valid search query is required" });
-    }
-
+  
+  uploadBookImage: async (req: Request, res: Response) => {
     try {
-      const response = await bookService.searchBook(search);
-      return res.status(200).json(response);
-    } catch (error) {
-      return res.status(400).json({
-        error: error instanceof Error ? error.message : "An error occurred on search",
+      const uuid = req.params.uuid;
+      const { user_uuid } = req.body;
+
+      if (!req.file) {
+        return res.status(400).json({ error: "Nenhuma imagem enviada" });
+      }
+
+      const response = await bookService.uploadBookImage(
+        uuid,
+        user_uuid,
+        req.file.buffer
+      );
+      if ("error" in response) {
+        return res.status(400).json(response);
+      }
+      if (!response.image) {
+        return res.status(400).json({ error: "Image data is missing" });
+      }
+      const imageBase64 = response.image
+        ? await processImage(Buffer.from(response.image))
+        : null;
+
+      return res.status(200).json({
+        message: "Imagem adicionada com sucesso!",
+        book: { ...response, image: `data:image/png;base64,${imageBase64}` },
       });
+    } catch (error) {
+      return res.status(500).json({ error: "Erro ao fazer upload da imagem" });
     }
-  }
+  },
 };
 
 export default bookController;
