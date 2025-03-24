@@ -109,8 +109,35 @@ const bookService = {
     const skip = page && limit ? (page - 1) * limit : 0;
 
     const where: any = {
-      title: search ? { contains: search, mode: "insensitive" } : undefined,
-      ISBN: isbn ? { contains: isbn, mode: "insensitive" } : undefined,
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { synopsis: { contains: search, mode: "insensitive" } },
+        { ISBN: { contains: search, mode: "insensitive" } },
+        { language: { contains: search, mode: "insensitive" } },
+        {
+          authors: {
+            some: {
+              author: { name: { contains: search, mode: "insensitive" } },
+            },
+          },
+        },
+        {
+          genres: {
+            some: {
+              genre: { name: { contains: search, mode: "insensitive" } },
+            },
+          },
+        },
+        {
+          publishers: {
+            some: {
+              publisher: {
+                name: { contains: search, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ],
       price: {
         gte: minPrice,
         lte: maxPrice,
