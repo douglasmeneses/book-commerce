@@ -9,7 +9,7 @@ import { updateAuthors } from "./authorService";
 import { updateGenres } from "./genreService";
 import { updatePublishers } from "./publisherService";
 import { userExists, validUser } from "../middlewares/userValidators";
-import { get } from "http";
+import upload from "../middlewares/upload";
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,7 @@ const bookService = {
   bookRegister: async (
     book: RegisterBook,
     user_uuid: string
-  ): Promise<Book | object> => {
+  ): Promise<Book | error> => {
     try {
       const validation = await bookValidates(book);
       if (validation && "error" in validation) {
@@ -38,7 +38,7 @@ const bookService = {
           ISBN: book.ISBN,
           page_count: book.page_count,
           stock_quantity: book.stock_quantity || 0,
-          image: book.image || null,
+          image: book.image ? Buffer.from(book.image) : null,
           release_date: new Date(book.release_date),
           stocks: {
             create: {
@@ -90,7 +90,7 @@ const bookService = {
       };
     }
   },
-  getBooks: async (filter: Filter): Promise<Book[] | object> => {
+  getBooks: async (filter: Filter): Promise<Book[] | error> => {
     const {
       search,
       author,
@@ -241,7 +241,7 @@ const bookService = {
     uuid: string,
     user_uuid: string,
     bookData: UpdateBook
-  ): Promise<Book | object> => {
+  ): Promise<Book | error> => {
     try {
       const userValidation = await validUser(user_uuid);
       if (userValidation && "error" in userValidation) {
@@ -332,6 +332,27 @@ const bookService = {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
       };
+    }
+  },
+  uploadBookImage: async (
+    uuid: string,
+    user_uuid: string,
+    imageBuffer: Buffer
+  ) => {
+    try {
+      const book = await bookExists(uuid);
+      if (book && "error" in book) {
+        return { error: book.error };
+      }
+
+      const updatedBook = await prisma.book.update({
+        where: { uuid },
+        data: { image: imageBuffer },
+      });
+
+      return updatedBook;
+    } catch (error) {
+      return { error: "Erro ao salvar imagem no banco" };
     }
   },
 };
