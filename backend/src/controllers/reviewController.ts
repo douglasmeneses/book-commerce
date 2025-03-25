@@ -25,7 +25,7 @@ const reviewController = {
     }
   },
 
-  getReviews: async (req: Request, res: Response) => {
+  getReviews: async (req: Request, res: Response): Promise<Response> => {
     const { book_uuid } = req.params;
 
     const filter = {
