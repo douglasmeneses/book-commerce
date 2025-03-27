@@ -69,7 +69,7 @@ const cartService = {
           user_id: user.id,
         },
         include: {
-          CartItem: { include: { book: true } },
+          cartItem: { include: { book: true } },
         },
       });
 
@@ -88,7 +88,7 @@ const cartService = {
           id: id,
         },
         include: {
-          CartItem: { include: { book: true } },
+          cartItem: { include: { book: true } },
         },
       });
 
@@ -113,7 +113,7 @@ const cartService = {
           user_id: user.id,
         },
         include: {
-          CartItem: { include: { book: true } },
+          cartItem: { include: { book: true } },
         },
       });
 
