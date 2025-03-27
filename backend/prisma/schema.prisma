@@ -29,10 +29,10 @@ model User {
   updated_at DateTime  @updatedAt
 
   favorites   Favorites[]
-  reviews      Review[]
-  orders       Order[]
+  reviews     Review[]
+  orders      Order[]
   cart        Cart[]
-  addresses     Address[]
+  addresses   Address[]
   userAddress userAddress[]
   creditCard  Credit_card[]
 }
@@ -148,6 +148,7 @@ model Book {
   title          String
   synopsis       String   @db.Text
   image          Bytes?
+  image_url      String?  @default("")
   language       String
   price          Decimal
   ISBN           String   @unique
@@ -182,7 +183,7 @@ model Author {
   name          String       @unique
   bio           String       @db.Text
   year_of_birth DateTime
-  image         Bytes
+  image         Bytes?
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
   books         bookAuthor[]

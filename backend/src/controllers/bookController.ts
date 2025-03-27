@@ -1,8 +1,7 @@
 import bookService from "../services/bookService";
-import { Filter } from "../types/bookTypes";
+import { Filter, BookResponse } from "../types/bookTypes";
 import { Request, Response } from "express";
-import { processImage } from "../utils/bookUtils";
-import { processBookImages } from "../utils/bookUtils";
+import { processBookImages, handleBookImage } from "../utils/bookUtils";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
@@ -16,14 +15,9 @@ const bookController = {
         return res.status(400).json({ error: response.error });
       }
 
-      const imageBase64 = response.image
-        ? await processImage(Buffer.from(response.image))
-        : null;
+      const bookResponse = await handleBookImage(response);
 
-      return res.status(200).json({
-        ...response,
-        image: `data:image/png;base64,${imageBase64}`,
-      });
+      return res.status(200).json(bookResponse);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -83,14 +77,9 @@ const bookController = {
         return res.status(400).json({ error: response.error });
       }
 
-      const imageBase64 = response.image
-        ? await processImage(Buffer.from(response.image))
-        : null;
+      const bookResponse = await handleBookImage(response);
 
-      return res.status(200).json({
-        ...response,
-        image: `data:image/png;base64,${imageBase64}`,
-      });
+      return res.status(200).json(bookResponse);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -111,13 +100,9 @@ const bookController = {
         return res.status(400).json({ error: response.error });
       }
 
-      const imageBase64 = response.image
-        ? await processImage(Buffer.from(response.image))
-        : null;
+      const bookResponse = await handleBookImage(response);
 
-      return res
-        .status(200)
-        .json({ ...response, image: `data:image/png;base64,${imageBase64}` });
+      return res.status(200).json(bookResponse);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -159,14 +144,9 @@ const bookController = {
       if (!response.image) {
         return res.status(400).json({ error: "Image data is missing" });
       }
-      const imageBase64 = response.image
-        ? await processImage(Buffer.from(response.image))
-        : null;
+      const bookResponse = await handleBookImage(response);
 
-      return res.status(200).json({
-        message: "Imagem adicionada com sucesso!",
-        book: { ...response, image: `data:image/png;base64,${imageBase64}` },
-      });
+      return res.status(200).json(bookResponse);
     } catch (error) {
       return res.status(500).json({ error: "Erro ao fazer upload da imagem" });
     }
