@@ -1,19 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { getBooks } from "@/services/bookService";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import BookCarousel from "@/components/BookCarousel";
 import { Book } from "@/types/index";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { getBooks } from "@/services/bookService";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -24,22 +16,11 @@ export default function Home() {
     const fetchBooks = async () => {
       try {
         setLoading(true);
+        const mostLiked = await getBooks({ mostLiked: true });
+        setMostLikedBooks(mostLiked);
 
-        const allBooks = await getBooks();
-
-        if (Array.isArray(allBooks)) {
-          const mostLikedBooks = [...allBooks].sort(
-            (a, b) => b.favorite_count - a.favorite_count
-          );
-          setMostLikedBooks(mostLikedBooks);
-
-          const mostRecentBooks = [...allBooks].sort(
-            (a, b) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-          );
-          setMostRecentBooks(mostRecentBooks);
-        }
+        const mostRecent = await getBooks({ mostRecent: true });
+        setMostRecentBooks(mostRecent);
       } catch (error) {
         console.log("Erro ao buscar livros:", error);
       } finally {
@@ -49,6 +30,15 @@ export default function Home() {
 
     fetchBooks();
   }, []);
+
+  const genres = [
+    "Fantasia",
+    "Aventura",
+    "Romance",
+    "Aventura",
+    "Tecnologia",
+    "Todos",
+  ];
 
   return (
     <>
@@ -104,173 +94,22 @@ export default function Home() {
           </div>
         </section>
         <section id="catalog" className="flex flex-col pt-40">
-          <ul className="flex mt-2 gap-10">
-            <h1 className="font-bold text-2xl w-2/6 ml-10 leading-none">
-              Mais curtidos
-            </h1>
-            <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
-              Fantasia
-            </li>
-            <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
-              Auto-ajuda
-            </li>
-            <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
-              Romance
-            </li>
-            <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
-              Ficção
-            </li>
-            <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
-              Investigação
-            </li>
-            <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
-              Outros
-            </li>
-          </ul>
-          <div className="mt-10 flex justify-center">
-            {loading ? (
-              <p>Carregando...</p>
-            ) : (
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                className="w-full"
-              >
-                <CarouselContent>
-                  {mostLikedBooks.map((book) => (
-                    <CarouselItem
-                      key={book.id}
-                      className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
-                    >
-                      <div className="">
-                        <Card className=" border shadow-sm overflow-hidden mx-10">
-                          <CardContent className="flex flex-col items-center justify-center">
-                            <div className="w-full flex justify-center bg-white my-5">
-                              <Image
-                                src={book.image_url}
-                                alt={book.title}
-                                width={150}
-                                height={200}
-                                className="object-cover w-[150px] h-[200px]"
-                              />
-                            </div>
-                            <div className="w-full flex flex-col gap-1">
-                              <p className="font-bold text-base">{`R$ ${parseFloat(
-                                book.price
-                              )
-                                .toFixed(2)
-                                .replace(".", ",")}`}</p>
-                              <p className="text-sm line-clamp-1 font-bold">
-                                {book.title}
-                              </p>
-                              <p className="text-xs text-gray-600 line-clamp-1">
-                                {book.authors.map((author, index) => (
-                                  <span key={index}>
-                                    {author.author.name}{" "}
-                                    {index < book.authors.length - 1
-                                      ? ", "
-                                      : ""}
-                                  </span>
-                                ))}
-                              </p>
-                              <div className="flex gap-2 items-center mt-2">
-                                <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
-                                  Adicionar
-                                </Button>
-                                <FavoriteBorderIcon
-                                  className="text-[#e67e22] cursor-pointer"
-                                  fontSize="medium"
-                                />
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-0 bg-white border shadow-md" />
-                <CarouselNext className="right-0 bg-white border shadow-md" />
-              </Carousel>
-            )}
-          </div>
+          {loading ? (
+            <p>Carregando...</p>
+          ) : (
+            <BookCarousel
+              books={mostLikedBooks}
+              genres={genres}
+              title={"Mais curtidos"}
+            />
+          )}
         </section>
-
         <section className="flex flex-col mt-20">
-          <h1 className="font-bold text-2xl leading-none mt-10 w-full text-center">
-            Mais recentes
-          </h1>
-          <div className="mt-10 flex justify-center">
-            {loading ? (
-              <p>Carregando...</p>
-            ) : (
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                className="w-full"
-              >
-                <CarouselContent>
-                  {mostRecentBooks.map((book) => (
-                    <CarouselItem
-                      key={book.id}
-                      className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
-                    >
-                      <div className="">
-                        <Card className=" border shadow-sm overflow-hidden mx-10">
-                          <CardContent className="flex flex-col items-center justify-center">
-                            <div className="w-full flex justify-center bg-white my-5">
-                              <Image
-                                src={book.image_url}
-                                alt={book.title}
-                                width={150}
-                                height={200}
-                                className="object-cover w-[150px] h-[200px]"
-                              />
-                            </div>
-                            <div className="w-full flex flex-col gap-1">
-                              <p className="font-bold text-base">{`R$ ${parseFloat(
-                                book.price
-                              )
-                                .toFixed(2)
-                                .replace(".", ",")}`}</p>
-                              <p className="text-sm line-clamp-1 font-bold">
-                                {book.title}
-                              </p>
-                              <p className="text-xs text-gray-600 line-clamp-1">
-                                {book.authors.map((author, index) => (
-                                  <span key={index}>
-                                    {author.author.name}{" "}
-                                    {index < book.authors.length - 1
-                                      ? ", "
-                                      : ""}
-                                  </span>
-                                ))}
-                              </p>
-                              <div className="flex gap-2 items-center mt-2">
-                                <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
-                                  Adicionar
-                                </Button>
-                                <FavoriteBorderIcon
-                                  className="text-[#e67e22] cursor-pointer"
-                                  fontSize="medium"
-                                />
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-0 bg-white border shadow-md" />
-                <CarouselNext className="right-0 bg-white border shadow-md" />
-              </Carousel>
-            )}
-          </div>
+          {loading ? (
+            <p>Carregando...</p>
+          ) : (
+            <BookCarousel books={mostRecentBooks} title={"Mais recentes"} />
+          )}
         </section>
       </main>
     </>

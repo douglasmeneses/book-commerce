@@ -1,10 +1,13 @@
 import axios from "axios";
+import { Filter } from "@/types";
 
 const API_URL = "http://localhost:3001/books";
 
-export const getBooks = async () => {
+export const getBooks = async (filtro: Filter) => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(API_URL, {
+      params: { ...filtro },
+    });
     return response.data;
   } catch (error) {
     const errorMessage =

@@ -51,3 +51,16 @@ export interface Book {
   authors: BookAuthor[];
   genres: BookGenre[];
 }
+
+export interface BookCarouselProps {
+  books: Array<Book>;
+  genres?: Array<string>;
+  title: string;
+}
+
+export interface Filter {
+  search?: string;
+  limit?: number;
+  mostLiked?: boolean;
+  mostRecent?: boolean;
+}
