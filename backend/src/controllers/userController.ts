@@ -32,6 +32,9 @@ export const registerUser = async (req: Request, res: Response) => {
       username,
       email,
       password: hashedPassword,
+      birth_date: req.body.birth_date,
+      cpf: req.body.cpf,
+      phone: req.body.phone,
     });
 
     return res.status(201).json({

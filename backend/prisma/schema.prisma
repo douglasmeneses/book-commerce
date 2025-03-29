@@ -32,8 +32,7 @@ model User {
   reviews      Review[]
   orders       Order[]
   cart        Cart[]
-  addresses     Address[]
-  userAddress userAddress[]
+  addresses userAddress[]
   creditCard  Credit_card[]
 }
 
@@ -127,7 +126,6 @@ model Address {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  user        User          @relation(fields: [user_id], references: [id])
   userAddress userAddress[]
 }
 
