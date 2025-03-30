@@ -34,6 +34,7 @@ export interface BookGenre {
 }
 
 export interface Book {
+  uuid: string;
   id: number;
   title: string;
   synopsis: string;
@@ -61,6 +62,7 @@ export interface BookCarouselProps {
 export interface Filter {
   search?: string;
   limit?: number;
+  page?: number;
   mostLiked?: boolean;
   mostRecent?: boolean;
 }

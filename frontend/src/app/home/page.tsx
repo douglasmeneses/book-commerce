@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import BookCarousel from "@/components/BookCarousel";
-import { Book } from "@/types/index";
+import { Book } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 
 export default function Home() {

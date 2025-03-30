@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Book } from "@/types/index";
+import { Book } from "@/types/bookTypes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { BookCarouselProps } from "@/types/index";
+import { BookCarouselProps } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 
 export default function BookCarousel({
