@@ -1,10 +1,46 @@
 import { CartItem, PrismaClient } from "@prisma/client";
+import { Cart } from "@prisma/client";
 import bookService from "./bookService";
 import { error } from "../types/bookTypes";
+import { Decimal } from "@prisma/client/runtime/library";
 
+interface CartItemResponse {
+  id: number;
+  created_at: Date;
+  updated_at: Date;
+  price: Decimal;
+  cart_id: number;
+  book_id: number;
+  quantity: number;
+  book: {
+    id: number;
+    title: string;
+    price: Decimal;
+  };
+}
 const prisma = new PrismaClient();
 
 const cartItemService = {
+  getCartItemById: async (id: number): Promise<CartItem | error> => {
+    try {
+      const cartItem = await prisma.cartItem.findFirst({
+        where: { id: id },
+      });
+
+      if (!cartItem) {
+        return { error: "Cart item not found!" };
+      }
+
+      return cartItem;
+    } catch (error) {
+      return {
+        error:
+          error instanceof Error
+            ? error.message
+            : "error ao buscar item do carrinho",
+      };
+    }
+  },
   addBookToCart: async (
     user_id: number,
     book_id: number,
@@ -35,7 +71,7 @@ const cartItemService = {
           data: {
             cart_id: cart.id,
             book_id: book_id,
-            quantity: quantity,
+            quantity: 0,
           },
         });
       }
@@ -51,6 +87,83 @@ const cartItemService = {
       return cartItem;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
+    }
+  },
+  removeBookToCart: async (
+    id: number,
+    quantity: number
+  ): Promise<CartItemResponse | error> => {
+    try {
+      const cartItem = await prisma.cartItem.findFirst({
+        where: {
+          id: id,
+        },
+        include: {
+          book: true,
+        },
+      });
+
+      if (!cartItem) {
+        return { error: "Cart item not found!" };
+      }
+
+      if (cartItem.quantity <= quantity) {
+        return { error: "Invalid quantity" };
+      }
+
+      await prisma.cartItem.update({
+        where: {
+          id: id,
+        },
+        data: {
+          quantity: cartItem.quantity - quantity,
+          price:
+            cartItem.price?.toNumber() -
+            quantity * cartItem.book.price?.toNumber(),
+        },
+      });
+
+      const updatedCartItem = await prisma.cartItem.findFirst({
+        where: {
+          id: id,
+        },
+        include: {
+          book: true,
+        },
+      });
+
+      return updatedCartItem as CartItemResponse;
+    } catch (error) {
+      return {
+        error:
+          error instanceof Error
+            ? error.message
+            : "error ao remover item do carrinho",
+      };
+    }
+  },
+  deleteCartItem: async (id: number): Promise<true | error> => {
+    try {
+      const cartItem = await prisma.cartItem.findFirst({
+        where: { id: id },
+      });
+
+      if (!cartItem) {
+        return { error: "Cart item not found!" };
+      }
+
+      await prisma.cartItem.delete({
+        where: { id: id },
+      });
+
+      return true;
+    } catch (error) {
+      return {
+        error:
+          error instanceof Error
+            ? error.message
+            : "error ao deletar item do carrinho",
+      };
     }
   },
 };

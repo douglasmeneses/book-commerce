@@ -128,6 +128,13 @@ export default function RegisterPage() {
           >
             Cadastrar
           </Button>
+
+          <div className="text-center text-sm text-gray-500">
+            Já possui uma conta?{" "}
+            <a href="/register" className="text-[#e67e22]">
+              Login
+            </a>
+          </div>
         </form>
       </Form>
     </div>

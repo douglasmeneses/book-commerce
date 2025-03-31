@@ -1,9 +1,9 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getBooks } from "@/services/bookService";
 import Image from "next/image";
+import NavBar from "@/components/NavBar";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -52,11 +52,12 @@ export default function Home() {
 
   return (
     <>
+      <NavBar />
       <main className="min-h-screen p-40">
         <section className="flex items-center justify-center">
           <div className="flex flex-col">
             <h1 className="font-bold text-4xl">Bem vindo à BookStore</h1>
-            <p className="font-light text-xl w-3/4 mt-4">
+            <p className="font-light text-xl w-3/4 mt-4 text-[13px] font-semibold w-[350px]">
               Em nossa loja você encontra um livro para todos os gostos. Grande
               variedade. Preços agradáveis. Histórias interessantes.
             </p>
@@ -72,23 +73,23 @@ export default function Home() {
               Veja nosso catálogo
             </Button>
           </div>
-          <div className="relative flex">
+          <div className="flex ml-[80px]">
             <Image
-              className="relative top-16 z-10"
+              className="relative top-16 z-10 object-fill w-[180px]"
               src="/livro-1.png"
               alt="Livro 1"
               width={200}
               height={200}
             />
             <Image
-              className="relative bottom-5 right-10"
+              className="relative bottom-5 right-10 object-fill w-[250px]"
               src="/livro-2.png"
               alt="Livro 2"
               width={250}
               height={200}
             />
             <Image
-              className="relative top-5 right-20 z-10"
+              className="relative top-5 right-20 z-10 object-fill w-[180px]"
               src="/livro-3.png"
               alt="Livro 3"
               width={200}
@@ -105,7 +106,7 @@ export default function Home() {
         </section>
         <section id="catalog" className="flex flex-col pt-40">
           <ul className="flex mt-2 gap-10">
-            <h1 className="font-bold text-2xl w-2/6  pl-16 leading-none">
+            <h1 className="font-bold text-2xl w-2/6 ml-10 leading-none">
               Mais curtidos
             </h1>
             <li className="text-sm font-light hover:text-[#e67e22] cursor-pointer">
@@ -138,32 +139,30 @@ export default function Home() {
                 }}
                 className="w-full"
               >
-                <CarouselContent className="p-5">
+                <CarouselContent>
                   {mostLikedBooks.map((book) => (
                     <CarouselItem
                       key={book.id}
-                      className="md:basis-1/4 lg:basis-1/5"
+                      className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
                     >
                       <div className="">
-                        <Card className="h-full border shadow-sm overflow-hidden mx-10">
+                        <Card className=" border shadow-sm overflow-hidden mx-10">
                           <CardContent className="flex flex-col items-center justify-center">
-                            <div className="w-full flex justify-center bg-white p-5">
+                            <div className="w-full flex justify-center bg-white my-5">
                               <Image
-                                src={
-                                  typeof book.image === "string"
-                                    ? book.image
-                                    : "/book.png"
-                                }
+                                src={book.image_url}
                                 alt={book.title}
                                 width={150}
-                                height={150}
+                                height={200}
+                                className="object-cover w-[150px] h-[200px]"
                               />
                             </div>
                             <div className="w-full flex flex-col gap-1">
-                              <p className="font-bold text-base">{`R$ ${book.price.replace(
-                                ".",
-                                ","
-                              )}`}</p>
+                              <p className="font-bold text-base">{`R$ ${parseFloat(
+                                book.price
+                              )
+                                .toFixed(2)
+                                .replace(".", ",")}`}</p>
                               <p className="text-sm line-clamp-1 font-bold">
                                 {book.title}
                               </p>
@@ -183,7 +182,7 @@ export default function Home() {
                                 </Button>
                                 <FavoriteBorderIcon
                                   className="text-[#e67e22] cursor-pointer"
-                                  fontSize="large"
+                                  fontSize="medium"
                                 />
                               </div>
                             </div>
@@ -215,32 +214,30 @@ export default function Home() {
                 }}
                 className="w-full"
               >
-                <CarouselContent className="p-5">
+                <CarouselContent>
                   {mostRecentBooks.map((book) => (
                     <CarouselItem
                       key={book.id}
-                      className="md:basis-1/4 lg:basis-1/5"
+                      className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
                     >
                       <div className="">
-                        <Card className="h-full border shadow-sm overflow-hidden mx-10">
+                        <Card className=" border shadow-sm overflow-hidden mx-10">
                           <CardContent className="flex flex-col items-center justify-center">
-                            <div className="w-full flex justify-center bg-white p-5">
+                            <div className="w-full flex justify-center bg-white my-5">
                               <Image
-                                src={
-                                  typeof book.image === "string"
-                                    ? book.image
-                                    : "/book.png"
-                                }
+                                src={book.image_url}
                                 alt={book.title}
                                 width={150}
-                                height={150}
+                                height={200}
+                                className="object-cover w-[150px] h-[200px]"
                               />
                             </div>
                             <div className="w-full flex flex-col gap-1">
-                              <p className="font-bold text-base">{`R$ ${book.price.replace(
-                                ".",
-                                ","
-                              )}`}</p>
+                              <p className="font-bold text-base">{`R$ ${parseFloat(
+                                book.price
+                              )
+                                .toFixed(2)
+                                .replace(".", ",")}`}</p>
                               <p className="text-sm line-clamp-1 font-bold">
                                 {book.title}
                               </p>
@@ -260,7 +257,7 @@ export default function Home() {
                                 </Button>
                                 <FavoriteBorderIcon
                                   className="text-[#e67e22] cursor-pointer"
-                                  fontSize="large"
+                                  fontSize="medium"
                                 />
                               </div>
                             </div>
