@@ -95,7 +95,6 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
-
       return cart;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
@@ -131,7 +130,6 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
-
       return cart;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };

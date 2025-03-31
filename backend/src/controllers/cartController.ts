@@ -18,7 +18,6 @@ const cartController = {
       const cartItems = await processCartItems(cart.cartItem);
 
       return res.json({ ...cart, cartItem: cartItems });
-
     } catch (error) {
       return res
         .status(500)
@@ -43,7 +42,6 @@ const cartController = {
       const cartItems = await processCartItems(cart.cartItem);
 
       return res.json({ ...cart, cartItem: cartItems });
-
     } catch (error) {
       return res
         .status(500)
@@ -59,7 +57,6 @@ const cartController = {
       const cartItems = await processCartItems(cart.cartItem);
 
       return res.json({ ...cart, cartItem: cartItems });
-
     } catch (error) {
       return res
         .status(500)
@@ -81,7 +78,6 @@ const cartController = {
       const cartItems = await processCartItems(cart.cartItem);
 
       return res.json({ ...cart, cartItem: cartItems });
-
     } catch (error) {
       return res
         .status(500)
