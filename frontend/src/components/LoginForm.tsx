@@ -7,17 +7,54 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { loginUser } from "@/services/userServices";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm({
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
   });
+
+  const handleLogin = async (data: { email: string; password: string }) => {
+    try {
+      const response = await loginUser(data.email, data.password);
+      localStorage.setItem("token", JSON.stringify(response.token));
+      localStorage.setItem(
+        "refreshToken",
+        JSON.stringify(response.refreshToken)
+      );
+      localStorage.setItem("user", JSON.stringify(response.user));
+      toast({
+        title: "Success",
+        description: "Login successfully",
+      });
+      toast({
+        title: "Bem vindo!",
+        description: `Bem vindo, ${response.user.name}`,
+      });
+      setTimeout(() => {
+        router.push("/home");
+      }, 2000);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Error while login user";
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+        action: <ToastAction altText="Close">Fechar</ToastAction>,
+      });
+    }
+  };
 
   return (
     <div className="w-full max-w-xl space-y-8">
@@ -29,7 +66,7 @@ export default function LoginPage() {
       </div>
 
       <Form {...form}>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={form.handleSubmit(handleLogin)}>
           <FormField
             control={form.control}
             name="email"

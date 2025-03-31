@@ -95,7 +95,6 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
-
       return cart;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
@@ -113,14 +112,24 @@ const cartService = {
           user_id: user.id,
         },
         include: {
-          cartItem: { include: { book: true } },
+          cartItem: {
+            include: {
+              book: {
+                include: {
+                  authors: { include: { author: true } },
+                  genres: { include: { genre: true } },
+                  publishers: { include: { publisher: true } },
+                },
+              },
+            },
+          },
+
         },
       });
 
       if (!cart) {
         return { error: "Cart not found!" };
       }
-
       return cart;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };

@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Book" ALTER COLUMN "rating" SET DATA TYPE DECIMAL(2,1);
+
+-- AlterTable
+ALTER TABLE "CartItem" ALTER COLUMN "price" SET DEFAULT 0.00;
+
+-- AlterTable
+ALTER TABLE "OrderItem" ADD COLUMN     "price" DECIMAL(10,2) NOT NULL DEFAULT 0.00;
