@@ -18,8 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <Toaster />
         <Toaster richColors />
-
         <Footer />
       </body>
     </html>
