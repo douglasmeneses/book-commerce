@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -18,6 +19,7 @@ export default function RootLayout({
       <body>
         {children}
         <Toaster richColors />
+
         <Footer />
       </body>
     </html>
