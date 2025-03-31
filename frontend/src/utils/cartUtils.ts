@@ -7,6 +7,6 @@ export const sortCartItems = (cartItems: CartItem[]): CartItem[] => {
           ...item,
           created_at: new Date(item.created_at),
         }))
-        .sort((a, b) => a.created_at.getTime() - b.created_at.getTime())
+        .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
     : [];
 };

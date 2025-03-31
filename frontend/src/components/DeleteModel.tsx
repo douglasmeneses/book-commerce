@@ -33,7 +33,7 @@ export default function DeleteModel({
         <Button
           size={"icon"}
           variant="secondary"
-          className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
+          className="bg-[#E16A00] text-white rounded-full min-w-[2rem] hover:bg-black"
         >
           <Trash />
         </Button>
@@ -49,7 +49,7 @@ export default function DeleteModel({
         <DialogFooter className="flex  mt-4">
           <Button
             variant="secondary"
-            className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
+            className="bg-[#E16A00] text-white rounded-full min-w-[2rem] hover:bg-black"
             onClick={(e) => {
               e.preventDefault();
               deleteBookFunc(item.id, user_uuid, item.cart_id);
@@ -60,7 +60,7 @@ export default function DeleteModel({
           <DialogClose asChild>
             <Button
               variant="secondary"
-              className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
+              className="bg-[#E16A00] text-white rounded-full min-w-[2rem] hover:bg-black"
             >
               Não
             </Button>

@@ -62,7 +62,7 @@ export default function QuantitySelectorButtons({
         <Button
           size={"icon"}
           variant="secondary"
-          className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
+          className="bg-[#E16A00] text-white rounded-full min-w-[2rem] hover:bg-black"
           onClick={(e) => {
             e.preventDefault();
             setQuantity((prep) => prep - 1),
@@ -79,7 +79,7 @@ export default function QuantitySelectorButtons({
       <Button
         size={"icon"}
         variant="secondary"
-        className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
+        className="bg-[#E16A00] text-white rounded-full min-w-[2rem] hover:bg-black"
         onClick={(e) => {
           e.preventDefault();
           setQuantity((prep) => prep + 1);

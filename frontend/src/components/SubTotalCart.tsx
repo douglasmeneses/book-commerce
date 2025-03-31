@@ -23,7 +23,7 @@ export default function SubTotalCart({ cart }: { cart: Cart }) {
         </h2>
         <Button
           variant="secondary"
-          className="mt-4 bg-orange-600 text-white rounded-md p-2 w-full text-base"
+          className="mt-4 bg-orange-600 text-white rounded-md p-2 w-full text-base hover:bg-black"
           onClick={() => {
             toast.success("Checkout successful!");
           }}
