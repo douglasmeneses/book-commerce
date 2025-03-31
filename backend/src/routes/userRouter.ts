@@ -20,7 +20,7 @@ router.get("/:uuid", authMiddleware,(req: Request, res: Response) => {
 router.put("/:uuid", authMiddleware, (req: Request, res: Response) => {
   userController.updateUserProfile(req, res);
 });
-
+//rota de upload de imagem com a proteção
 router.put(
   "/:uuid/upload",
   authMiddleware,
