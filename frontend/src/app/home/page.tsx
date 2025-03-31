@@ -1,9 +1,9 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getBooks } from "@/services/bookService";
 import Image from "next/image";
+import NavBar from "@/components/NavBar";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -52,11 +52,12 @@ export default function Home() {
 
   return (
     <>
+      <NavBar />
       <main className="min-h-screen p-40">
         <section className="flex items-center justify-center">
           <div className="flex flex-col">
             <h1 className="font-bold text-4xl">Bem vindo à BookStore</h1>
-            <p className="font-light text-xl w-3/4 mt-4">
+            <p className="font-light text-xl w-3/4 mt-4 text-[13px] font-semibold w-[350px]">
               Em nossa loja você encontra um livro para todos os gostos. Grande
               variedade. Preços agradáveis. Histórias interessantes.
             </p>
@@ -72,7 +73,7 @@ export default function Home() {
               Veja nosso catálogo
             </Button>
           </div>
-          <div className="relative flex">
+          <div className="flex ml-[80px]">
             <Image
               className="relative top-16 z-10"
               src="/livro-1.png"
