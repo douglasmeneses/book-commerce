@@ -101,7 +101,7 @@ export default function CartPage() {
     );
     setAccCart(
       (prep) =>
-        cart.cartItem.reduce((acc, value) => acc - value.quantity, 0) - 1
+        cart.cartItem.reduce((acc, value) => acc + value.quantity, 0) - 1
     );
     try {
       if (typeof response === "string") {
