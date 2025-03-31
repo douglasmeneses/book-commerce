@@ -1,3 +1,5 @@
+import { Decimal } from "@prisma/client/runtime/library";
+
 export interface RegisterBook {
   title: string;
   synopsis: string;
@@ -6,6 +8,7 @@ export interface RegisterBook {
   ISBN: string;
   page_count: number;
   image?: Buffer;
+  image_url?: string;
   release_date: Date;
   stock_quantity: number;
   authors: string[];
@@ -31,6 +34,25 @@ export interface UpdateBook {
   publishers?: string[];
 }
 
+export interface BookResponse {
+  uuid: string;
+  id: number;
+  title: string;
+  synopsis: string;
+  image: string | null;
+  image_url: string | null;
+  language: string;
+  price: Decimal;
+  ISBN: string;
+  rating: Decimal;
+  favorite_count: number;
+  page_count: number;
+  release_date: Date;
+  stock_quantity: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface Filter {
   search?: string;
   author?: string;
@@ -48,4 +70,8 @@ export interface Filter {
 
 export interface error {
   error: string;
+}
+
+export interface ProcessedBook extends Omit<Book, "image"> {
+  image: string | null;
 }
