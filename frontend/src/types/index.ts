@@ -47,7 +47,7 @@ export interface Book {
   release_date: string;
   created_at: string;
   updated_at: string;
-  image: Uint8Array<ArrayBufferLike> | null;
+  image_url: string;
   authors: BookAuthor[];
   genres: BookGenre[];
 }

@@ -21,8 +21,16 @@ model User {
   isAdmin     Boolean       @default(false)
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
+
   addresses   Address[]
   cart        Cart[]
+  creditCard  Credit_card[] 
+  favorites   Favorites[]
+  orders      Order[]
+  reviews     Review[]
+  userAddress userAddress[]
+}
+
   creditCard  Credit_card[]
   favorites   Favorites[]
   orders      Order[]
@@ -131,6 +139,7 @@ model Book {
   title          String
   synopsis       String
   image          Bytes?
+  image_url      String?  @default("")
   language       String
   price          Decimal
   ISBN           String          @unique
@@ -165,7 +174,7 @@ model Author {
   name          String       @unique
   bio           String
   year_of_birth DateTime
-  image         Bytes
+  image         Bytes?
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
   id            Int          @id @default(autoincrement())

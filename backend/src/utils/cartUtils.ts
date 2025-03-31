@@ -1,20 +1,38 @@
-import { CartItem } from "@prisma/client";
-import { processImage } from "./bookUtils";
+import sharp from "sharp";
+import { CartItemResponse, CartItemRequest } from "../types/cartTypes";
 
 export const processCartItems = async (
-  cartItems: Array<any>
-): Promise<Array<any>> => {
+  cartItems: CartItemRequest[]
+): Promise<CartItemResponse[]> => {
   return Promise.all(
-    cartItems.map(async (cartItem) => ({
-      ...cartItem,
-      book: {
-        ...cartItem.book,
-        image: `data:image/png;base64,${
-          cartItem.book.image
-            ? await processImage(Buffer.from(cartItem.book.image))
-            : null
-        }`,
-      },
-    }))
+    cartItems.map(async (cartItem) => {
+      if (cartItem.book.image) {
+        const compressedImage = (cartItem.book.image = await sharp(
+          Buffer.from(cartItem.book.image)
+        )
+          .resize(100)
+          .jpeg({ quality: 70 })
+          .toBuffer());
+
+        const imageBase64 = Buffer.from(compressedImage).toString("base64");
+
+        return {
+          ...cartItem,
+          book: {
+            ...cartItem.book,
+            image: `data:image/png;base64,${imageBase64}`,
+            image_url: null,
+          },
+        };
+      } else {
+        return {
+          ...cartItem,
+          book: {
+            ...cartItem.book,
+            image: null,
+          },
+        };
+      }
+    })
   );
 };

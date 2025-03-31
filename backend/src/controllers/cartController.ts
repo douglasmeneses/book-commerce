@@ -15,9 +15,10 @@ const cartController = {
       );
       if ("error" in cart) return res.status(400).json({ error: cart.error });
 
-      const cartItems = await processCartItems(cart.CartItem);
+      const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, CartItem: cartItems });
+      return res.json({ ...cart, cartItem: cartItems });
+
     } catch (error) {
       return res
         .status(500)
@@ -39,9 +40,10 @@ const cartController = {
       );
       if ("error" in cart) return res.status(400).json({ error: cart.error });
 
-      const cartItems = await processCartItems(cart.CartItem);
+      const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, CartItem: cartItems });
+      return res.json({ ...cart, cartItem: cartItems });
+
     } catch (error) {
       return res
         .status(500)
@@ -54,9 +56,10 @@ const cartController = {
       const cart = await cartService.getCartByUser_UUID(user_uuid);
       if ("error" in cart) return res.status(400).json({ error: cart.error });
 
-      const cartItems = await processCartItems(cart.CartItem);
+      const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, CartItem: cartItems });
+      return res.json({ ...cart, cartItem: cartItems });
+
     } catch (error) {
       return res
         .status(500)
@@ -75,9 +78,10 @@ const cartController = {
 
       if ("error" in cart) return res.status(400).json({ error: cart.error });
 
-      const cartItems = await processCartItems(cart.CartItem);
+      const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, CartItem: cartItems });
+      return res.json({ ...cart, cartItem: cartItems });
+
     } catch (error) {
       return res
         .status(500)
