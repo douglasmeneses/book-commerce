@@ -170,7 +170,7 @@ const userController = {
       if (!req.file.mimetype.startsWith('image/')) {
         return res.status(400).json({ error: "Arquivo enviado não é uma imagem válida" });
       }
-  
+  //upload avatar de usuario controller
       const response = await userService.uploadAvatar(uuid, req.file.buffer);
       if (response && "error" in response) {
         return res.status(400).json({ error: response.error });
