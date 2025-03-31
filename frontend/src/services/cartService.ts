@@ -50,3 +50,56 @@ export const addItemToCart = async (
     return errorMessage;
   }
 };
+
+export const removeItemFromCart = async (
+  id: number,
+  user_uuid: string,
+  cartItem_id: number,
+  quantity: number
+): Promise<string | Cart> => {
+  try {
+    const response = (await axios.put(
+      `${API_URL}/${id}`,
+      {
+        user_uuid: user_uuid,
+        cartItem_id: cartItem_id,
+        quantity: quantity,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${TOKEN}`,
+          "x-refresh-token": REFRESH_TOKEN,
+        },
+      }
+    )) as AxiosResponse<Cart>;
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Error removing item from cart.";
+    return errorMessage;
+  }
+};
+
+export const deleteCartItem = async (
+  cartItem_id: number,
+  user_uuid: string,
+  id: number
+): Promise<string | Cart> => {
+  try {
+    const response = (await axios.delete(`${API_URL}/${cartItem_id}`, {
+      headers: {
+        authorization: `Bearer ${TOKEN}`,
+        "x-refresh-token": REFRESH_TOKEN,
+      },
+      data: {
+        user_uuid,
+        id,
+      },
+    })) as AxiosResponse<Cart>;
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Error deleting cart item.";
+    return errorMessage;
+  }
+};

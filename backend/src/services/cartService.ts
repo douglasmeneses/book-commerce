@@ -113,7 +113,18 @@ const cartService = {
           user_id: user.id,
         },
         include: {
-          cartItem: { include: { book: true } },
+          cartItem: {
+            include: {
+              book: {
+                include: {
+                  authors: { include: { author: true } },
+                  genres: { include: { genre: true } },
+                  publishers: { include: { publisher: true } },
+                },
+              },
+            },
+          },
+
         },
       });
 

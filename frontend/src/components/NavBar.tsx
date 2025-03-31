@@ -43,7 +43,7 @@ export default function NavBar() {
             placeholder="Procurar"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-1/2 pl-10 py-2 border-b border-zinc-300 focus:outline-none focus:ring-0 focus:border-b-1    focus:border-orange-500"
+            className="w-1/2 pl-10 py-2 border-b border-zinc-300 focus:outline-none focus:ring-0 focus:border-b-1 focus:border-orange-500"
           />
         </form>
 

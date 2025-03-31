@@ -62,3 +62,4 @@ export const handleBookImage = async (book: Book): Promise<BookResponse> => {
 
   return bookResponse;
 };
+
