@@ -4,10 +4,10 @@ import { use } from "react";
 
 const API_URL = "http://localhost:3001/carts";
 const TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImplZmZzb25AZ21haWwuY29tIiwiaWF0IjoxNzQzMjA5NDM5LCJleHAiOjE3NDMyMTMwMzl9.QJPiwTEabFRcvMnKbmvCGTH_d9dhk7zBHpvRd3Wyecw";
-const REFRESH_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImplZmZzb25AZ21haWwuY29tIiwiaWF0IjoxNzQzMjA5NDM5LCJleHAiOjE3NDMyOTU4Mzl9.rVgG0HuYy59u7htI_WmMlKaSi65izTAutd434X4E0og";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImplZmZzb25AZ21haWwuY29tIiwiaWF0IjoxNzQzMzgxOTU3LCJleHAiOjE3NDMzODU1NTd9.Qd9ce0og5unoK_a9jO2IvgEaBSYNITAYLr3Z5h5zEG0";
 
+const REFRESH_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImplZmZzb25AZ21haWwuY29tIiwiaWF0IjoxNzQzMzgxOTU3LCJleHAiOjE3NDM0NjgzNTd9.MUrpMzRhgjYHBlWJOiGX2Vhd-QCBRNB1K--J8TCJx3A";
 export const getCart = async (user_uuid: string): Promise<string | Cart> => {
   try {
     const response = await axios.get(`${API_URL}/${user_uuid}`, {
@@ -62,9 +62,9 @@ export const removeItemFromCart = async (
     const response = (await axios.put(
       `${API_URL}/${id}`,
       {
-        user_uuid,
-        cartItem_id,
-        quantity,
+        user_uuid: user_uuid,
+        cartItem_id: cartItem_id,
+        quantity: quantity,
       },
       {
         headers: {

@@ -8,7 +8,6 @@ import { useParams } from "next/navigation";
 import { Cart, CartItem } from "@/types/cartTypes";
 import CartItemsList from "@/components/CartItemsList";
 import SubTotalCart from "@/components/SubTotalCart";
-import { set } from "react-hook-form";
 
 export default function CartPage() {
   const { user_uuid } = useParams() as { user_uuid: string };
@@ -23,10 +22,7 @@ export default function CartPage() {
         throw new Error(response);
       }
       setCart(response);
-      console.log("Cart data:", response);
-      toast.success("Cart fetched successfully!");
     } catch (error) {
-      console.error("Error parsing cart data:", error);
       toast.error(
         `Error parsing cart data: ${
           error instanceof Error ? error.message : "Unknown error"
@@ -50,17 +46,71 @@ export default function CartPage() {
       (prep) =>
         cart.cartItem.reduce((acc, value) => acc + value.quantity, 0) + 1
     );
-    console.log("Response from addItemToCart:", response);
     try {
       if (typeof response === "string") {
         toast.error(response);
       }
-
-      toast.success("Item added to cart successfully!");
     } catch (error) {
       console.error("Error adding item to cart:", error);
       toast.error(
         `Error adding item to cart: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  };
+
+  const handleRemoveItem = async (
+    cart_id: number,
+    user_uuid: string,
+    cartItem_id: number,
+    quantity: number
+  ): Promise<void> => {
+    const response = await cartService.removeItemFromCart(
+      cart_id,
+      user_uuid,
+      cartItem_id,
+      quantity
+    );
+    setAccCart(
+      (prep) =>
+        cart.cartItem.reduce((acc, value) => acc + value.quantity, 0) - 1
+    );
+    try {
+      if (typeof response === "string") {
+        toast.error(response);
+      }
+    } catch (error) {
+      toast.error(
+        `Error removing item from cart: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  };
+
+  const handleDeleteItem = async (
+    cartItem_id: number,
+    user_uuid: string,
+    cart_id: number
+  ) => {
+    const response = await cartService.deleteCartItem(
+      cartItem_id,
+      user_uuid,
+      cart_id
+    );
+    setAccCart(
+      (prep) =>
+        cart.cartItem.reduce((acc, value) => acc - value.quantity, 0) - 1
+    );
+    try {
+      if (typeof response === "string") {
+        toast.error(response);
+      }
+      toast.success("Item deletado com sucesso!");
+    } catch (error) {
+      toast.error(
+        `Error deleting item from cart: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
@@ -79,6 +129,8 @@ export default function CartPage() {
           user_uuid={user_uuid}
           cart={cart}
           handleAddItem={handleAddItem}
+          handleRemoveItem={handleRemoveItem}
+          handleDeleteItem={handleDeleteItem}
         />
         <SubTotalCart cart={cart} />
       </div>

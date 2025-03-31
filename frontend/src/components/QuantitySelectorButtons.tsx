@@ -1,6 +1,20 @@
+"use client";
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash } from "lucide-react";
 import { CartItem } from "@/types/cartTypes";
+import { useEffect, useState } from "react";
+import DeleteModel from "./DeleteModel";
 
 interface QuantitySelectorButtonsProps {
   user_uuid: string;
@@ -10,22 +24,54 @@ interface QuantitySelectorButtonsProps {
     book_uuid: string,
     quantity: number
   ) => Promise<void>;
+
+  handleRemoveItem: (
+    id: number,
+    user_uuid: string,
+    cartItem_id: number,
+    quantity: number
+  ) => Promise<void>;
+
+  handleDeleteItem: (
+    cartItem_id: number,
+    user_uuid: string,
+    cart_id: number
+  ) => Promise<void>;
 }
 
 export default function QuantitySelectorButtons({
   user_uuid,
   item,
   handleAddItem,
+  handleRemoveItem,
+  handleDeleteItem,
 }: QuantitySelectorButtonsProps) {
+  const [quantity, setQuantity] = useState<number>(item.quantity);
+
+  useEffect(() => {}, [quantity]);
+
   return (
     <div className="flex justify-between bg-[#FAFFFD] rounded-[17px] items-center w-[15%]">
-      <Button
-        size={"icon"}
-        variant="secondary"
-        className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
-      >
-        {item.quantity > 1 ? <Minus /> : <Trash />}
-      </Button>
+      {quantity <= 1 ? (
+        <DeleteModel
+          item={item}
+          deleteBookFunc={handleDeleteItem}
+          user_uuid={user_uuid}
+        />
+      ) : (
+        <Button
+          size={"icon"}
+          variant="secondary"
+          className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
+          onClick={(e) => {
+            e.preventDefault();
+            setQuantity((prep) => prep - 1),
+              handleRemoveItem(item.cart_id, user_uuid, item.id, 1);
+          }}
+        >
+          <Minus />
+        </Button>
+      )}
 
       <p>
         <strong>{item.quantity}</strong>
@@ -36,6 +82,7 @@ export default function QuantitySelectorButtons({
         className="bg-[#E16A00] text-white rounded-full min-w-[2rem]"
         onClick={(e) => {
           e.preventDefault();
+          setQuantity((prep) => prep + 1);
           handleAddItem(user_uuid, item.book.uuid, 1);
         }}
       >

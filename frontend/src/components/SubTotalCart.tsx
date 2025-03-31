@@ -19,19 +19,13 @@ export default function SubTotalCart({ cart }: { cart: Cart }) {
           {new Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
-          }).format(
-            cart?.cartItem?.reduce(
-              (acc, item) => acc + item.price * item.quantity,
-              0
-            ) || 0
-          )}
+          }).format(cart?.totalPrice || 0)}
         </h2>
         <Button
           variant="secondary"
           className="mt-4 bg-orange-600 text-white rounded-md p-2 w-full text-base"
           onClick={() => {
             toast.success("Checkout successful!");
-            // Implement checkout logic here
           }}
         >
           Concluir Compra

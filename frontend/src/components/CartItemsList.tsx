@@ -11,12 +11,25 @@ interface CartItemsListProps {
     book_uuid: string,
     quantity: number
   ) => Promise<void>;
+  handleRemoveItem: (
+    id: number,
+    user_uuid: string,
+    cartItem_id: number,
+    quantity: number
+  ) => Promise<void>;
+  handleDeleteItem: (
+    cartItem_id: number,
+    user_uuid: string,
+    cart_id: number
+  ) => Promise<void>;
 }
 
 export default function CartItemsList({
   user_uuid,
   cart,
   handleAddItem,
+  handleRemoveItem,
+  handleDeleteItem,
 }: CartItemsListProps) {
   const sortedCartItems = sortCartItems(cart.cartItem);
   return (
@@ -59,6 +72,8 @@ export default function CartItemsList({
                     user_uuid={user_uuid}
                     item={item}
                     handleAddItem={handleAddItem}
+                    handleRemoveItem={handleRemoveItem}
+                    handleDeleteItem={handleDeleteItem}
                   />
                 </div>
               </span>
@@ -66,10 +81,10 @@ export default function CartItemsList({
               <span className="moz- items-center w-[10%] max-w-[10%]">
                 <p>
                   <strong>
-                    {(item.price * item.quantity).toLocaleString("pt-br", {
+                    {new Intl.NumberFormat("pt-BR", {
                       style: "currency",
                       currency: "BRL",
-                    })}
+                    }).format(item.price || 0)}
                   </strong>
                 </p>
               </span>
