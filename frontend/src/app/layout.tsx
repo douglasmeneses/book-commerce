@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "E-commerce",
@@ -16,6 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <Toaster richColors />
+
         <Footer />
       </body>
     </html>

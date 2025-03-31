@@ -9,7 +9,6 @@ import { updateAuthors } from "./authorService";
 import { updateGenres } from "./genreService";
 import { updatePublishers } from "./publisherService";
 import { userExists, validUser } from "../middlewares/userValidators";
-import upload from "../middlewares/upload";
 
 const prisma = new PrismaClient();
 
@@ -39,6 +38,7 @@ const bookService = {
           page_count: book.page_count,
           stock_quantity: book.stock_quantity || 0,
           image: book.image ? Buffer.from(book.image) : null,
+          image_url: book.image ? book.image_url : null,
           release_date: new Date(book.release_date),
           stocks: {
             create: {

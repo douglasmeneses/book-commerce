@@ -5,7 +5,7 @@ import { SearchBar } from "./SearchBar";
 
 export default function NavBar() {
   return (
-    <nav className="navbar w-5/6 mx-auto px-4 py-2 rounded-md mt-4">
+    <nav className="navbar w-3/4 mx-auto px-4 py-2 rounded-md mt-4">
       <div className="container flex items-center justify-between">
         <Link href="/" className="navbar-brand">
           <img
@@ -16,11 +16,9 @@ export default function NavBar() {
             className="d-inline-block align-text-top"
           />
         </Link>
-
         <div className="flex items-center ml-auto">
           <SearchBar />
         </div>
-
         <div className="flex items-center space-x-1 ml-auto">
           <Link href="/login">
             <Button variant="ghost">Login</Button>
