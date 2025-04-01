@@ -28,14 +28,14 @@ model User {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
 
-  favorites      Favorites[]
-  reviews        Review[]
-  orders         Order[]
-  cart           Cart[]
-  addresses      Address[]
-  userAddress    userAddress[]
-  creditCard     Credit_card[]
-  Recommendation Recommendation[]
+  favorites   Favorites[]
+  reviews     Review[]
+  orders      Order[]
+  cart        Cart[]
+  addresses   Address[]
+  userAddress userAddress[]
+  creditCard  Credit_card[]
+  recommendations Recommendation[]
 }
 
 model Credit_card {
@@ -161,15 +161,15 @@ model Book {
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  genres         bookGenre[]
-  authors        bookAuthor[]
-  publishers     bookPublisher[]
-  stocks         Stock[]
-  favorites      Favorites[]
-  review         Review[]
-  orderItem      OrderItem[]
-  cartItem       CartItem[]
-  Recommendation Recommendation[]
+  genres     bookGenre[]
+  authors    bookAuthor[]
+  publishers bookPublisher[]
+  stocks     Stock[]
+  favorites  Favorites[]
+  review     Review[]
+  orderItem  OrderItem[]
+  cartItem   CartItem[]
+  recommendations Recommendation[]
 }
 
 model Genre {
