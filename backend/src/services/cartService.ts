@@ -76,6 +76,14 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
+
+      await prisma.recommendation.create({
+        data: {
+          user_id: user.id,
+          book_id: book.id,
+        },
+      });
+
       return cart as CartResponse;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
