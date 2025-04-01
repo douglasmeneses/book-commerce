@@ -1,4 +1,3 @@
-import userService from "./userService";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

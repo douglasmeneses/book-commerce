@@ -28,6 +28,7 @@ const bookController = {
     try {
       const filter: Filter = {
         search: req.query.search as string,
+        title: req.query.title as string,
         author: req.query.author as string,
         genre: req.query.genre as string,
         publisher: req.query.publisher as string,

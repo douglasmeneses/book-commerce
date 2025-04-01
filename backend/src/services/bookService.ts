@@ -93,6 +93,7 @@ const bookService = {
   getBooks: async (filter: Filter): Promise<Book[] | error> => {
     const {
       search,
+      title,
       author,
       genre,
       publisher,
@@ -162,6 +163,12 @@ const bookService = {
           publisher: { name: { contains: publisher, mode: "insensitive" } },
         },
       };
+    }
+    if (isbn) {
+      where.ISBN = { contains: isbn, mode: "insensitive" };
+    }
+    if (title) {
+      where.title = { contains: title, mode: "insensitive" };
     }
 
     const orderBy: any[] = [];

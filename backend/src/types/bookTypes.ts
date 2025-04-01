@@ -1,4 +1,5 @@
 import { Decimal } from "@prisma/client/runtime/library";
+import { Book } from "@prisma/client";
 
 export interface RegisterBook {
   title: string;
@@ -55,6 +56,7 @@ export interface BookResponse {
 
 export interface Filter {
   search?: string;
+  title?: string;
   author?: string;
   genre?: string;
   publisher?: string;
