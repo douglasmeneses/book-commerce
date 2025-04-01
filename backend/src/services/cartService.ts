@@ -8,6 +8,7 @@ import {
 import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
 import { CartResponse } from "../types/cartTypes";
+import recomendationService from "./recomendationService";
 
 const prisma = new PrismaClient();
 
@@ -76,6 +77,9 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
+
+      await recomendationService.registerBook(book.id, user.id);
+
       return cart as CartResponse;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
@@ -123,7 +127,6 @@ const cartService = {
               },
             },
           },
-
         },
       });
 

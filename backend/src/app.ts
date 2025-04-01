@@ -5,7 +5,7 @@ import favoriteRouter from "./routes/favoriteRouter";
 import cartRouter from "./routes/cartRouter";
 import userRouter from "./routes/userRouter";
 import reviewRouter from "./routes/reviewRouter";
-
+import recomendationRouter from "./routes/recomendationROuter";
 
 const PORT = process.env.PORT || 3001;
 
@@ -19,6 +19,7 @@ app.use("/favorites", favoriteRouter);
 app.use("/carts", cartRouter);
 app.use("/users", userRouter);
 app.use("/reviews", reviewRouter);
+app.use("/recomendation", recomendationRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
