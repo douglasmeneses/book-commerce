@@ -1,4 +1,4 @@
-import { Cart, PrismaClient } from "@prisma/client";
+import { Cart, PrismaClient, Recommendation } from "@prisma/client";
 import { userExists } from "../middlewares/userValidators";
 import { bookExists } from "../middlewares/bookValidators";
 import {
@@ -8,6 +8,7 @@ import {
 import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
 import { CartResponse } from "../types/cartTypes";
+import { get } from "axios";
 
 const prisma = new PrismaClient();
 
@@ -217,6 +218,23 @@ const cartService = {
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
     }
+  },
+
+  getRecommendedBooks: async (user_id: number) => {
+    const recommendations = await prisma.recommendation.findMany({
+      where: {
+        user_id: user_id,
+      },
+      include: {
+        book: true,
+      },
+    });
+
+    if (!recommendations) {
+      return { error: "Recommendations not found!" };
+    }
+
+    return recommendations;
   },
 };
 
