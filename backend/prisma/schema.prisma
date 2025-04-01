@@ -162,6 +162,47 @@ model Book {
   publishers     bookPublisher[]
 }
 
+model Recomendation {
+  model Book {
+  title          String
+  synopsis       String
+  image          Bytes?
+  image_url      String?  @default("")
+  language       String
+  price          Decimal
+  ISBN           String          @unique
+  rating         Decimal         @default(0) @db.Decimal(2, 1)
+  favorite_count Int             @default(0)
+  page_count     Int
+  release_date   DateTime
+  created_at     DateTime        @default(now())
+  updated_at     DateTime        @updatedAt
+  uuid           String          @unique @default(uuid())
+  id             Int             @id @default(autoincrement())
+  stock_quantity Int             @default(0)
+  cartItem       CartItem[]
+  favorites      Favorites[]
+  orderItem      OrderItem[]
+  review         Review[]
+  stocks         Stock[]
+  authors        bookAuthor[]
+  genres         bookGenre[]
+  publishers     bookPublisher[]
+}
+
+model Recomendation {
+  id         String   @id @default(uuid())
+  user_id    Int
+  book_id    Int
+  book       Book     @relation(fields: [book_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
+  title      String   @map("book.title") 
+  genres     bookGenre[] @relation("book.genres") 
+  publishers bookPublisher[] @relation("book.publishers") 
+}
+
+}
+
 model Genre {
   name       String      @unique
   created_at DateTime    @default(now())
