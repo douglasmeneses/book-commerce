@@ -28,13 +28,13 @@ model User {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
 
-  favorites   Favorites[]
-  reviews     Review[]
-  orders      Order[]
-  cart        Cart[]
-  addresses   Address[]
-  userAddress userAddress[]
-  creditCard  Credit_card[]
+  favorites       Favorites[]
+  reviews         Review[]
+  orders          Order[]
+  cart            Cart[]
+  addresses       Address[]
+  userAddress     userAddress[]
+  creditCard      Credit_card[]
   recommendations Recommendation[]
 }
 
@@ -161,14 +161,14 @@ model Book {
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  genres     bookGenre[]
-  authors    bookAuthor[]
-  publishers bookPublisher[]
-  stocks     Stock[]
-  favorites  Favorites[]
-  review     Review[]
-  orderItem  OrderItem[]
-  cartItem   CartItem[]
+  genres          bookGenre[]
+  authors         bookAuthor[]
+  publishers      bookPublisher[]
+  stocks          Stock[]
+  favorites       Favorites[]
+  review          Review[]
+  orderItem       OrderItem[]
+  cartItem        CartItem[]
   recommendations Recommendation[]
 }
 
@@ -255,11 +255,11 @@ model Favorites {
 
 model Recommendation {
   id         Int      @id @default(autoincrement())
-  user_id    Int
+  user_uuid  String
   book_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_uuid], references: [uuid], onDelete: Cascade)
   book Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
 }

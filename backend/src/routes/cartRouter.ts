@@ -21,7 +21,7 @@ router.delete(
     cartController.deleteCartItem(req, res);
   }
 ),
-  router.get("/reccomendations", (req: Request, res: Response) => {
-    cartController.getRecommendedBooks(req, res);
-  });
+router.get("/reccomendations", (req: Request, res: Response) => {
+  cartController.getRecommendedBooks(req, res);
+});
 export default router;
