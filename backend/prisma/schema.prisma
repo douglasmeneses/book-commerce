@@ -35,6 +35,7 @@ model User {
   addresses   Address[]
   userAddress userAddress[]
   creditCard  Credit_card[]
+  recommendations Recommendation[]
 }
 
 model Credit_card {
@@ -168,6 +169,7 @@ model Book {
   review     Review[]
   orderItem  OrderItem[]
   cartItem   CartItem[]
+  recommendations Recommendation[]
 }
 
 model Genre {
