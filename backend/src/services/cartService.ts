@@ -80,7 +80,7 @@ const cartService = {
 
       await prisma.recommendation.create({
         data: {
-          user_id: user.id,
+          user_uuid: user.uuid,
           book_id: book.id,
         },
       });
@@ -228,10 +228,10 @@ const cartService = {
     }
   },
 
-  getRecommendedBooks: async (user_uuid: string) => {
+  getRecommendedBooks: async (user_id: number) => {
     const recommendations = await prisma.recommendation.findMany({
       where: {
-        user_uuid: user_uuid,
+        user_id: user_id,
       },
       include: {
         book: true,
