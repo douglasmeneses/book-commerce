@@ -4,6 +4,25 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { User, IdCard, Phone, Calendar } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const stepTwoZodSchema = z.object({
+  name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+  birthDate: z.string().refine((value) => !isNaN(Date.parse(value)), {
+    message: "Data de nascimento inválida",
+  }),
+  cpf: z
+    .string()
+    .length(11, "O CPF deve ter 11 dígitos")
+    .regex(/^\d+$/, "O CPF deve conter apenas números"),
+  phone: z
+    .string()
+    .regex(
+      /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/,
+      "O telefone deve estar no formato (11) 91234-5678"
+    ),
+});
 
 export default function StepTwo({
   defaultValues,
@@ -17,14 +36,25 @@ export default function StepTwo({
     phone: string;
   };
   onPrevious: () => void;
-  onSubmit: () => void;
+  onSubmit: (data: {
+    name: string;
+    birthDate: string;
+    cpf: string;
+    phone: string;
+  }) => void;
 }) {
   const form = useForm({
     defaultValues,
+    resolver: zodResolver(stepTwoZodSchema),
   });
 
-  const handleSubmit = () => {
-    onSubmit();
+  const handleSubmit = (data: {
+    name: string;
+    birthDate: string;
+    cpf: string;
+    phone: string;
+  }) => {
+    onSubmit(data);
   };
 
   return (
@@ -33,7 +63,7 @@ export default function StepTwo({
         <FormField
           control={form.control}
           name="name"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="name" className="mb-1 block">
                 Nome
@@ -53,6 +83,11 @@ export default function StepTwo({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
@@ -60,7 +95,7 @@ export default function StepTwo({
         <FormField
           control={form.control}
           name="birthDate"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="birthDate" className="mb-1 block">
                 Data de Nascimento
@@ -80,6 +115,11 @@ export default function StepTwo({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
@@ -87,7 +127,7 @@ export default function StepTwo({
         <FormField
           control={form.control}
           name="cpf"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="cpf" className="mb-1 block">
                 CPF
@@ -107,6 +147,11 @@ export default function StepTwo({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
@@ -114,7 +159,7 @@ export default function StepTwo({
         <FormField
           control={form.control}
           name="phone"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="phone" className="mb-1 block">
                 Telefone
@@ -134,6 +179,11 @@ export default function StepTwo({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />

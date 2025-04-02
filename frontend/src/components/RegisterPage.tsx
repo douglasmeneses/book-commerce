@@ -33,9 +33,16 @@ export default function RegisterPage() {
     setStep((prev) => prev - 1);
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (data: {
+    name: string;
+    birthDate: string;
+    cpf: string;
+    phone: string;
+  }) => {
+    setFormData((prev) => ({ ...prev, ...data }));
+
     try {
-      const response = await registerUser(formData);
+      const response = await registerUser({ ...formData, ...data });
       toast({
         title: "Success",
         description: "User registered successfully",
@@ -57,7 +64,7 @@ export default function RegisterPage() {
     <div className="w-full max-w-xl space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-semibold">
-          Registre sua conta na {" "}
+          Registre sua conta na{" "}
           <span className="text-[#e67e22]">BookStore</span>
         </h1>
       </div>
@@ -69,7 +76,7 @@ export default function RegisterPage() {
               initial={{ opacity: 0, x: 0 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
             >
               <StepOne defaultValues={formData} onNext={handleNextStep} />
             </motion.div>
@@ -80,7 +87,7 @@ export default function RegisterPage() {
               initial={{ opacity: 1, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 50 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
             >
               <StepTwo
                 defaultValues={formData}

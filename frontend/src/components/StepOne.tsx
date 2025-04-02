@@ -6,6 +6,26 @@ import { useForm } from "react-hook-form";
 import { User, Mail } from "lucide-react";
 import { useState } from "react";
 import { Lock, Eye, EyeOff } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const stepOneZodSchema = z
+  .object({
+    username: z.string().min(3, "o apelido deve ter pelo menos 3 caracteres"),
+    email: z.string().email("Email inválido"),
+    password: z
+      .string()
+      .min(8, "A senha deve ter pelo menos 8 caracteres")
+      .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
+      .regex(/[0-9]/, "A senha deve conter pelo menos um número")
+      .regex(/[@$!%*?&.]/, "A senha deve conter pelo menos um caractere especial"),
+    confirmPassword: z
+      .string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
 export default function StepOne({
   defaultValues,
@@ -27,6 +47,7 @@ export default function StepOne({
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm({
     defaultValues,
+    resolver: zodResolver(stepOneZodSchema),
   });
 
   const handleNext = (data: {
@@ -44,7 +65,7 @@ export default function StepOne({
         <FormField
           control={form.control}
           name="username"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="username" className="mb-1 block">
                 Apelido
@@ -62,6 +83,11 @@ export default function StepOne({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
@@ -69,7 +95,7 @@ export default function StepOne({
         <FormField
           control={form.control}
           name="email"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="email" className="mb-1 block">
                 Email
@@ -87,6 +113,11 @@ export default function StepOne({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
@@ -94,7 +125,7 @@ export default function StepOne({
         <FormField
           control={form.control}
           name="password"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="password" className="mb-1 block">
                 Senha
@@ -125,6 +156,11 @@ export default function StepOne({
                   </button>
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
@@ -132,7 +168,7 @@ export default function StepOne({
         <FormField
           control={form.control}
           name="confirmPassword"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="confirmPassword" className="mb-1 block">
                 Confirmar Senha
@@ -152,6 +188,11 @@ export default function StepOne({
                   />
                 </div>
               </FormControl>
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {fieldState.error.message}
+                </p>
+              )}
             </FormItem>
           )}
         />
