@@ -9,6 +9,7 @@ import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
 import { CartResponse } from "../types/cartTypes";
 import { get } from "axios";
+import bookService from "./bookService";
 
 const prisma = new PrismaClient();
 
@@ -228,21 +229,66 @@ const cartService = {
     }
   },
 
-  getRecommendedBooks: async (user_id: number) => {
-    const recommendations = await prisma.recommendation.findMany({
-      where: {
-        user_id: user_id,
-      },
-      include: {
-        book: true,
-      },
-    });
-
-    if (!recommendations) {
-      return { error: "Recommendations not found!" };
+  getRecommendedBooks: async (user_uuid: string) => {
+    try {
+      const recommendedBooks = await prisma.book.findMany({
+        where: {
+          recommendations: {
+            some: {
+              user_uuid: user_uuid,
+            },
+          },
+        },
+        include: {
+          authors: {
+            include: {
+              author: true,
+            },
+          },
+          genres: {
+            include: {
+              genre: true,
+            },
+          },
+          publishers: {
+            include: {
+              publisher: true,
+            },
+          },
+        },
+      });
+      const recommendedResponse = await Promise.all(
+        recommendedBooks.map(async (book) => {
+          const booksTitle = await bookService.getBooks({
+            search: book.title,
+          });
+          const booksAuthors = await bookService.getBooks({
+            search: book.authors
+              .map((authorRelation) => authorRelation.author.name)
+              .join(", "),
+          });
+          const booksGenres = await bookService.getBooks({
+            search: book.genres
+              .map((genreRelation) => genreRelation.genre.name)
+              .join(", "),
+          });
+          const booksPublishers = await bookService.getBooks({
+            search: book.publishers
+              .map((publisherRelation) => publisherRelation.publisher.name)
+              .join(", "),
+          });
+          return {
+            booksTitle: booksTitle,
+            booksAuthors: booksAuthors,
+            booksGenres: booksGenres,
+            booksPublishers: booksPublishers,
+          }
+        })
+      );
+      return recommendedResponse;
+    } catch (error) {
+      throw new Error("Failed to fetch recommended books");
     }
-
-    return recommendations;
   },
 };
 

@@ -5,6 +5,9 @@ import { Router } from "express";
 
 const router = Router();
 
+router.get("/reccomendations", (req: Request, res: Response) => {
+  cartController.getRecommendedBooks(req, res);
+});
 router.post("/:user_uuid", authMiddleware, (req: Request, res: Response) => {
   cartController.addBookToCart(req, res);
 });
@@ -20,8 +23,6 @@ router.delete(
   (req: Request, res: Response) => {
     cartController.deleteCartItem(req, res);
   }
-),
-router.get("/reccomendations", (req: Request, res: Response) => {
-  cartController.getRecommendedBooks(req, res);
-});
+);
+
 export default router;
