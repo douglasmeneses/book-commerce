@@ -88,7 +88,6 @@ const cartController = {
   getRecommendedBooks: async (req: Request, res: Response) => {
     try {
       const user_uuid = req.params.user_uuid as string;
-      console.log(user_uuid);
       const reccomendations = await cartService.getRecommendedBooks(user_uuid);
       if ("error" in reccomendations)
         return res.status(400).json({ error: reccomendations.error });
