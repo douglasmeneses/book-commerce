@@ -6,6 +6,7 @@ import Image from "next/image";
 import BookCarousel from "@/components/BookCarousel";
 import { Book } from "@/types/index";
 import { getBooks } from "@/services/bookService";
+import NavBar from "@/components/NavBar";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -47,7 +48,7 @@ export default function Home() {
         <section className="flex items-center justify-center">
           <div className="flex flex-col">
             <h1 className="font-bold text-4xl">Bem vindo à BookStore</h1>
-            <p className="font-light text-xl w-3/4 mt-4 text-[13px] font-semibold w-[350px]">
+            <p className="text-xl w-3/4 mt-4 text-[13px] font-semibold">
               Em nossa loja você encontra um livro para todos os gostos. Grande
               variedade. Preços agradáveis. Histórias interessantes.
             </p>
