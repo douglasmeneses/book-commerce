@@ -1,11 +1,13 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import recomendationController from "../controllers/recomendationController";
-import { Request, Response } from "express";
 
 const router = Router();
 
-router.get("/:user_id", async (req: Request, res: Response) => {
-  recomendationController.getBookRecommendations(req, res);
+router.get("/", async (req: Request, res: Response) => {
+  recomendationController.getRecommendations(req, res);
 });
 
+router.post("/:uuid", async (req: Request, res: Response) => {
+  recomendationController.registerRecommendation(req, res);
+});
 export default router;
