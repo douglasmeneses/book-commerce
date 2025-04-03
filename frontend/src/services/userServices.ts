@@ -32,4 +32,4 @@ export const registerUser = async (newUser: RegisterUser) => {
     }
     throw new Error("Something went wrong to register user");
   }
-}
+};

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster as ToasterUI } from "@/components/ui/toaster";
+import { Toaster as ToastSonner } from "@/components/ui/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,10 +20,9 @@ export default function RootLayout({
       <body>
         <NavBar />
         {children}
-        <Toaster />
-        <Toaster richColors />
+        <ToasterUI />
+        <ToastSonner richColors />
         <Footer />
-        <Toaster richColors />
       </body>
     </html>
   );
