@@ -77,7 +77,7 @@ export interface CartItemResponse {
     id: number;
     title: string;
     price: Decimal;
-    image: Uint8Array | null;
+    image: string | null;
     image_url: string | null;
   };
 }

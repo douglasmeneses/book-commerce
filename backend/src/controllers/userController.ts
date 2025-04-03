@@ -21,19 +21,26 @@ const userController = {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
+
       const newUser = await userService.registerUser({
         name,
         username,
         email,
         password: hashedPassword,
+        birth_date: req.body.birth_date,
+        cpf: req.body.cpf,
+        phone: req.body.phone,
       });
 
-      return res
-        .status(200)
-        .json({ message: "Usuário registrado com sucesso", user: newUser });
+      return res.status(201).json({
+        message: "Usuário registrado com sucesso!",
+        user: newUser,
+      });
     } catch (error) {
-      return res.status(400).json({
-        error: error instanceof Error ? error.message : "Ocorreu um erro",
+      console.error("Erro ao registrar o usuário:", error);
+      return res.status(500).json({
+        error: "Erro interno do servidor",
+        message: "Erro ao registrar o usuário. Tente novamente mais tarde.",
       });
     }
   },
@@ -161,36 +168,40 @@ const userController = {
   uploadAvatar: async (req: Request, res: Response): Promise<Response> => {
     try {
       const uuid = req.params.uuid;
-  
+
       if (!req.file) {
         return res.status(400).json({ error: "Nenhuma imagem enviada" });
       }
-  
-      
-      if (!req.file.mimetype.startsWith('image/')) {
-        return res.status(400).json({ error: "Arquivo enviado não é uma imagem válida" });
+
+      if (!req.file.mimetype.startsWith("image/")) {
+        return res
+          .status(400)
+          .json({ error: "Arquivo enviado não é uma imagem válida" });
       }
-  //upload avatar de usuario controller
+      //upload avatar de usuario controller
       const response = await userService.uploadAvatar(uuid, req.file.buffer);
       if (response && "error" in response) {
         return res.status(400).json({ error: response.error });
       }
-  
+
       if (!response) {
         return res.status(400).json({ error: "Erro ao atualizar avatar" });
       }
-  
+
       const avatarBase64 = response.avatar
         ? await processAvatar(Buffer.from(response.avatar))
         : null;
-  
+
       return res.status(200).json({
         message: "Avatar atualizado com sucesso!",
         user: { ...response, avatar: `data:image/png;base64,${avatarBase64}` },
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      return res.status(500).json({ error: `Erro ao fazer upload do avatar: ${errorMessage}` });
+      const errorMessage =
+        error instanceof Error ? error.message : "Erro desconhecido";
+      return res
+        .status(500)
+        .json({ error: `Erro ao fazer upload do avatar: ${errorMessage}` });
     }
   },
 };

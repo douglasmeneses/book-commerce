@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import BookCarousel from "@/components/BookCarousel";
-import { Book } from "@/types/index";
+import { Book } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
-import NavBar from "@/components/NavBar";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -43,7 +42,6 @@ export default function Home() {
 
   return (
     <>
-      <NavBar />
       <main className="min-h-screen p-40">
         <section className="flex items-center justify-center">
           <div className="flex flex-col">

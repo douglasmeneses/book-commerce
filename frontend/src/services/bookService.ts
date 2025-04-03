@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Filter } from "@/types";
+import { Filter } from "@/types/bookTypes";
 
 const API_URL = "http://localhost:3001/books";
 

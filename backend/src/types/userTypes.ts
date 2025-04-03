@@ -4,6 +4,9 @@ export interface RegisterUser {
   username: string;
   email: string;
   password: string;
+  birth_date?: Date;
+  cpf?: string;
+  phone?: string;
 }
 
 export interface UpdateUser {
