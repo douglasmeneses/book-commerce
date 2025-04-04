@@ -8,19 +8,19 @@ datasource db {
 }
 
 model User {
-  uuid       String    @unique @default(uuid())
-  id         Int       @id @unique @default(autoincrement())
-  email      String    @unique
-  password   String
-  name       String
-  username   String    @unique
-  avatar     Bytes?
-  birth_date DateTime?
-  cpf        String?   @unique
-  phone      String?
-  isAdmin    Boolean   @default(false)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  uuid         String         @unique @default(uuid())
+  id           Int            @id @unique @default(autoincrement())
+  email        String         @unique
+  password     String
+  name         String
+  username     String         @unique
+  avatar       Bytes?
+  birth_date   DateTime?
+  cpf          String?        @unique
+  phone        String?
+  isAdmin      Boolean        @default(false)
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
 
   cart          Cart[]
   addresses     userAddress[]
@@ -115,7 +115,7 @@ model Address {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  userAddress userAddress[]
+  userAddress  userAddress[]
 }
 
 model userAddress {
@@ -145,6 +145,7 @@ model Book {
   uuid           String          @unique @default(uuid())
   id             Int             @id @default(autoincrement())
   stock_quantity Int             @default(0)
+
   cartItem       CartItem[]
   favorites      Favorites[]
   orderItem      OrderItem[]
