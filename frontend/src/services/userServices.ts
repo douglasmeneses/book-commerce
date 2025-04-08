@@ -58,3 +58,24 @@ export const updateUserProfile = async (
     throw new Error("Something went wrong to update user profile");
   }
 };
+
+export const deleteUser = async (user_uuid: string) => {
+  try {
+    const TOKEN = localStorage.getItem("token") || "";
+    const REFRESH_TOKEN = localStorage.getItem("refresh_token") || "";
+    const response = await axios.delete(`${API_URL}/${user_uuid}`, {
+      headers: {
+        authorization: `Bearer ${TOKEN}`,
+        "x-refresh-token": REFRESH_TOKEN,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Error while deleting user"
+      );
+    }
+    throw new Error("Something went wrong to delete user");
+  }
+};

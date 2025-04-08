@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { updateUserProfile } from "@/services/userServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import DeleteUserButton from "@/components/DeleteUserButton";
+import { Save } from "lucide-react";
 
 const profileUpdateSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
@@ -48,6 +50,8 @@ type ProfileUpdateForm = z.infer<typeof profileUpdateSchema>;
 export default function ProfileUpdatePage() {
   const { toast } = useToast();
   const router = useRouter();
+  const user = localStorage.getItem("user") || "";
+  const user_uuid: string = user ? JSON.parse(user).uuid : "";
 
   const form = useForm<ProfileUpdateForm>({
     resolver: zodResolver(profileUpdateSchema),
@@ -61,7 +65,7 @@ export default function ProfileUpdatePage() {
     },
   });
 
-  const handleSubmit = async (data: ProfileUpdateForm) => {
+  const handleSubmit = async (data: ProfileUpdateForm, user_uuid: string) => {
     try {
       const formData = new FormData();
       formData.append("username", data.username || "");
@@ -73,9 +77,6 @@ export default function ProfileUpdatePage() {
       formData.append("cpf", data.cpf || "");
       formData.append("phone", data.phone || "");
       formData.append("birthDate", data.birthDate || "");
-
-      const user = localStorage.getItem("user") || "";
-      const user_uuid = user ? JSON.parse(user).uuid : "";
 
       await updateUserProfile(user_uuid, formData);
       toast({
@@ -96,7 +97,7 @@ export default function ProfileUpdatePage() {
     <div className="max-w-7xl mx-auto p-6">
       <form
         className="space-y-4"
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit((data) => handleSubmit(data, user_uuid))}
         encType="multipart/form-data"
       >
         <div className="flex flex-row justify-between items-center gap-8 mb-4">
@@ -197,13 +198,15 @@ export default function ProfileUpdatePage() {
             </p>
           )}
         </div>
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-row justify-center items-center gap-4">
           <Button
             type="submit"
             className="w-80 bg-[#e67e22] text-white mt-10 mb-8"
           >
             Salvar Dados
+            <Save />
           </Button>
+          <DeleteUserButton user_uuid={user_uuid} />
         </div>
       </form>
     </div>
