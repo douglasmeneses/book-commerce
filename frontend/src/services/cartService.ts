@@ -1,13 +1,12 @@
 import { Cart } from "@/types/cartTypes";
 import axios, { AxiosResponse } from "axios";
-import { use } from "react";
 
 const API_URL = "http://localhost:3001/carts";
 const TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImplZmZzb25AZ21haWwuY29tIiwiaWF0IjoxNzQzMzgxOTU3LCJleHAiOjE3NDMzODU1NTd9.Qd9ce0og5unoK_a9jO2IvgEaBSYNITAYLr3Z5h5zEG0";
-
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTc0MzM3MDgwMiwiZXhwIjoxNzQzMzc0NDAyfQ.zOgikeaCABb-miDChY_tCQOtXw21BBJVu8CadMU8Ci8";
 const REFRESH_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImplZmZzb25AZ21haWwuY29tIiwiaWF0IjoxNzQzMzgxOTU3LCJleHAiOjE3NDM0NjgzNTd9.MUrpMzRhgjYHBlWJOiGX2Vhd-QCBRNB1K--J8TCJx3A";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTc0MzM3MDgwMiwiZXhwIjoxNzQzNDU3MjAyfQ.wPgCEllb8Kyn5AM8wG7enUuL3u9qmVryC8AZwIGylQs";
+
 export const getCart = async (user_uuid: string): Promise<string | Cart> => {
   try {
     const response = await axios.get(`${API_URL}/${user_uuid}`, {
@@ -30,7 +29,7 @@ export const addItemToCart = async (
   quantity: number
 ): Promise<string | Cart> => {
   try {
-    const reponse = (await axios.post(
+    const response = (await axios.post(
       `${API_URL}/${user_uuid}`,
       {
         book_uuid,
@@ -44,7 +43,7 @@ export const addItemToCart = async (
       }
     )) as AxiosResponse<Cart>;
 
-    return reponse.data;
+    return response.data;
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Error adding item to cart.";

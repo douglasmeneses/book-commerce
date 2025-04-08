@@ -115,8 +115,14 @@ const userController = {
     const uuid = req.params.uuid;
     const { username, name, password, avatar, cpf, phone, birth_date } =
       req.body;
-
+      if (birth_date && !/^\d{4}-\d{2}-\d{2}$/.test(birth_date)) {
+        return res.status(400).json({ error: "Data de nascimento inválida. O formato correto é YYYY-MM-DD." });
+      }
+  
+    
     try {
+
+      const formattedBirthDate = birth_date ? new Date(birth_date) : undefined;
       const user = await userService.updateUserProfile(uuid, {
         username,
         name,
@@ -124,7 +130,7 @@ const userController = {
         avatar: avatar ? Buffer.from(avatar, "base64") : undefined,
         cpf,
         phone,
-        birth_date,
+        birth_date: formattedBirthDate,
       });
 
       if (!user) {
@@ -170,7 +176,7 @@ const userController = {
       if (!req.file.mimetype.startsWith('image/')) {
         return res.status(400).json({ error: "Arquivo enviado não é uma imagem válida" });
       }
-  //upload avatar de usuario controller
+  
       const response = await userService.uploadAvatar(uuid, req.file.buffer);
       if (response && "error" in response) {
         return res.status(400).json({ error: response.error });
