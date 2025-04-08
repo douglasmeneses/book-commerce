@@ -7,3 +7,12 @@ export interface RegisterUser {
   cpf?: string;
   phone?: string;
 }
+
+export interface UpdateUser {
+  name: string;
+  username?: string;
+  password?: string;
+  phone?: string;
+  cpf?: string;
+  birth_date?: Date;
+}
