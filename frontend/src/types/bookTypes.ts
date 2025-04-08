@@ -34,6 +34,7 @@ export interface BookGenre {
 }
 
 export interface Book {
+  uuid: string;
   id: number;
   title: string;
   synopsis: string;
@@ -50,4 +51,18 @@ export interface Book {
   image_url: string;
   authors: BookAuthor[];
   genres: BookGenre[];
+}
+
+export interface BookCarouselProps {
+  books: Array<Book>;
+  genres?: Array<string>;
+  title: string;
+}
+
+export interface Filter {
+  search?: string;
+  limit?: number;
+  page?: number;
+  mostLiked?: boolean;
+  mostRecent?: boolean;
 }
