@@ -10,3 +10,6 @@ export const sortCartItems = (cartItems: CartItem[]): CartItem[] => {
         .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
     : [];
 };
+
+export const cleanToken = (token: string): string =>
+  token.replace(/^"|"$/g, "");

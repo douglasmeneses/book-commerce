@@ -1,8 +1,8 @@
 import { Cart } from "@/types/cartTypes";
 import axios, { AxiosResponse } from "axios";
+import { cleanToken } from "@/utils/cartUtils";
 
 const API_URL = "http://localhost:3001/carts";
-const cleanToken = (token: string): string => token.replace(/^"|"$/g, "");
 
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");

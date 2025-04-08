@@ -20,6 +20,8 @@ import {
 import { addItemToCart } from "@/services/cartService";
 
 export default function SearchPage() {
+  const user = localStorage.getItem("user");
+  const user_uuid: string = user ? JSON.parse(user).uuid : "";
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -60,12 +62,10 @@ export default function SearchPage() {
 
     fetchBooks();
   }, [query, currentPage]);
+
   const handleAddToCart = async (bookId: string) => {
     try {
-      const userUUID = "20cfe17a-adb9-4095-9cdd-b54900b52576";
-      const quantity = 1;
-
-      const response = await addItemToCart(userUUID, String(bookId), quantity);
+      const response = await addItemToCart(user_uuid, String(bookId), 1);
 
       if (typeof response === "string") {
         throw new Error(response);
