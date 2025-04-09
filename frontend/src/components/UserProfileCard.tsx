@@ -17,7 +17,13 @@ import "dayjs/locale/pt-br";
 
 dayjs.locale("pt-br");
 
-export default function UserProfileCard({ user }: { user: User | null }) {
+export default function UserProfileCard({
+  user,
+  className,
+}: {
+  user: User | null;
+  className?: string;
+}) {
   const dateFormater = (date: string | Date) => {
     const data = dayjs(date).format("DD [de] MMMM [de] YYYY");
     return data;
@@ -25,7 +31,9 @@ export default function UserProfileCard({ user }: { user: User | null }) {
 
   const [userData, setUserData] = useState<User | null>(user);
   return (
-    <Card className="w-auto min-w-[500px]  bg-[#FFFFFF] justify-center items-center text-[#241400]">
+    <Card
+      className={`w-auto min-w-[500px] bg-[#FFFFFF] justify-center items-center text-[#241400] ${className}`}
+    >
       <CardHeader className="flex flex-row items-center gap-6 px-8  justify-start ">
         <Avatar className="w-24 h-auto text-[#E16A00]">
           <AvatarImage src={userData?.avatar || ""} />
