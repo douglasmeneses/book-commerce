@@ -48,9 +48,9 @@ const favoriteService = {
       };
     }
   },
-  getFavorites: async (username: string) => {
+  getFavorites: async (user_uuid: string) => {
     try {
-      const user = await userExists(username);
+      const user = await userExists(user_uuid);
       if ("error" in user) {
         return { error: user.error };
       }

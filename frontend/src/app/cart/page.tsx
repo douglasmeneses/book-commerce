@@ -7,6 +7,7 @@ import { Cart } from "@/types/cartTypes";
 import CartItemsList from "@/components/CartItemsList";
 import SubTotalCart from "@/components/SubTotalCart";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 export default function CartPage() {
   const router = useRouter();
@@ -31,7 +32,11 @@ export default function CartPage() {
       toast.info("Sessão expirada, redirecionando para o login...");
       setTimeout(() => router.push("/login"), 2000);
     } finally {
-      setLoading(false);
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 900);
+
+      return () => clearTimeout(timer);
     }
   };
 
@@ -130,8 +135,8 @@ export default function CartPage() {
     <div>
       <div className="flex h-screen bg-[#FFFAF5] justify-evenly">
         {loading ? (
-          <div className="flex flex-col justify-center items-center h-full">
-            <p className="text-gray-500">Carregando carrinho...</p>
+          <div className="w-full flex justify-center items-center h-full">
+            <LoaderCircle className="animate-spin text-[#e67e22]" size={40} />
           </div>
         ) : !cart.cartItem || cart.cartItem.length === 0 ? (
           <div className="flex flex-col justify-center items-center h-full">
