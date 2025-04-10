@@ -33,3 +33,28 @@ export const registerUser = async (newUser: RegisterUser) => {
     throw new Error("Something went wrong to register user");
   }
 };
+
+export const updateUserProfile = async (
+  user_uuid: string,
+  formData: FormData
+) => {
+  try {
+    const TOKEN = localStorage.getItem("token") || "";
+    const REFRESH_TOKEN = localStorage.getItem("refresh_token") || "";
+    const response = await axios.put(`${API_URL}/${user_uuid}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        authorization: `Bearer ${TOKEN}`,
+        "x-refresh-token": REFRESH_TOKEN,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Error while updating user profile"
+      );
+    }
+    throw new Error("Something went wrong to update user profile");
+  }
+};
