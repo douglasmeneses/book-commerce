@@ -5,6 +5,7 @@ import favoriteRouter from "./routes/favoriteRouter";
 import cartRouter from "./routes/cartRouter";
 import userRouter from "./routes/userRouter";
 import reviewRouter from "./routes/reviewRouter";
+import orderRouter from "./routes/orderRouter";
 
 
 const PORT = process.env.PORT || 3001;
@@ -14,6 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use("/orders", orderRouter);
 app.use("/books", bookRouter);
 app.use("/favorites", favoriteRouter);
 app.use("/carts", cartRouter);
