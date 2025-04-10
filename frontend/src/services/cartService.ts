@@ -2,11 +2,17 @@ import { Cart } from "@/types/cartTypes";
 import axios, { AxiosResponse } from "axios";
 
 const API_URL = "http://localhost:3001/carts";
-const TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTc0MzM3MDgwMiwiZXhwIjoxNzQzMzc0NDAyfQ.zOgikeaCABb-miDChY_tCQOtXw21BBJVu8CadMU8Ci8";
-const REFRESH_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsImlhdCI6MTc0MzM3MDgwMiwiZXhwIjoxNzQzNDU3MjAyfQ.wPgCEllb8Kyn5AM8wG7enUuL3u9qmVryC8AZwIGylQs";
+const cleanToken = (token: string): string => token.replace(/^"|"$/g, "");
 
+const TOKEN = cleanToken(localStorage.getItem("token") || "");
+const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
+
+const handleNewToken = (response: AxiosResponse<any, any>): void => {
+  const authHeader = response.headers["authorization"] as string | undefined;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    localStorage.setItem("token", cleanToken(authHeader));
+  }
+};
 export const getCart = async (user_uuid: string): Promise<string | Cart> => {
   try {
     const response = await axios.get(`${API_URL}/${user_uuid}`, {
@@ -15,6 +21,7 @@ export const getCart = async (user_uuid: string): Promise<string | Cart> => {
         "x-refresh-token": REFRESH_TOKEN,
       },
     });
+    handleNewToken(response);
     return response.data;
   } catch (error) {
     const errorMessage =
@@ -42,6 +49,7 @@ export const addItemToCart = async (
         },
       }
     )) as AxiosResponse<Cart>;
+    handleNewToken(response);
 
     return response.data;
   } catch (error) {
@@ -72,6 +80,7 @@ export const removeItemFromCart = async (
         },
       }
     )) as AxiosResponse<Cart>;
+    handleNewToken(response);
     return response.data;
   } catch (error) {
     const errorMessage =
@@ -96,6 +105,7 @@ export const deleteCartItem = async (
         id,
       },
     })) as AxiosResponse<Cart>;
+    handleNewToken(response);
     return response.data;
   } catch (error) {
     const errorMessage =

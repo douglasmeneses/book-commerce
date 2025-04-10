@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Heart, CircleUserRound, ShoppingCart } from "lucide-react";
@@ -8,6 +8,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/navigation";
 
 export default function NavBar() {
+  const [user, setUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser);
+    }
+  }, []);
+
   const [search, setSearch] = useState("");
   const router = useRouter();
 
@@ -48,23 +57,29 @@ export default function NavBar() {
         </form>
 
         <div className="flex items-center space-x-1 ml-auto">
-          <Link href="/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/register">
-            <Button variant="ghost">Cadastre-se</Button>
-          </Link>
+          {!user && (
+            <Link href="/login">
+              <Button variant="ghost">Login</Button>
+            </Link>
+          )}
+          {!user && (
+            <Link href="/register">
+              <Button variant="ghost">Cadastre-se</Button>
+            </Link>
+          )}
           <div className="flex gap-[14px]">
             <Heart
               size={30}
               color="#E16A00"
               className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
             />
-            <ShoppingCart
-              size={30}
-              color="#E16A00"
-              className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
-            />
+            <Link href="/cart">
+              <ShoppingCart
+                size={30}
+                color="#E16A00"
+                className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
+              />
+            </Link>
             <CircleUserRound
               size={30}
               color="#E16A00"

@@ -11,6 +11,13 @@ import { loginUser } from "@/services/userServices";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const loginSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+});
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,6 +29,7 @@ export default function LoginPage() {
       email: "",
       password: "",
     },
+    resolver: zodResolver(loginSchema),
   });
 
   const handleLogin = async (data: { email: string; password: string }) => {
@@ -70,7 +78,7 @@ export default function LoginPage() {
           <FormField
             control={form.control}
             name="email"
-            render={({ field }) => (
+            render={({ field, formState }) => (
               <FormItem>
                 <Label htmlFor="email" className="mb-1 block">
                   Email
@@ -90,6 +98,11 @@ export default function LoginPage() {
                     />
                   </div>
                 </FormControl>
+                {formState.errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formState.errors.email.message}
+                  </p>
+                )}
               </FormItem>
             )}
           />
@@ -97,7 +110,7 @@ export default function LoginPage() {
           <FormField
             control={form.control}
             name="password"
-            render={({ field }) => (
+            render={({ field, formState }) => (
               <FormItem>
                 <Label htmlFor="password" className="mb-1 block">
                   Senha
@@ -128,6 +141,11 @@ export default function LoginPage() {
                     </button>
                   </div>
                 </FormControl>
+                {formState.errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formState.errors.password.message}
+                  </p>
+                )}
               </FormItem>
             )}
           />
