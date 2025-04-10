@@ -16,3 +16,19 @@ export interface UpdateUser {
   cpf?: string;
   birth_date?: Date;
 }
+
+export interface User {
+  uuid: string;
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  username: string;
+  avatar: string | null;
+  birth_date: Date | null;
+  cpf: string | null;
+  phone: string | null;
+  isAdmin: boolean;
+  created_at: string;
+  updated_at: string;
+}

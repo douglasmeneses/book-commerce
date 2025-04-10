@@ -78,11 +78,13 @@ export default function NavBar() {
                 className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
               />
             </Link>
-            <CircleUserRound
-              size={30}
-              color="#E16A00"
-              className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
-            />
+            <Link href="/profile">
+              <CircleUserRound
+                size={30}
+                color="#E16A00"
+                className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
+              />
+            </Link>
           </div>
         </div>
       </div>

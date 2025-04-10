@@ -22,7 +22,21 @@ const favoriteController = {
       });
     }
   },
-  getFavorites: async (req: Request, res: Response) => {},
+  getFavorites: async (req: Request, res: Response) => {
+    try {
+      const user_uuid = req.params.user_uuid;
+      const favorites = await favoriteService.getFavorites(user_uuid);
+
+      if (favorites && "error" in favorites) {
+        return res.status(404).json({ error: favorites.error });
+      }
+      return res.status(200).json(favorites);
+    } catch (error) {
+      return res.status(500).json({
+        error: error instanceof Error ? error.message : "internal erro",
+      });
+    }
+  },
 };
 
 export default favoriteController;
