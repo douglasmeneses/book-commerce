@@ -1,13 +1,15 @@
 "use client";
 
 import * as cartService from "@/services/cartService";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { Cart, CartItem } from "@/types/cartTypes";
+import { Cart } from "@/types/cartTypes";
 import CartItemsList from "@/components/CartItemsList";
 import SubTotalCart from "@/components/SubTotalCart";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const router = useRouter();
   const user = localStorage.getItem("user");
   const user_uuid = user ? JSON.parse(user).uuid : "";
   const [cart, setCart] = useState<Cart>({} as Cart);
@@ -25,11 +27,9 @@ export default function CartPage() {
       }
       setCart(response);
     } catch (error) {
-      toast.error(
-        `Error parsing cart data: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      console.log("Error fetching cart:", error);
+      toast.info("Sessão expirada, redirecionando para o login...");
+      setTimeout(() => router.push("/login"), 2000);
     } finally {
       setLoading(false);
     }
