@@ -39,7 +39,6 @@ export default function NavBar() {
             className="d-inline-block align-text-top"
           />
         </Link>
-
         <form
           onSubmit={handleSearch}
           className="mx-4 flex-grow w-full flex justify-center relative"
@@ -55,7 +54,6 @@ export default function NavBar() {
             className="w-1/2 pl-10 py-2 border-b border-zinc-300 focus:outline-none focus:ring-0 focus:border-b-1 focus:border-orange-500"
           />
         </form>
-
         <div className="flex items-center space-x-1 ml-auto">
           {!user && (
             <Link href="/login">
