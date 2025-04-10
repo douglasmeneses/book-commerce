@@ -93,6 +93,15 @@ const userService = {
 
     return user;
   },
+
+  uploadAvatar: async (uuid: string, avatar: Buffer): Promise<User | null> => {
+    const user = await prisma.user.update({
+      where: { uuid },
+      data: { avatar },
+    });
+
+    return user || null;
+  },
 };
 
 export default userService;

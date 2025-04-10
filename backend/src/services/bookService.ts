@@ -360,6 +360,7 @@ const bookService = {
       };
     }
   },
+    
   uploadBookImage: async (
     uuid: string,
     user_uuid: string,
