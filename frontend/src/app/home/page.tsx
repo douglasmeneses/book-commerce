@@ -7,6 +7,7 @@ import BookCarousel from "@/components/BookCarousel";
 import { Book } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [mostLikedBooks, setMostLikedBooks] = useState<Array<Book>>([]);
