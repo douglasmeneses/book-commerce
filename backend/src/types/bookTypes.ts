@@ -1,4 +1,5 @@
 import { Decimal } from "@prisma/client/runtime/library";
+import { Book } from "@prisma/client";
 
 export interface RegisterBook {
   title: string;
@@ -24,7 +25,7 @@ export interface UpdateBook {
   language?: string;
   price?: number;
   ISBN?: string;
-  rating?: string;
+  rating?: Decimal;
   favorite_count?: number;
   page_count?: number;
   release_date?: Date;
