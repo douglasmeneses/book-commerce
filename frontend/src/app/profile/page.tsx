@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { User } from "@/types/userTypes";
 import { Book } from "@/types/bookTypes";
-import { getBooks, getFavoriteBooks } from "@/services/bookService";
+import { getFavoriteBooks } from "@/services/bookService";
+import { getOrdersByUser } from "@/services/orderService";
 import BooksPerfilCarousel from "@/components/BooksCarouselProfile";
 import ProfileHeaderInfos from "@/components/ProfileHeaderInfos";
 import ProfileBooksSection from "@/components/ProfileBooksSection";
@@ -16,7 +17,7 @@ export default function ProfilePage() {
   });
   const [loading, setLoading] = useState(true);
   const [favoritedBooks, setFavoritedBooks] = useState<Array<Book>>([]);
-  const [books, setBooks] = useState<Array<Book>>([]);
+  const [latestOrders, setLatestOrders] = useState<Array<Book>>([]);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -24,8 +25,9 @@ export default function ProfilePage() {
         setLoading(true);
         const Favorites = await getFavoriteBooks(user?.uuid || "");
         setFavoritedBooks(Favorites);
-        const books = await getBooks({ search: "a" });
-        setBooks(books);
+
+        const orders = await getOrdersByUser(user?.uuid || "");
+        setLatestOrders(orders);
       } catch (error) {
         console.log("Erro ao buscar livros:", error);
       } finally {
@@ -41,7 +43,7 @@ export default function ProfilePage() {
       <ProfileHeaderInfos user={user} />
       <ProfileBooksSection
         favoritedBooks={favoritedBooks}
-        LatestOrders={books} // tem que passar os livros mais recentes aqui, mas não tem no backend ainda
+        LatestOrders={latestOrders}
       />
       <div
         className="border border-[#E2E2E2] w-full absolute z-[1]"

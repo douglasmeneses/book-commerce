@@ -93,9 +93,7 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
         </Carousel>
       ) : (
         <div className="w-full flex justify-center items-center h-40">
-          <p className="text-gray-500 text-lg font-semibold">
-            Sem livros favoritados
-          </p>
+          <p className="text-gray-500 text-lg font-semibold">Sem livros</p>
         </div>
       )}
     </div>
