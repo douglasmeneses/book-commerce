@@ -1,10 +1,12 @@
 import { Decimal } from "@prisma/client/runtime/library";
+
 import {
   CartResponse as CartResponseInterface,
   CartItemResponse,
 } from "../types/cartTypes";
 
-export class CartResponse {
+export class CartResponseDTO {
+  id: number;
   totalPrice: number;
   cartItem: {
     created_at: Date;
@@ -22,6 +24,7 @@ export class CartResponse {
   }[];
 
   constructor(cart: any) {
+    this.id = cart.id;
     this.totalPrice = parseFloat(cart.totalPrice);
     this.cartItem = cart.cartItem.map((item: CartItemResponse) => ({
       created_at: item.created_at,
