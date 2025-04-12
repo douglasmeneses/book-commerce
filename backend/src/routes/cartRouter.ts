@@ -5,17 +5,26 @@ import { Router } from "express";
 
 const router = Router();
 
-router.post("/:user_uuid", authMiddleware, (req: Request, res: Response) => {
-  cartController.addBookToCart(req, res);
-});
-router.put("/:id", authMiddleware, (req: Request, res: Response) => {
-  cartController.removeBookToCart(req, res);
-});
+router.post(
+  "/:user_uuid/item/:book_uuid",
+  authMiddleware,
+  (req: Request, res: Response) => {
+    cartController.addBookToCart(req, res);
+  }
+);
+router.put(
+  "/:user_uuid/item/:cartItem_id/remove",
+  authMiddleware,
+  (req: Request, res: Response) => {
+    cartController.removeBookToCart(req, res);
+  }
+);
 router.get("/:user_uuid", authMiddleware, (req: Request, res: Response) => {
   cartController.getCartByUser_UUID(req, res);
 });
+
 router.delete(
-  "/:cartItem_id",
+  "/:user_uuid/item/:cartItem_id",
   authMiddleware,
   (req: Request, res: Response) => {
     cartController.deleteCartItem(req, res);

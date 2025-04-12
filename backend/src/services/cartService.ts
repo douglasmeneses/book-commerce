@@ -123,7 +123,6 @@ const cartService = {
               },
             },
           },
-
         },
       });
 
@@ -137,22 +136,18 @@ const cartService = {
   },
   removeBookToCart: async (
     user_uuid: string,
-    id: number,
     cartItem_id: number,
     quantity: number
   ): Promise<error | CartResponse> => {
     try {
-      const validates = removeBookToCartValidates(id, cartItem_id, quantity);
+      const validates = removeBookToCartValidates(cartItem_id, quantity);
       if (validates) return { error: validates.error };
 
       const user = await userExists(user_uuid);
       if ("error" in user) return { error: user.error };
 
-      const cart = await cartService.getCartById(id);
+      const cart = await cartService.getCartByUser_UUID(user_uuid);
       if ("error" in cart) return { error: cart.error };
-
-      if (user.id !== cart.user_id)
-        return { error: "User not allowed to remove this item" };
 
       const cartItem = await cartItemService.removeBookToCart(
         cartItem_id,
@@ -164,7 +159,7 @@ const cartService = {
 
       await prisma.cart.update({
         where: {
-          id: id,
+          id: cart.id,
         },
         data: {
           totalPrice:
@@ -173,7 +168,7 @@ const cartService = {
         },
       });
 
-      const updatedCart = await cartService.getCartById(id);
+      const updatedCart = await cartService.getCartByUser_UUID(user_uuid);
       if ("error" in updatedCart) {
         return { error: updatedCart.error };
       }
@@ -184,28 +179,21 @@ const cartService = {
   },
   deleteCartItem: async (
     user_uuid: string,
-    id: number,
     cartItem_id: number
   ): Promise<CartResponse | error> => {
     try {
       const user = await userExists(user_uuid);
       if ("error" in user) return { error: user.error };
 
-      const cart = await cartService.getCartById(id);
+      const cart = await cartService.getCartByUser_UUID(user_uuid);
       if ("error" in cart) return { error: cart.error };
-
-      if (user.id !== cart.user_id)
-        return { error: "User not allowed to remove this item" };
 
       const cartItem = await cartItemService.getCartItemById(cartItem_id);
       if ("error" in cartItem) return { error: cartItem.error };
 
-      if (cartItem.cart_id !== id)
-        return { error: "Cart item not found in this cart" };
-
       await prisma.cart.update({
         where: {
-          id: id,
+          id: cart.id,
         },
         data: {
           totalPrice: cart.totalPrice?.toNumber() - cartItem.price.toNumber(),
@@ -218,7 +206,7 @@ const cartService = {
 
       const updatedCart =
         deleteCartItem === true
-          ? await cartService.getCartById(id)
+          ? await cartService.getCartByUser_UUID(user_uuid)
           : { error: "error" };
       if ("error" in updatedCart) return { error: updatedCart.error };
 
