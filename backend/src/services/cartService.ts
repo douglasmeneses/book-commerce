@@ -125,7 +125,7 @@ const cartService = {
           },
         },
       });
-
+      console.log(cart?.cartItem[0].book);
       if (!cart) {
         return { error: "Cart not found!" };
       }

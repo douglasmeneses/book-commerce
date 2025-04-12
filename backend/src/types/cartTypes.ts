@@ -79,5 +79,22 @@ export interface CartItemResponse {
     price: Decimal;
     image: string | null;
     image_url: string | null;
+    stock_quantity: number;
+    authors: {
+      id: number;
+      book_id: number;
+      author_id: number;
+      created_at: Date;
+      updated_at: Date;
+      author: {
+        id: number;
+        name: string;
+        bio: string;
+        year_of_birth: string;
+        image: Record<string, unknown>;
+        created_at: string;
+        updated_at: string;
+      };
+    }[];
   };
 }

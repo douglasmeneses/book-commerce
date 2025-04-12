@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import cartService from "../services/cartService";
 import { processCartItems } from "../utils/cartUtils";
+import { CartResponseDTO } from "../dtos/cartDTO";
 
 const cartController = {
   addBookToCart: async (req: Request, res: Response) => {
@@ -18,7 +19,11 @@ const cartController = {
 
       const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, cartItem: cartItems });
+      const cartResponse = new CartResponseDTO({
+        ...cart,
+        cartItem: cartItems,
+      });
+      return res.json(cartResponse);
     } catch (error) {
       return res
         .status(500)
@@ -40,7 +45,11 @@ const cartController = {
 
       const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, cartItem: cartItems });
+      const cartResponse = new CartResponseDTO({
+        ...cart,
+        cartItem: cartItems,
+      });
+      return res.json(cartResponse);
     } catch (error) {
       return res
         .status(500)
@@ -57,7 +66,11 @@ const cartController = {
 
       const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, cartItem: cartItems });
+      const cartResponse = new CartResponseDTO({
+        ...cart,
+        cartItem: cartItems,
+      });
+      return res.json(cartResponse);
     } catch (error) {
       return res
         .status(500)
@@ -75,7 +88,11 @@ const cartController = {
 
       const cartItems = await processCartItems(cart.cartItem);
 
-      return res.json({ ...cart, cartItem: cartItems });
+      const cartResponse = new CartResponseDTO({
+        ...cart,
+        cartItem: cartItems,
+      });
+      return res.json(cartResponse);
     } catch (error) {
       return res
         .status(500)
