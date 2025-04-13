@@ -2,6 +2,9 @@ import bookService from "../services/bookService";
 import { Filter, BookResponse } from "../types/bookTypes";
 import { Request, Response } from "express";
 import { processBookImages, handleBookImage } from "../utils/bookUtils";
+import { BookWithConvertedRating } from "../types/bookTypes";
+import { ProcessedBook } from "../types/bookTypes";
+import { Decimal } from "@prisma/client/runtime/library";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
@@ -46,6 +49,7 @@ const bookController = {
       };
 
       const response = await bookService.getBooks(filter);
+
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
       }
@@ -54,9 +58,21 @@ const bookController = {
         return res.status(400).json({ error: "Invalid response format" });
       }
 
-      const processedBooksImages = await processBookImages(response);
+      const booksWithDecimal = response.map((book) => ({
+        ...book,
+        price: new Decimal(book.price),
+        rating: new Decimal(book.rating),
+      }));
 
-      return res.status(200).json(processedBooksImages);
+      const processedBooksImages = await processBookImages(booksWithDecimal);
+
+      const finalBooks = processedBooksImages.map((book) => ({
+        ...book,
+        price: parseFloat(book.price.toString()),
+        rating: parseFloat(book.rating.toString()),
+      }));
+
+      return res.status(200).json(finalBooks);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -124,7 +140,7 @@ const bookController = {
       });
     }
   },
-  
+
   uploadBookImage: async (req: Request, res: Response) => {
     try {
       const uuid = req.params.uuid;
