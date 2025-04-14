@@ -57,7 +57,15 @@ const favoriteService = {
 
       const favorites = await prisma.favorites.findMany({
         where: { user_id: user.id },
-        include: { book: true },
+        include: {
+          book: {
+            include: {
+              authors: { include: { author: true } },
+              genres: { include: { genre: true } },
+              publishers: { include: { publisher: true } },
+            },
+          },
+        },
         orderBy: { created_at: "desc" },
       });
 
