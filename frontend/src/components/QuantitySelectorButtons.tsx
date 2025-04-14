@@ -24,19 +24,13 @@ interface QuantitySelectorButtonsProps {
     book_uuid: string,
     quantity: number
   ) => Promise<void>;
-
   handleRemoveItem: (
-    id: number,
     user_uuid: string,
     cartItem_id: number,
     quantity: number
   ) => Promise<void>;
 
-  handleDeleteItem: (
-    cartItem_id: number,
-    user_uuid: string,
-    cart_id: number
-  ) => Promise<void>;
+  handleDeleteItem: (cartItem_id: number, user_uuid: string) => Promise<void>;
 }
 
 export default function QuantitySelectorButtons({
@@ -66,7 +60,7 @@ export default function QuantitySelectorButtons({
           onClick={(e) => {
             e.preventDefault();
             setQuantity((prep) => prep - 1),
-              handleRemoveItem(item.cart_id, user_uuid, item.id, 1);
+              handleRemoveItem(user_uuid, item.id, 1);
           }}
         >
           <Minus />

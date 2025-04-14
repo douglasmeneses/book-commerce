@@ -21,6 +21,7 @@ export default function CartPage() {
   const fetchCart = async () => {
     if (accFetchCarts == 0) setLoading(true);
     const response = await cartService.getCart(user_uuid);
+    console.log("uuid: ", user_uuid);
     console.log("Response from cart service:", response);
     try {
       if (typeof response === "string") {
@@ -70,13 +71,11 @@ export default function CartPage() {
   };
 
   const handleRemoveItem = async (
-    cart_id: number,
     user_uuid: string,
     cartItem_id: number,
     quantity: number
   ): Promise<void> => {
     const response = await cartService.removeItemFromCart(
-      cart_id,
       user_uuid,
       cartItem_id,
       quantity
@@ -98,16 +97,8 @@ export default function CartPage() {
     }
   };
 
-  const handleDeleteItem = async (
-    cartItem_id: number,
-    user_uuid: string,
-    cart_id: number
-  ) => {
-    const response = await cartService.deleteCartItem(
-      cartItem_id,
-      user_uuid,
-      cart_id
-    );
+  const handleDeleteItem = async (cartItem_id: number, user_uuid: string) => {
+    const response = await cartService.deleteCartItem(cartItem_id, user_uuid);
     setAccCart(
       (prep) =>
         cart.cartItem.reduce((acc, value) => acc + value.quantity, 0) - 1

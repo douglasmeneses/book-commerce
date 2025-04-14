@@ -47,6 +47,22 @@ export interface CartResponse {
     };
   }[];
 }
+export interface CartItemImageResponse {
+  id: number;
+  created_at: Date;
+  updated_at: Date;
+  price: Decimal;
+  cart_id: number;
+  book_id: number;
+  quantity: number;
+  book: {
+    id: number;
+    title: string;
+    price: Decimal;
+    image: string | null;
+    image_url: string | null;
+  };
+}
 
 export interface CartItemRequest {
   id: number;
@@ -75,6 +91,7 @@ export interface CartItemResponse {
   quantity: number;
   book: {
     id: number;
+    uuid: string;
     title: string;
     price: Decimal;
     image: string | null;

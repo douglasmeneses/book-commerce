@@ -64,14 +64,7 @@ const cartService = {
         },
       });
 
-      const cart = await prisma.cart.findFirst({
-        where: {
-          user_id: user.id,
-        },
-        include: {
-          cartItem: { include: { book: true } },
-        },
-      });
+      const cart = await cartService.getCartByUser_UUID(user_uuid);
 
       if (!cart) {
         return { error: "Cart not found!" };
@@ -125,7 +118,6 @@ const cartService = {
           },
         },
       });
-      console.log(cart?.cartItem[0].book);
       if (!cart) {
         return { error: "Cart not found!" };
       }

@@ -19,9 +19,13 @@ router.put(
     cartController.removeBookToCart(req, res);
   }
 );
-router.get("user/:user_uuid", authMiddleware, (req: Request, res: Response) => {
-  cartController.getCartByUser_UUID(req, res);
-});
+router.get(
+  "/user/:user_uuid",
+  authMiddleware,
+  (req: Request, res: Response) => {
+    cartController.getCartByUser_UUID(req, res);
+  }
+);
 
 router.delete(
   "/user/:user_uuid/item/:cartItem_id",

@@ -1,11 +1,15 @@
 import sharp from "sharp";
-import { CartItemResponse, CartItemRequest } from "../types/cartTypes";
+import {
+  CartItemResponse,
+  CartItemRequest,
+  CartItemImageResponse,
+} from "../types/cartTypes";
 
 export const processCartItems = async (
   cartItems: CartItemRequest[]
-): Promise<CartItemResponse[]> => {
+): Promise<CartItemImageResponse[]> => {
   return Promise.all(
-    cartItems.map(async (cartItem) => {
+    cartItems.map(async (cartItem: CartItemRequest) => {
       if (cartItem.book.image) {
         const compressedImage = (cartItem.book.image = await sharp(
           Buffer.from(cartItem.book.image)

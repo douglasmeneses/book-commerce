@@ -2,7 +2,7 @@ import { Cart } from "@/types/cartTypes";
 import axios, { AxiosResponse } from "axios";
 import { cleanToken } from "@/utils/cartUtils";
 
-const API_URL = "http://localhost:3001/carts";
+const API_URL = "http://localhost:3001/carts/user";
 
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
@@ -37,9 +37,8 @@ export const addItemToCart = async (
 ): Promise<string | Cart> => {
   try {
     const response = (await axios.post(
-      `${API_URL}/${user_uuid}`,
+      `${API_URL}/${user_uuid}/item/${book_uuid}`,
       {
-        book_uuid,
         quantity,
       },
       {
@@ -60,14 +59,14 @@ export const addItemToCart = async (
 };
 
 export const removeItemFromCart = async (
-  id: number,
   user_uuid: string,
   cartItem_id: number,
   quantity: number
 ): Promise<string | Cart> => {
   try {
     const response = (await axios.put(
-      `${API_URL}/${id}`,
+      //"/user/:user_uuid/item/:cartItem_id/remove"
+      `${API_URL}/${user_uuid}/item/${cartItem_id}/remove`,
       {
         user_uuid: user_uuid,
         cartItem_id: cartItem_id,
@@ -91,20 +90,18 @@ export const removeItemFromCart = async (
 
 export const deleteCartItem = async (
   cartItem_id: number,
-  user_uuid: string,
-  id: number
+  user_uuid: string
 ): Promise<string | Cart> => {
   try {
-    const response = (await axios.delete(`${API_URL}/${cartItem_id}`, {
-      headers: {
-        authorization: `Bearer ${TOKEN}`,
-        "x-refresh-token": REFRESH_TOKEN,
-      },
-      data: {
-        user_uuid,
-        id,
-      },
-    })) as AxiosResponse<Cart>;
+    const response = (await axios.delete(
+      `${API_URL}/${user_uuid}/item/${cartItem_id}`,
+      {
+        headers: {
+          authorization: `Bearer ${TOKEN}`,
+          "x-refresh-token": REFRESH_TOKEN,
+        },
+      }
+    )) as AxiosResponse<Cart>;
     handleNewToken(response);
     return response.data;
   } catch (error) {

@@ -6,14 +6,15 @@ import {
 } from "../types/cartTypes";
 
 export class CartResponseDTO {
-  id: number;
   totalPrice: number;
   cartItem: {
+    id: number;
     created_at: Date;
     updated_at: Date;
     price: Decimal;
     quantity: number;
     book: {
+      uuid: string;
       title: string;
       price: Decimal;
       image: Uint8Array | null;
@@ -24,14 +25,15 @@ export class CartResponseDTO {
   }[];
 
   constructor(cart: any) {
-    this.id = cart.id;
     this.totalPrice = parseFloat(cart.totalPrice);
     this.cartItem = cart.cartItem.map((item: CartItemResponse) => ({
+      id: item.id,
       created_at: item.created_at,
       updated_at: item.updated_at,
       price: item.price,
       quantity: item.quantity,
       book: {
+        uuid: item.book.uuid,
         title: item.book.title,
         price: item.book.price,
         image: item.book.image,
