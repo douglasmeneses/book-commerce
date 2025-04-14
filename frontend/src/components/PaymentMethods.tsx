@@ -1,30 +1,30 @@
-import { Button } from "@/components/ui/button"
-import { CreditCard, Barcode, DollarSign } from "lucide-react"
+"use client";
 
-const methods = [
-  { label: "Cartão de Crédito", icon: CreditCard },
-  { label: "Pix", icon: DollarSign },
-  { label: "Boleto", icon: Barcode },
-]
+const methods = ["CARTÃO DE CRÉDITO", "CARTÃO DE DÉBITO", "PIX", "BOLETO", "DINHEIRO"];
 
-export default function PaymentMethods() {
+export default function PaymentMethods({
+  selected,
+  onChange,
+}: {
+  selected: string;
+  onChange: (method: string) => void;
+}) {
   return (
-    <div className="relative" style={{ width: '996px', height: '256px', left: '40px' }}>
-      <div className="bg-white p-6 rounded-xl shadow-md" style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}>
-        <h2 className="font-bold mb-4 text-lg">Pagamento</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {methods.map(({ label, icon: Icon }, idx) => (
-            <Button
-              key={idx}
-              variant="outline"
-              className={`justify-start gap-2 px-4 py-6 text-sm font-semibold text-black bg-muted hover:bg-muted/80 rounded-md border-orange-300 border-2 ${idx === 0 ? "bg-orange-100" : ""}`}
-            >
-              <Icon className="w-4 h-4 text-orange-500" />
-              {label.toUpperCase()}
-            </Button>
-          ))}
-        </div>
+    <div className="p-4 bg-white rounded shadow">
+      <h2 className="font-bold mb-2">Pagamento</h2>
+      <div className="grid grid-cols-3 gap-2">
+        {methods.map((method) => (
+          <button
+            key={method}
+            onClick={() => onChange(method)}
+            className={`p-2 rounded border ${
+              selected === method ? "bg-orange-300" : "bg-gray-200"
+            }`}
+          >
+            {method}
+          </button>
+        ))}
       </div>
     </div>
-  )
+  );
 }

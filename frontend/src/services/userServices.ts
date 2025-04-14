@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RegisterUser } from "@/types/userTypes";
+import { RegisterUser, Address } from "@/types/userTypes";
 
 const API_URL = "http://localhost:3001/users";
 
@@ -77,5 +77,27 @@ export const deleteUser = async (user_uuid: string) => {
       );
     }
     throw new Error("Something went wrong to delete user");
+  }
+};
+
+
+export const getUserAddress = async (user_uuid: string) => {
+  try {
+    const TOKEN = localStorage.getItem("token") || "";
+    const REFRESH_TOKEN = localStorage.getItem("refresh_token") || "";
+    const response = await axios.get(`${API_URL}/${user_uuid}/address`, {
+      headers: {
+        authorization: `Bearer ${TOKEN}`,
+        "x-refresh-token": REFRESH_TOKEN,
+      },
+    });
+    return response.data;  
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Error while fetching user address"
+      );
+    }
+    throw new Error("Something went wrong to fetch user address");
   }
 };
