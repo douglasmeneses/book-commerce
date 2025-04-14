@@ -102,6 +102,59 @@ const userService = {
 
     return user || null;
   },
+  getUserAddresses: async (uuid: string): Promise<{
+    is_default: boolean;
+    label: string | null;
+    address: {
+      number: string;
+      id: number;
+      created_at: Date;
+      updated_at: Date;
+      street: string;
+      neighborhood: string | null;
+      complement: string | null;
+      city: string;
+      state: string;
+      zip_code: string;
+      country: string;
+    };
+  }[]> => {
+    const user = await prisma.user.findUnique({
+      where: { uuid },
+      select: {
+        addresses: {
+          select: {
+            is_default: true,
+            label: true,
+            address: {
+              select: {
+                number: true,
+                id: true,
+                created_at: true,
+                updated_at: true,
+                street: true,
+                neighborhood: true,
+                complement: true,
+                city: true,
+                state: true,
+                zip_code: true,
+                country: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  
+    if (!user || !user.addresses) return [];
+  
+    return user.addresses.map((address) => ({
+      is_default: address.is_default,
+      label: address.label,
+      address: address.address,
+    }));
+  }
+  
 };
 
 export default userService;
