@@ -1,18 +1,12 @@
 import { Cart } from "@/types/cartTypes";
 import axios, { AxiosResponse } from "axios";
-import { cleanToken } from "@/utils/cartUtils";
+import { cleanToken, handleNewToken } from "@/utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/carts/user";
 
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
-const handleNewToken = (response: AxiosResponse<any, any>): void => {
-  const authHeader = response.headers["authorization"] as string | undefined;
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    localStorage.setItem("token", cleanToken(authHeader));
-  }
-};
 export const getCart = async (user_uuid: string): Promise<string | Cart> => {
   try {
     const response = await axios.get(`${API_URL}/${user_uuid}`, {

@@ -11,16 +11,26 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { BookCarouselProps } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
+import { favoriteBook } from "@/services/favoriteService";
+import FavoriteButton from "./FavoriteButton";
 
 export default function BookCarousel({
   books,
   genres,
   title,
+  handleFavoriteBook,
+  isLogin,
 }: BookCarouselProps) {
   const [filteredBooks, setFilteredBooks] = useState<Array<Book>>(books);
   const [selectedGenre, setSelectedGenre] = useState<string>("Todos");
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -116,9 +126,11 @@ export default function BookCarousel({
                           <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
                             Adicionar
                           </Button>
-                          <FavoriteBorderIcon
-                            className="text-[#e67e22] cursor-pointer"
-                            fontSize="medium"
+                          <FavoriteButton
+                            book_uuid={book.uuid}
+                            favorite={book.favorites}
+                            handleFavoriteBook={handleFavoriteBook}
+                            isLogin={isLogin}
                           />
                         </div>
                       </div>

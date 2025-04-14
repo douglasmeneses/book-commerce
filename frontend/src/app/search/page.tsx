@@ -18,6 +18,8 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { addItemToCart } from "@/services/cartService";
+import { favoriteBook } from "@/services/favoriteService";
+import FavoriteButton from "@/components/FavoriteButton";
 
 export default function SearchPage() {
   const user = localStorage.getItem("user");
@@ -38,7 +40,7 @@ export default function SearchPage() {
         limit: itemsPerPage,
       };
       try {
-        const books = await getBooks(filter);
+        const books = await getBooks(filter, user_uuid);
         setBooks(books);
 
         const nextPageFilter: Filter = {
@@ -46,7 +48,7 @@ export default function SearchPage() {
           page: currentPage + 1,
           limit: itemsPerPage,
         };
-        const nextPageBooks = await getBooks(nextPageFilter);
+        const nextPageBooks = await getBooks(nextPageFilter, user_uuid);
 
         if (nextPageBooks.length > 0) {
           setTotalPages(currentPage + 1);
@@ -62,6 +64,14 @@ export default function SearchPage() {
 
     fetchBooks();
   }, [query, currentPage]);
+
+  const handleFavoriteBook = async (book_uuid: string) => {
+    try {
+      await favoriteBook(book_uuid, user_uuid);
+    } catch (error) {
+      console.error("Error favoriting book:", error);
+    }
+  };
 
   const handleAddToCart = async (bookId: string) => {
     try {
@@ -161,9 +171,11 @@ export default function SearchPage() {
                     >
                       Adicionar
                     </Button>
-                    <FavoriteBorderIcon
-                      className="text-[#e67e22] cursor-pointer"
-                      fontSize="medium"
+                    <FavoriteButton
+                      book_uuid={book.uuid}
+                      favorite={book.favorites}
+                      handleFavoriteBook={handleFavoriteBook}
+                      isLogin={user ? true : false}
                     />
                   </div>
                 </div>

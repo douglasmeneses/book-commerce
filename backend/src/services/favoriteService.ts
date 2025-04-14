@@ -63,6 +63,7 @@ const favoriteService = {
               authors: { include: { author: true } },
               genres: { include: { genre: true } },
               publishers: { include: { publisher: true } },
+              favorites: { where: { user_id: user.id } },
             },
           },
         },
