@@ -31,7 +31,6 @@ export const getFavoriteBooks = async (user_uuid: string) => {
         },
       }
     );
-    console.log("response", response.data);
     return response.data;
   } catch (error) {
     const errorMessage =
