@@ -30,7 +30,6 @@ export default function BooksPerfilCarousel({
   const [Loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Books BooksPerfilCarousel:", books);
     const timer = setTimeout(() => {
       setLoading(false);
     }, 900);

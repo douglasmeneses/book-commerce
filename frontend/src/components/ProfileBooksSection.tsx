@@ -15,8 +15,6 @@ export default function ProfileBooksSection({
   handleFavoriteBook,
   isLogin,
 }: ProfileBooksSectionProps) {
-  console.log("latests ProfileBooksSection:", LatestOrders);
-
   return (
     <div className="mb-8">
       <Label className="text-2xl font-bold text-[#241400] mb-4">

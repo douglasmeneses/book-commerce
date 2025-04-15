@@ -37,7 +37,7 @@ export default function ProfilePage() {
           user?.uuid || ""
         )) as Array<FavoriteBookResponse>;
         setFavoritedBooks(
-          Favorites.map((favroiteResponse) => favroiteResponse.book) || []
+          Favorites.map((favoriteResponse) => favoriteResponse.book) || []
         );
 
         const books = await getBooks({ search: "a" }, user?.uuid || "");
