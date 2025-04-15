@@ -178,7 +178,7 @@ const bookService = {
     if (orderByPrice) orderBy.push({ price: orderByPrice });
 
     try {
-      const books = await prisma.book.findMany({
+      return await prisma.book.findMany({
         where,
         orderBy,
         include: {
@@ -189,14 +189,6 @@ const bookService = {
         take: limit,
         skip,
       });
-
-      const formatedBooks = books.map((book) => ({
-        ...book,
-        rating: book.rating.toNumber(),
-        price: book.price.toNumber(),
-      }));
-
-      return formatedBooks;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",

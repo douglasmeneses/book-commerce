@@ -58,21 +58,9 @@ const bookController = {
         return res.status(400).json({ error: "Invalid response format" });
       }
 
-      const booksWithDecimal = response.map((book) => ({
-        ...book,
-        price: new Decimal(book.price),
-        rating: new Decimal(book.rating),
-      }));
+      const processedBooksImages = await processBookImages(response);
 
-      const processedBooksImages = await processBookImages(booksWithDecimal);
-
-      const finalBooks = processedBooksImages.map((book) => ({
-        ...book,
-        price: parseFloat(book.price.toString()),
-        rating: parseFloat(book.rating.toString()),
-      }));
-
-      return res.status(200).json(finalBooks);
+      return res.status(200).json(processedBooksImages);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",
