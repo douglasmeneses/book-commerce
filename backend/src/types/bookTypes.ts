@@ -76,3 +76,8 @@ export interface error {
 export interface ProcessedBook extends Omit<Book, "image"> {
   image: string | null;
 }
+
+export type BookWithConvertedRating = Omit<Book, "rating" | "price"> & {
+  rating: number;
+  price: number;
+};
