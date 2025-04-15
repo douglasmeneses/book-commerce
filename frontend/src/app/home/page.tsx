@@ -7,6 +7,7 @@ import BookCarousel from "@/components/BookCarousel";
 import { Book } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 import { favoriteBook } from "@/services/favoriteService";
+import { toast } from "sonner";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,7 @@ export default function Home() {
         );
         setMostRecentBooks(mostRecent);
       } catch (error) {
-        console.log("Erro ao buscar livros:", error);
+        toast.error("Erro ao buscar livros");
       } finally {
         setLoading(false);
       }

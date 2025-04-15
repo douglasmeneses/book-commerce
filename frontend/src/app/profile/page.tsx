@@ -7,6 +7,7 @@ import { getBooks, getFavoriteBooks } from "@/services/bookService";
 import ProfileHeaderInfos from "@/components/ProfileHeaderInfos";
 import ProfileBooksSection from "@/components/ProfileBooksSection";
 import { favoriteBook } from "@/services/favoriteService";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(() => {
@@ -42,7 +43,7 @@ export default function ProfilePage() {
         const books = await getBooks({ search: "a" }, user?.uuid || "");
         setBooks(books);
       } catch (error) {
-        console.log("Erro ao buscar livros:", error);
+        toast.error("Erro ao buscar livros favoritos.");
       } finally {
         setLoading(false);
       }

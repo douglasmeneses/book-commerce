@@ -21,15 +21,12 @@ export default function CartPage() {
   const fetchCart = async () => {
     if (accFetchCarts == 0) setLoading(true);
     const response = await cartService.getCart(user_uuid);
-    console.log("uuid: ", user_uuid);
-    console.log("Response from cart service:", response);
     try {
       if (typeof response === "string") {
         throw new Error(response);
       }
       setCart(response);
     } catch (error) {
-      console.log("Error fetching cart:", error);
       toast.info("Sessão expirada, redirecionando para o login...");
       setTimeout(() => router.push("/login"), 2000);
     } finally {
