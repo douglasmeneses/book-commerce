@@ -4,7 +4,7 @@ import { Order } from "@/types/orderTypes";
 const API_URL = "http://localhost:3001/orders";
 
 const TOKEN = localStorage.getItem("token");
-const REFRESH_TOKEN = localStorage.getItem("refreshToken");
+const REFRESH_TOKEN = localStorage.getItem("refresh_token");
 
 const authHeaders = {
   headers: {
