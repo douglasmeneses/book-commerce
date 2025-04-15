@@ -124,7 +124,7 @@ const bookController = {
       });
     }
   },
-  
+
   uploadBookImage: async (req: Request, res: Response) => {
     try {
       const uuid = req.params.uuid;

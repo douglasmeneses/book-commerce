@@ -43,9 +43,9 @@ export interface BookResponse {
   image: string | null;
   image_url: string | null;
   language: string;
-  price: Decimal;
+  price: number;
   ISBN: string;
-  rating: Decimal;
+  rating: number;
   favorite_count: number;
   page_count: number;
   release_date: Date;
