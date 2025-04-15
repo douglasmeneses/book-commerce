@@ -121,7 +121,7 @@ export class OrderService {
     });
 
     if (orders.length === 0) {
-      return { message: "Nenhum pedido encontrado" };
+      return [];
     }
 
     return orders;
