@@ -170,9 +170,9 @@ model Book {
   image          Bytes?
   image_url      String?         @default("")
   language       String
-  price          Float
+  price          Decimal
   ISBN           String          @unique
-  rating         Float           @default(0) 
+  rating         Decimal         @default(0) @db.Decimal(2, 1)
   favorite_count Int             @default(0)
   page_count     Int
   release_date   DateTime
