@@ -7,25 +7,32 @@ const API_URL = "http://localhost:3001/favorites";
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
-export const favoriteBook = async (book_uuid: string, user_uuid: string) => {
+const ApiRequest = async (
+  method: "get" | "post" | "put" | "delete",
+  url: string,
+  data?: any
+) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/book/${book_uuid}`,
-      {
-        user_uuid: user_uuid,
+    const tokenConfig = {
+      headers: {
+        authorization: `Bearer ${TOKEN}`,
+        "x-refresh-token": REFRESH_TOKEN,
       },
-      {
-        headers: {
-          authorization: `Bearer ${TOKEN}`,
-          "x-refresh-token": REFRESH_TOKEN,
-        },
-      }
-    );
-    handleNewToken(response);
+    };
+    const response = data
+      ? await axios[method](url, data, tokenConfig)
+      : await axios[method](url, tokenConfig);
     return response.data;
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Error favoriting book.";
-    return errorMessage;
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Error with request.");
+    }
+    throw new Error("Something went wrong with the request.");
   }
+};
+
+export const favoriteBook = async (book_uuid: string, user_uuid: string) => {
+  const url = `${API_URL}/book/${book_uuid}`;
+  const data = { user_uuid };
+  return ApiRequest("post", url, data);
 };

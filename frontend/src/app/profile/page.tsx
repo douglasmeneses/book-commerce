@@ -17,12 +17,12 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [favoritedBooks, setFavoritedBooks] = useState<Array<Book>>([]);
   const [books, setBooks] = useState<Array<Book>>([]);
-  const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
+  const [accumulatedFetchCount, setAccumulatedFetchCount] = useState<number>(0);
 
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
       await favoriteBook(book_uuid, user?.uuid || "");
-      setAccFetchsBooks((prev) => prev + 1);
+      setAccumulatedFetchCount((prev) => prev + 1);
     } catch (error) {
       console.error("Error favoriting book:", error);
     }
@@ -31,7 +31,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        if (accFetchsBooks == 0) setLoading(true);
+        if (accumulatedFetchCount == 0) setLoading(true);
 
         const Favorites = (await getFavoriteBooks(
           user?.uuid || ""
@@ -50,7 +50,7 @@ export default function ProfilePage() {
     };
 
     fetchBooks();
-  }, [accFetchsBooks]);
+  }, [accumulatedFetchCount]);
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-[#FFFAF5]">
