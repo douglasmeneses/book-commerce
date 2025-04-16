@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { OrderService } from '../services/orderService';
+import { Request, Response } from "express";
+import { OrderService } from "../services/orderService";
 
 const service = new OrderService();
 
@@ -15,7 +15,7 @@ export async function createOrder(req: Request, res: Response) {
 
 export const getOrderById = async (req: Request, res: Response) => {
   try {
-    const orderId = Number(req.params.id); 
+    const orderId = Number(req.params.id);
     const order = await service.getOrderById(orderId);
     res.json(order);
   } catch (error: any) {
@@ -45,7 +45,7 @@ export async function deleteOrder(req: Request, res: Response) {
 
 export async function getOrdersByUser(req: Request, res: Response) {
   try {
-    const user_uuid = req.params.user_uuid || req.query.user_uuid as string;
+    const user_uuid = req.params.user_uuid || (req.query.user_uuid as string);
     const orders = await service.getOrdersByUser(user_uuid);
     res.json(orders);
   } catch (error: any) {
