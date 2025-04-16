@@ -66,11 +66,6 @@ export default function NavBar() {
             </Link>
           )}
           <div className="flex gap-[14px]">
-            <Heart
-              size={30}
-              color="#E16A00"
-              className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
-            />
             <Link href="/cart">
               <ShoppingCart
                 size={30}
