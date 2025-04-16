@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { cleanToken } from "@/utils/cartUtils";
+import axios from "axios";
+import { cleanToken, handleNewToken } from "../utils/tokenUtils";
 import { Book } from "@/types/bookTypes";
 
 const API_URL = "http://localhost:3001/orders";
@@ -7,24 +7,32 @@ const API_URL = "http://localhost:3001/orders";
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
-const handleNewToken = (response: AxiosResponse<any, any>): void => {
-  const authHeader = response.headers["authorization"] as string | undefined;
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    localStorage.setItem("token", cleanToken(authHeader));
-  }
-};
-
-export const getOrdersByUser = async (user_uuid: string): Promise<Book[]> => {
+const ApiRequest = async (
+  method: "get" | "post" | "put" | "delete",
+  url: string,
+  data?: any
+) => {
   try {
-    const response = await axios.get(`${API_URL}/user/${user_uuid}`, {
+    const tokenConfig = {
       headers: {
         authorization: `Bearer ${TOKEN}`,
         "x-refresh-token": REFRESH_TOKEN,
       },
-    });
+    };
+    const response = data
+      ? await axios[method](url, data, tokenConfig)
+      : await axios[method](url, tokenConfig);
     handleNewToken(response);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching orders.");
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Error with request.");
+    }
+    throw new Error("Something went wrong with the request.");
   }
+};
+
+export const getOrdersByUser = async (user_uuid: string): Promise<Book[]> => {
+  const url = `${API_URL}/user/${user_uuid}`;
+  return ApiRequest("get", url);
 };
