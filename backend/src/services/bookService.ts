@@ -15,6 +15,7 @@ import { updateAuthors } from "./authorService";
 import { updateGenres } from "./genreService";
 import { updatePublishers } from "./publisherService";
 import { userExists, validUser } from "../middlewares/userValidators";
+import { BookResponseDTO } from "../dtos/booksDTOs";
 
 const prisma = new PrismaClient();
 
@@ -96,9 +97,7 @@ const bookService = {
       };
     }
   },
-  getBooks: async (
-    filter: Filter
-  ): Promise<BookWithConvertedRating[] | error> => {
+  getBooks: async (filter: Filter): Promise<BookResponseDTO[] | error> => {
     const {
       search,
       author,
@@ -178,7 +177,7 @@ const bookService = {
     if (orderByPrice) orderBy.push({ price: orderByPrice });
 
     try {
-      return await prisma.book.findMany({
+      const books = await prisma.book.findMany({
         where,
         orderBy,
         include: {
@@ -189,6 +188,8 @@ const bookService = {
         take: limit,
         skip,
       });
+      const booksDTO = books.map((book) => new BookResponseDTO(book));
+      return booksDTO;
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",
