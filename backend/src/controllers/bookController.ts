@@ -2,6 +2,9 @@ import bookService from "../services/bookService";
 import { Filter, BookResponse } from "../types/bookTypes";
 import { Request, Response } from "express";
 import { processBookImages, handleBookImage } from "../utils/bookUtils";
+import { BookWithConvertedRating } from "../types/bookTypes";
+import { ProcessedBook } from "../types/bookTypes";
+import { Decimal } from "@prisma/client/runtime/library";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
@@ -46,6 +49,7 @@ const bookController = {
       };
 
       const response = await bookService.getBooks(filter);
+
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
       }
@@ -124,7 +128,7 @@ const bookController = {
       });
     }
   },
-  
+
   uploadBookImage: async (req: Request, res: Response) => {
     try {
       const uuid = req.params.uuid;

@@ -1,6 +1,7 @@
 import sharp from "sharp";
 import { Book } from "@prisma/client";
 import { BookResponse } from "../types/bookTypes";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export const processImage = async (
   imageBuffer: Buffer | null,
