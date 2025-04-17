@@ -22,6 +22,7 @@ const ApiRequest = async (
       ? await axios[method](url, data, tokenConfig)
       : await axios[method](url, tokenConfig);
     handleNewToken(response);
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -68,7 +68,7 @@ export class OrderService {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
       include: {
-        orderItem: { include: { book: true } },
+        items: { include: { book: true } },
       },
     });
     if (!order) throw new Error("Pedido não encontrado");
@@ -116,7 +116,7 @@ export class OrderService {
     const orders = await prisma.order.findMany({
       where: { user_id: user.id },
       include: {
-        orderItem: { include: { book: true } as any },
+        items: { include: { book: true } as any },
       },
     });
 

@@ -30,18 +30,6 @@ export default function ProfilePage() {
     }
   };
 
-  const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
-
-  const handleFavoriteBook = async (book_uuid: string) => {
-    try {
-      await favoriteBook(book_uuid, user?.uuid || "");
-      setAccFetchsBooks((prev) => prev + 1);
-    } catch (error) {
-      console.error("Error favoriting book:", error);
-    }
-  };
-
-
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -54,9 +42,9 @@ export default function ProfilePage() {
 
         const orders = await getOrdersByUser(user?.uuid || "");
         setLatestOrders(orders);
-
       } catch (error) {
         toast.error("Erro ao buscar livros favoritos.");
+        console.error("Error fetching favorite books:", error);
       }
     };
 
