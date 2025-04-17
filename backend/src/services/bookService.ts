@@ -1,4 +1,10 @@
-import { RegisterBook, Filter, UpdateBook, error } from "../types/bookTypes";
+import {
+  RegisterBook,
+  Filter,
+  UpdateBook,
+  error,
+  BookWithConvertedRating,
+} from "../types/bookTypes";
 import { Book, PrismaClient } from "@prisma/client";
 import {
   bookExists,
@@ -93,7 +99,7 @@ const bookService = {
   getBooks: async (
     filter: Filter,
     user_uuid?: string
-  ): Promise<Book[] | error> => {
+  ): Promise<BookWithConvertedRating[] | error> => {
     const {
       search,
       author,
