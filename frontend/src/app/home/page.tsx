@@ -109,7 +109,10 @@ export default function Home() {
           {loading ? (
             <p>Carregando...</p>
           ) : (
-            <BookCarousel books={mostRecentBooks} title={"Mais recentes"} />
+            <BookCarousel
+              books={mostRecentBooks}
+              title={"Adicionados recentemente"}
+            />
           )}
         </section>
       </main>

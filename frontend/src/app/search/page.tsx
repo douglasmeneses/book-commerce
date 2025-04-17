@@ -18,6 +18,12 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { addItemToCart } from "@/services/cartService";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function SearchPage() {
   const user = localStorage.getItem("user");
@@ -124,26 +130,25 @@ export default function SearchPage() {
                         const isHalfStar =
                           index === Math.floor(rating) && rating % 1 !== 0;
 
-                        if (isFullStar) {
-                          return (
-                            <StarIcon key={index} className="text-yellow-400" />
-                          );
-                        }
-
-                        if (isHalfStar) {
-                          return (
-                            <StarHalfIcon
-                              key={index}
-                              className="text-yellow-400"
-                            />
-                          );
-                        }
-
                         return (
-                          <StarBorderIcon
-                            key={index}
-                            className="text-yellow-400"
-                          />
+                          <TooltipProvider key={index} delayDuration={200}>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                {isFullStar ? (
+                                  <StarIcon className="text-yellow-400" />
+                                ) : isHalfStar ? (
+                                  <StarHalfIcon className="text-yellow-400" />
+                                ) : (
+                                  <StarBorderIcon className="text-yellow-400" />
+                                )}
+                              </TooltipTrigger>
+                              <TooltipContent className="bg-[#e67e22] text-white rounded-sm font-bold">
+                                <span>{`${parseFloat(book.rating).toFixed(
+                                  1
+                                )} de 5.0`}</span>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         );
                       })}
                     </div>
