@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import { Book } from "@prisma/client";
-import { BookResponse } from "../types/bookTypes";
+import { BookResponse, BookWithConvertedRating } from "../types/bookTypes";
 import { Decimal } from "@prisma/client/runtime/library";
 
 export const processImage = async (
@@ -19,10 +19,10 @@ export const processImage = async (
 };
 
 export const processBookImages = async (
-  books: Book[]
+  books: BookWithConvertedRating[]
 ): Promise<BookResponse[]> => {
   return Promise.all(
-    books.map(async (book: Book) => {
+    books.map(async (book: BookWithConvertedRating) => {
       if (book.image) {
         const compressedImage = (book.image = await sharp(book.image)
           .resize(100)

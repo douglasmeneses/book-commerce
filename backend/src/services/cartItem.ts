@@ -80,7 +80,7 @@ const cartItemService = {
         where: { id: cartItem.id },
         data: {
           quantity: cartItem.quantity + quantity,
-          price: cartItem.price?.toNumber() + quantity * book.price?.toNumber(),
+          price: cartItem.price?.toNumber() + quantity * book.price,
         },
       });
 
@@ -89,10 +89,7 @@ const cartItemService = {
       return { error: error instanceof Error ? error.message : "error" };
     }
   },
-  removeBookToCart: async (
-    id: number,
-    quantity: number
-  ): Promise<CartItemResponse | error> => {
+  removeBookToCart: async (id: number, quantity: number) => {
     try {
       const cartItem = await prisma.cartItem.findFirst({
         where: {
@@ -117,9 +114,7 @@ const cartItemService = {
         },
         data: {
           quantity: cartItem.quantity - quantity,
-          price:
-            cartItem.price?.toNumber() -
-            quantity * cartItem.book.price?.toNumber(),
+          price: cartItem.price?.toNumber() - quantity * cartItem.book.price,
         },
       });
 
@@ -132,7 +127,7 @@ const cartItemService = {
         },
       });
 
-      return updatedCartItem as CartItemResponse;
+      return updatedCartItem;
     } catch (error) {
       return {
         error:

@@ -7,7 +7,7 @@ import {
 } from "../middlewares/cartValidators";
 import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
-import { CartResponse } from "../types/cartTypes";
+import { CartItemRequest, CartResponse } from "../types/cartTypes";
 
 const prisma = new PrismaClient();
 
@@ -16,7 +16,7 @@ const cartService = {
     user_uuid: string,
     book_uuid: string,
     quantity: number
-  ): Promise<error | CartResponse> => {
+  ) => {
     try {
       const validate = cartValidates(user_uuid, book_uuid, quantity);
       if (validate) return { error: validate.error };
@@ -59,8 +59,7 @@ const cartService = {
           id: findCart.id,
         },
         data: {
-          totalPrice:
-            findCart.totalPrice?.toNumber() + book.price.toNumber() * quantity,
+          totalPrice: findCart.totalPrice?.toNumber() + book.price * quantity,
         },
       });
 
@@ -69,12 +68,12 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
-      return cart as CartResponse;
+      return cart;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };
     }
   },
-  getCartById: async (id: number): Promise<CartResponse | error> => {
+  getCartById: async (id: number) => {
     try {
       const cart = await prisma.cart.findFirst({
         where: {
@@ -93,7 +92,9 @@ const cartService = {
       return { error: error instanceof Error ? error.message : "error" };
     }
   },
-  getCartByUser_UUID: async (user_uuid: string) => {
+  getCartByUser_UUID: async (
+    user_uuid: string
+  ): Promise<CartResponse | { error: string }> => {
     try {
       const user = await userExists(user_uuid);
       if ("error" in user) {
@@ -130,7 +131,7 @@ const cartService = {
     user_uuid: string,
     cartItem_id: number,
     quantity: number
-  ): Promise<error | CartResponse> => {
+  ) => {
     try {
       const validates = removeBookToCartValidates(cartItem_id, quantity);
       if (validates) return { error: validates.error };
@@ -145,6 +146,9 @@ const cartService = {
         cartItem_id,
         quantity
       );
+
+      if (!cartItem) return { error: "Cart item not found!" };
+
       if ("error" in cartItem) {
         return { error: cartItem.error as string };
       }
@@ -155,8 +159,7 @@ const cartService = {
         },
         data: {
           totalPrice:
-            cart.totalPrice?.toNumber() -
-            cartItem.book.price.toNumber() * quantity,
+            cart.totalPrice?.toNumber() - cartItem.book.price * quantity,
         },
       });
 
@@ -169,10 +172,7 @@ const cartService = {
       return { error: error instanceof Error ? error.message : "error" };
     }
   },
-  deleteCartItem: async (
-    user_uuid: string,
-    cartItem_id: number
-  ): Promise<CartResponse | error> => {
+  deleteCartItem: async (user_uuid: string, cartItem_id: number) => {
     try {
       const user = await userExists(user_uuid);
       if ("error" in user) return { error: user.error };

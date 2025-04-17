@@ -57,9 +57,9 @@ export default function BooksPerfilCarousel({
             {books.map((book) => (
               <CarouselItem
                 key={book.id}
-                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
+                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle min-w-[250px] max-w-[250px]"
               >
-                <Card className="border shadow-sm overflow-hidden mx-1">
+                <Card className="border shadow-sm overflow-hidden mx-1  ">
                   <CardContent className="flex flex-col items-center justify-center">
                     <div className="w-full flex justify-center bg-white my-5">
                       <Image
