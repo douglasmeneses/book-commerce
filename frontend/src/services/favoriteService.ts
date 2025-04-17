@@ -36,3 +36,4 @@ export const favoriteBook = async (book_uuid: string, user_uuid: string) => {
   const data = { user_uuid };
   return ApiRequest("post", url, data);
 };
+

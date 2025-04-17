@@ -47,6 +47,8 @@ const bookController = {
         page: parseInt(req.query.page as string) || 1,
         limit: parseInt(req.query.limit as string) || 10,
       };
+      
+      const user_uuid = req.query.user_uuid as string | undefined;
 
       const user_uuid = req.query.user_uuid as string | undefined;
 
