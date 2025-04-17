@@ -92,7 +92,9 @@ const cartService = {
       return { error: error instanceof Error ? error.message : "error" };
     }
   },
-  getCartByUser_UUID: async (user_uuid: string) => {
+  getCartByUser_UUID: async (
+    user_uuid: string
+  ): Promise<CartResponse | { error: string }> => {
     try {
       const user = await userExists(user_uuid);
       if ("error" in user) {
