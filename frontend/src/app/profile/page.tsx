@@ -9,6 +9,7 @@ import { getOrdersByUser } from "@/services/orderService";
 import BooksPerfilCarousel from "@/components/BooksCarouselProfile";
 import ProfileHeaderInfos from "@/components/ProfileHeaderInfos";
 import ProfileBooksSection from "@/components/ProfileBooksSection";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(() => {
@@ -29,7 +30,7 @@ export default function ProfilePage() {
         const orders = await getOrdersByUser(user?.uuid || "");
         setLatestOrders(orders);
       } catch (error) {
-        console.log("Erro ao buscar livros:", error);
+        toast.error("Erro ao buscar livros favoritos.");
       } finally {
         setLoading(false);
       }
