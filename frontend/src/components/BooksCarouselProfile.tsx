@@ -37,13 +37,15 @@ export default function BooksPerfilCarousel({
     return () => clearTimeout(timer);
   }, []);
 
+  const isBooksArray = Array.isArray(books);
+
   return (
     <div className="w-full flex flex-col items-center">
       {Loading ? (
         <div className="w-full flex justify-center items-center h-40">
           <LoaderCircle className="animate-spin text-[#e67e22]" size={40} />
         </div>
-      ) : books.length > 0 ? (
+      ) : isBooksArray && books.length > 0 ? (
         <Carousel
           className="w-full max-w-4xl mt-5"
           opts={{
@@ -80,7 +82,7 @@ export default function BooksPerfilCarousel({
                       <p className="text-xs text-gray-600 line-clamp-1">
                         {book.authors.map((author, index) => (
                           <span key={index}>
-                            {author.author.name}{" "}
+                            {author.author.name}
                             {index < book.authors.length - 1 ? ", " : ""}
                           </span>
                         ))}
@@ -103,7 +105,7 @@ export default function BooksPerfilCarousel({
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className=" absolute">{"<"}</CarouselPrevious>
+          <CarouselPrevious className="absolute">{"<"}</CarouselPrevious>
           <CarouselNext className="">{">"}</CarouselNext>
         </Carousel>
       ) : (

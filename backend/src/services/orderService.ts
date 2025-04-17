@@ -45,7 +45,7 @@ export class OrderService {
           book_id: item.book_id,
           quantity: item.quantity,
           price: item.price,
-          total_price: item.price.toNumber() * item.quantity,
+          total_price: item.price,
         },
       });
     }
@@ -116,7 +116,7 @@ export class OrderService {
     const orders = await prisma.order.findMany({
       where: { user_id: user.id },
       include: {
-        orderItem: { include: { book: true } },
+        orderItem: { include: { book: true } as any },
       },
     });
 

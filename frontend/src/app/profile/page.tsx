@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@/types/userTypes";
-
 import { Book, FavoriteBookResponse } from "@/types/bookTypes";
 import { getBooks, getFavoriteBooks } from "@/services/bookService";
 import { getOrdersByUser } from "@/services/orderService";
@@ -21,9 +20,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [favoritedBooks, setFavoritedBooks] = useState<Array<Book>>([]);
   const [latestOrders, setLatestOrders] = useState<Array<Book>>([]);
-
   const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
-
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
       await favoriteBook(book_uuid, user?.uuid || "");
@@ -32,7 +29,6 @@ export default function ProfilePage() {
       console.error("Error favoriting book:", error);
     }
   };
-
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -63,7 +59,6 @@ export default function ProfilePage() {
         LatestOrders={latestOrders}
         handleFavoriteBook={handleFavoriteBook}
         isLogin={user ? true : false}
-
       />
       <div
         className="border border-[#E2E2E2] w-full absolute z-[1]"

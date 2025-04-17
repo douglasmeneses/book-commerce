@@ -132,7 +132,6 @@ export default function Home() {
               title={"Mais recentes"}
               handleFavoriteBook={handleFavoriteBook}
               isLogin={user ? true : false}
-
             />
           )}
         </section>
