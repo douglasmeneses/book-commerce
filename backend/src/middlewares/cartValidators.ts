@@ -24,14 +24,9 @@ export const cartValidates = (
 };
 
 export const removeBookToCartValidates = (
-  id: number,
   cartItem_id: number,
   quantity: number
 ): error | null => {
-  if (!id || typeof id !== "number") {
-    return { error: "Invalid cart id" };
-  }
-
   if (!cartItem_id || typeof cartItem_id !== "number") {
     return { error: "Invalid cart item id" };
   }

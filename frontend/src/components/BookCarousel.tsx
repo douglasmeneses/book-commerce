@@ -11,16 +11,26 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { BookCarouselProps } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
+import { favoriteBook } from "@/services/favoriteService";
+import FavoriteButton from "./FavoriteButton";
 
 export default function BookCarousel({
   books,
   genres,
   title,
+  handleFavoriteBook,
+  isLogin,
 }: BookCarouselProps) {
   const [filteredBooks, setFilteredBooks] = useState<Array<Book>>(books);
   const [selectedGenre, setSelectedGenre] = useState<string>("Todos");
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -50,7 +60,7 @@ export default function BookCarousel({
     <div className="w-full">
       {genres && (
         <ul className="flex mt-2 gap-10">
-          <h1 className="font-bold text-2xl w-2/6 ml-10 leading-none">
+          <h1 className="font-bold text-2xl w-2/6 ml-12 leading-none">
             {title}
           </h1>
           {[...new Set(genres)].map((genre) => (
@@ -65,7 +75,7 @@ export default function BookCarousel({
         </ul>
       )}
       {!genres && (
-        <h1 className="font-bold text-2xl leading-none mt-10 w-full text-center">
+        <h1 className="font-bold text-2xl leading-none mt-10 w-full ml-10">
           {title}
         </h1>
       )}
@@ -85,14 +95,14 @@ export default function BookCarousel({
               >
                 <div className="">
                   <Card className="border shadow-sm overflow-hidden mx-10">
-                    <CardContent className="flex flex-col items-center justify-center">
+                    <CardContent className="flex flex-col items-center justify-center w-[230px]">
                       <div className="w-full flex justify-center bg-white my-5">
                         <Image
                           src={book.image_url || "/book-placeholder.png"}
                           alt={book.title}
                           width={150}
                           height={200}
-                          className="object-cover w-[150px] h-[200px]"
+                          className="object-cover h-[200px] w-[170px]"
                         />
                       </div>
                       <div className="w-full flex flex-col gap-1">
@@ -116,9 +126,11 @@ export default function BookCarousel({
                           <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
                             Adicionar
                           </Button>
-                          <FavoriteBorderIcon
-                            className="text-[#e67e22] cursor-pointer"
-                            fontSize="medium"
+                          <FavoriteButton
+                            book_uuid={book.uuid}
+                            favorite={book.favorites}
+                            handleFavoriteBook={handleFavoriteBook}
+                            isLogin={isLogin}
                           />
                         </div>
                       </div>

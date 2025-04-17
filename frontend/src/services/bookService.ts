@@ -1,16 +1,16 @@
 import axios from "axios";
 import { Filter } from "@/types/bookTypes";
-import { cleanToken } from "@/utils/cartUtils";
+import { cleanToken } from "@/utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/books";
 
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
-export const getBooks = async (filtro: Filter) => {
+export const getBooks = async (filtro: Filter, user_uuid?: string) => {
   try {
     const response = await axios.get(API_URL, {
-      params: { ...filtro },
+      params: { ...filtro, user_uuid: user_uuid ? user_uuid : "" },
     });
     return response.data;
   } catch (error) {
@@ -23,7 +23,7 @@ export const getBooks = async (filtro: Filter) => {
 export const getFavoriteBooks = async (user_uuid: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:3001/favorites/${user_uuid}`,
+      `http://localhost:3001/favorites/user/${user_uuid}/`,
       {
         headers: {
           authorization: `Bearer ${TOKEN}`,
@@ -31,7 +31,6 @@ export const getFavoriteBooks = async (user_uuid: string) => {
         },
       }
     );
-    console.log("response", response.data);
     return response.data;
   } catch (error) {
     const errorMessage =

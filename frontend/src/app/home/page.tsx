@@ -6,24 +6,40 @@ import Image from "next/image";
 import BookCarousel from "@/components/BookCarousel";
 import { Book } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
-
+import { favoriteBook } from "@/services/favoriteService";
+import { toast } from "sonner";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const [mostLikedBooks, setMostLikedBooks] = useState<Array<Book>>([]);
   const [mostRecentBooks, setMostRecentBooks] = useState<Array<Book>>([]);
+
+  const handleFavoriteBook = async (book_uuid: string) => {
+    try {
+      await favoriteBook(book_uuid, user?.uuid || "");
+    } catch (error) {
+      console.error("Error favoriting book:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        const mostLiked = await getBooks({ mostLiked: true });
+        const mostLiked = await getBooks({ mostLiked: true }, user?.uuid || "");
         setMostLikedBooks(mostLiked);
 
-        const mostRecent = await getBooks({ mostRecent: true });
+        const mostRecent = await getBooks(
+          { mostRecent: true },
+          user?.uuid || ""
+        );
         setMostRecentBooks(mostRecent);
       } catch (error) {
-        console.log("Erro ao buscar livros:", error);
+        toast.error("Erro ao buscar livros");
       } finally {
         setLoading(false);
       }
@@ -102,6 +118,8 @@ export default function Home() {
               books={mostLikedBooks}
               genres={genres}
               title={"Mais curtidos"}
+              handleFavoriteBook={handleFavoriteBook}
+              isLogin={user ? true : false}
             />
           )}
         </section>
@@ -109,7 +127,12 @@ export default function Home() {
           {loading ? (
             <p>Carregando...</p>
           ) : (
-            <BookCarousel books={mostRecentBooks} title={"Mais recentes"} />
+            <BookCarousel
+              books={mostRecentBooks}
+              title={"Mais recentes"}
+              handleFavoriteBook={handleFavoriteBook}
+              isLogin={user ? true : false}
+            />
           )}
         </section>
       </main>
