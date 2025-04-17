@@ -6,7 +6,7 @@ const API_URL = "http://localhost:3001/carts/user";
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
-const apiRequest = async (
+const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
   url: string,
   data?: any
@@ -33,7 +33,7 @@ const apiRequest = async (
 
 export const getCart = async (user_uuid: string): Promise<string | Cart> => {
   const url = `${API_URL}/${user_uuid}`;
-  return apiRequest("get", url);
+  return ApiRequest("get", url);
 };
 
 export const addItemToCart = async (
@@ -43,7 +43,7 @@ export const addItemToCart = async (
 ): Promise<string | Cart> => {
   const url = `${API_URL}/${user_uuid}/item/${book_uuid}`;
   const data = { quantity };
-  return apiRequest("post", url, data);
+  return ApiRequest("post", url, data);
 };
 
 export const removeItemFromCart = async (
@@ -53,7 +53,7 @@ export const removeItemFromCart = async (
 ): Promise<string | Cart> => {
   const url = `${API_URL}/${user_uuid}/item/${cartItem_id}/remove`;
   const data = { user_uuid, cartItem_id, quantity };
-  return apiRequest("put", url, data);
+  return ApiRequest("put", url, data);
 };
 
 export const deleteCartItem = async (
@@ -61,5 +61,5 @@ export const deleteCartItem = async (
   user_uuid: string
 ): Promise<string | Cart> => {
   const url = `${API_URL}/${user_uuid}/item/${cartItem_id}`;
-  return apiRequest("delete", url);
+  return ApiRequest("delete", url);
 };
