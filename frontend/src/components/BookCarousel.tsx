@@ -60,7 +60,7 @@ export default function BookCarousel({
     <div className="w-full">
       {genres && (
         <ul className="flex mt-2 gap-10">
-          <h1 className="font-bold text-2xl w-2/6 ml-10 leading-none">
+          <h1 className="font-bold text-2xl w-2/6 ml-12 leading-none">
             {title}
           </h1>
           {[...new Set(genres)].map((genre) => (
@@ -75,7 +75,7 @@ export default function BookCarousel({
         </ul>
       )}
       {!genres && (
-        <h1 className="font-bold text-2xl leading-none mt-10 w-full text-center">
+        <h1 className="font-bold text-2xl leading-none mt-10 w-full ml-10">
           {title}
         </h1>
       )}
@@ -95,14 +95,14 @@ export default function BookCarousel({
               >
                 <div className="">
                   <Card className="border shadow-sm overflow-hidden mx-10">
-                    <CardContent className="flex flex-col items-center justify-center">
+                    <CardContent className="flex flex-col items-center justify-center w-[230px]">
                       <div className="w-full flex justify-center bg-white my-5">
                         <Image
                           src={book.image_url || "/book-placeholder.png"}
                           alt={book.title}
                           width={150}
                           height={200}
-                          className="object-cover w-[150px] h-[200px]"
+                          className="object-cover h-[200px] w-[170px]"
                         />
                       </div>
                       <div className="w-full flex flex-col gap-1">
