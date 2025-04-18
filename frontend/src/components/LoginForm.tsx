@@ -50,7 +50,7 @@ export default function LoginPage() {
         description: `Bem vindo, ${response.user.name}`,
       });
       setTimeout(() => {
-        router.push("/home");
+        router.push("/");
       }, 2000);
     } catch (error) {
       const errorMessage =

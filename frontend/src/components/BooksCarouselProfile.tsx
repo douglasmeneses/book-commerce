@@ -11,10 +11,22 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { BookCarouselProps } from "@/types/bookTypes";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+import FavoriteButton from "./FavoriteButton";
 
-export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
+interface BookCarouselProps {
+  books: Array<Book>;
+  handleFavoriteBook: (book_uuid: string) => void;
+  isLogin: boolean;
+}
+
+export default function BooksPerfilCarousel({
+  books,
+  handleFavoriteBook,
+  isLogin,
+}: BookCarouselProps) {
   const [Loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,13 +37,15 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
     return () => clearTimeout(timer);
   }, []);
 
+  const isBooksArray = Array.isArray(books);
+
   return (
     <div className="w-full flex flex-col items-center">
       {Loading ? (
         <div className="w-full flex justify-center items-center h-40">
           <LoaderCircle className="animate-spin text-[#e67e22]" size={40} />
         </div>
-      ) : books.length > 0 ? (
+      ) : isBooksArray && books.length > 0 ? (
         <Carousel
           className="w-full max-w-4xl mt-5"
           opts={{
@@ -43,9 +57,9 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
             {books.map((book) => (
               <CarouselItem
                 key={book.id}
-                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
+                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle min-w-[250px] max-w-[250px]"
               >
-                <Card className="border shadow-sm overflow-hidden mx-1">
+                <Card className="border shadow-sm overflow-hidden mx-1  ">
                   <CardContent className="flex flex-col items-center justify-center">
                     <div className="w-full flex justify-center bg-white my-5">
                       <Image
@@ -68,7 +82,7 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
                       <p className="text-xs text-gray-600 line-clamp-1">
                         {book.authors.map((author, index) => (
                           <span key={index}>
-                            {author.author.name}{" "}
+                            {author.author.name}
                             {index < book.authors.length - 1 ? ", " : ""}
                           </span>
                         ))}
@@ -77,9 +91,12 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
                         <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
                           Adicionar
                         </Button>
-                        <FavoriteBorderIcon
-                          className="text-[#e67e22] cursor-pointer"
-                          fontSize="medium"
+
+                        <FavoriteButton
+                          book_uuid={book.uuid}
+                          favorite={book.favorites}
+                          handleFavoriteBook={handleFavoriteBook}
+                          isLogin={isLogin}
                         />
                       </div>
                     </div>
@@ -88,7 +105,7 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className=" absolute">{"<"}</CarouselPrevious>
+          <CarouselPrevious className="absolute">{"<"}</CarouselPrevious>
           <CarouselNext className="">{">"}</CarouselNext>
         </Carousel>
       ) : (

@@ -1,7 +1,8 @@
 import axios from "axios";
-import { cleanToken, handleNewToken } from "../utils/tokenUtils";
+import { cleanToken } from "../utils/tokenUtils";
+import { handleNewToken } from "../utils/tokenUtils";
 
-const API_URL = "http://localhost:3001/orders";
+const API_URL = "http://localhost:3001/favorites";
 
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
@@ -21,8 +22,6 @@ const ApiRequest = async (
     const response = data
       ? await axios[method](url, data, tokenConfig)
       : await axios[method](url, tokenConfig);
-    handleNewToken(response);
-
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -32,7 +31,9 @@ const ApiRequest = async (
   }
 };
 
-export const getOrdersByUser = async (user_uuid: string) => {
-  const url = `${API_URL}/user/${user_uuid}`;
-  return ApiRequest("get", url);
+export const favoriteBook = async (book_uuid: string, user_uuid: string) => {
+  const url = `${API_URL}/book/${book_uuid}`;
+  const data = { user_uuid };
+  return ApiRequest("post", url, data);
 };
+
