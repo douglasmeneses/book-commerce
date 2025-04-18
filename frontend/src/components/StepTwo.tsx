@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { User, IdCard, Phone, Calendar } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { cpf as cpfValidator } from "cpf-cnpj-validator";
 
 const stepTwoZodSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
@@ -14,8 +15,10 @@ const stepTwoZodSchema = z.object({
   }),
   cpf: z
     .string()
-    .length(11, "O CPF deve ter 11 dígitos")
-    .regex(/^\d+$/, "O CPF deve conter apenas números"),
+    .length(14, "O CPF deve ter 11 dígitos")
+    .refine((value) => cpfValidator.isValid(value), {
+      message: "CPF inválido",
+    }),
   phone: z
     .string()
     .regex(
@@ -48,13 +51,27 @@ export default function StepTwo({
     resolver: zodResolver(stepTwoZodSchema),
   });
 
+  const formatCPF = (value: string) => {
+    return value
+      .replace(/\D/g, "")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  };
+
+  const cleanCPF = (cpf: string) => cpf.replace(/\D/g, "");
+
   const handleSubmit = (data: {
     name: string;
     birthDate: string;
     cpf: string;
     phone: string;
   }) => {
-    onSubmit(data);
+    const payload = {
+      ...data,
+      cpf: cleanCPF(data.cpf),
+    };
+    onSubmit(payload);
   };
 
   return (
@@ -142,8 +159,11 @@ export default function StepTwo({
                     className="pl-10 bg-gray-100 border-none h-12"
                     placeholder="123.456.789-00"
                     type="text"
-                    required
-                    {...field}
+                    value={field.value}
+                    onChange={(e) => {
+                      const formatted = formatCPF(e.target.value);
+                      field.onChange(formatted);
+                    }}
                   />
                 </div>
               </FormControl>
