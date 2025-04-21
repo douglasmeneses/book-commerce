@@ -3,11 +3,10 @@ import {
   CartItemResponse,
   CartItemRequest,
   CartItemImageResponse,
+  CartResponse,
 } from "../types/cartTypes";
 
-export const processCartItems = async (
-  cartItems: CartItemRequest[]
-): Promise<CartItemImageResponse[]> => {
+export const processCartItems = async (cartItems: CartItemRequest[]) => {
   return Promise.all(
     cartItems.map(async (cartItem: CartItemRequest) => {
       if (cartItem.book.image) {

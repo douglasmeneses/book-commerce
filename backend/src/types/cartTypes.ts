@@ -17,7 +17,7 @@ export interface CartRequest {
     book: {
       id: number;
       title: string;
-      price: Decimal;
+      price: number;
       image: Uint8Array | null;
       image_url: string | null;
     };
@@ -30,22 +30,7 @@ export interface CartResponse {
   updated_at: Date;
   totalPrice: Decimal;
   user_id: number;
-  cartItem: {
-    id: number;
-    created_at: Date;
-    updated_at: Date;
-    price: Decimal;
-    cart_id: number;
-    book_id: number;
-    quantity: number;
-    book: {
-      id: number;
-      title: string;
-      price: Decimal;
-      image: Uint8Array | null;
-      image_url: string | null;
-    };
-  }[];
+  cartItem: CartItemRequest[];
 }
 export interface CartItemImageResponse {
   id: number;
@@ -58,7 +43,7 @@ export interface CartItemImageResponse {
   book: {
     id: number;
     title: string;
-    price: Decimal;
+    price: number;
     image: string | null;
     image_url: string | null;
   };
@@ -75,7 +60,7 @@ export interface CartItemRequest {
   book: {
     id: number;
     title: string;
-    price: Decimal;
+    price: number;
     image: Uint8Array | null;
     image_url: string | null;
   };
@@ -93,7 +78,7 @@ export interface CartItemResponse {
     id: number;
     uuid: string;
     title: string;
-    price: Decimal;
+    price: number;
     image: string | null;
     image_url: string | null;
     stock_quantity: number;

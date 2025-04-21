@@ -1,27 +1,39 @@
 import { Cart } from "@/types/cartTypes";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { cleanToken, handleNewToken } from "@/utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/carts/user";
-
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
-export const getCart = async (user_uuid: string): Promise<string | Cart> => {
+const ApiRequest = async (
+  method: "get" | "post" | "put" | "delete",
+  url: string,
+  data?: any
+): Promise<string | Cart> => {
   try {
-    const response = await axios.get(`${API_URL}/${user_uuid}`, {
+    const tokenConfig = {
       headers: {
         authorization: `Bearer ${TOKEN}`,
         "x-refresh-token": REFRESH_TOKEN,
       },
-    });
+    };
+
+    const response: AxiosResponse<Cart> = data
+      ? await axios[method](url, data, tokenConfig)
+      : await axios[method](url, tokenConfig);
     handleNewToken(response);
     return response.data;
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Error fetching cart.";
+      error instanceof Error ? error.message : "Error with request.";
     return errorMessage;
   }
+};
+
+export const getCart = async (user_uuid: string): Promise<string | Cart> => {
+  const url = `${API_URL}/${user_uuid}`;
+  return ApiRequest("get", url);
 };
 
 export const addItemToCart = async (
@@ -29,27 +41,9 @@ export const addItemToCart = async (
   book_uuid: string,
   quantity: number
 ): Promise<string | Cart> => {
-  try {
-    const response = (await axios.post(
-      `${API_URL}/${user_uuid}/item/${book_uuid}`,
-      {
-        quantity,
-      },
-      {
-        headers: {
-          authorization: `Bearer ${TOKEN}`,
-          "x-refresh-token": REFRESH_TOKEN,
-        },
-      }
-    )) as AxiosResponse<Cart>;
-    handleNewToken(response);
-
-    return response.data;
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Error adding item to cart.";
-    return errorMessage;
-  }
+  const url = `${API_URL}/${user_uuid}/item/${book_uuid}`;
+  const data = { quantity };
+  return ApiRequest("post", url, data);
 };
 
 export const removeItemFromCart = async (
@@ -57,50 +51,15 @@ export const removeItemFromCart = async (
   cartItem_id: number,
   quantity: number
 ): Promise<string | Cart> => {
-  try {
-    const response = (await axios.put(
-      //"/user/:user_uuid/item/:cartItem_id/remove"
-      `${API_URL}/${user_uuid}/item/${cartItem_id}/remove`,
-      {
-        user_uuid: user_uuid,
-        cartItem_id: cartItem_id,
-        quantity: quantity,
-      },
-      {
-        headers: {
-          authorization: `Bearer ${TOKEN}`,
-          "x-refresh-token": REFRESH_TOKEN,
-        },
-      }
-    )) as AxiosResponse<Cart>;
-    handleNewToken(response);
-    return response.data;
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Error removing item from cart.";
-    return errorMessage;
-  }
+  const url = `${API_URL}/${user_uuid}/item/${cartItem_id}/remove`;
+  const data = { user_uuid, cartItem_id, quantity };
+  return ApiRequest("put", url, data);
 };
 
 export const deleteCartItem = async (
   cartItem_id: number,
   user_uuid: string
 ): Promise<string | Cart> => {
-  try {
-    const response = (await axios.delete(
-      `${API_URL}/${user_uuid}/item/${cartItem_id}`,
-      {
-        headers: {
-          authorization: `Bearer ${TOKEN}`,
-          "x-refresh-token": REFRESH_TOKEN,
-        },
-      }
-    )) as AxiosResponse<Cart>;
-    handleNewToken(response);
-    return response.data;
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Error deleting cart item.";
-    return errorMessage;
-  }
+  const url = `${API_URL}/${user_uuid}/item/${cartItem_id}`;
+  return ApiRequest("delete", url);
 };

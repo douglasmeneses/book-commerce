@@ -42,9 +42,9 @@ export default function ProfilePage() {
 
         const orders = await getOrdersByUser(user?.uuid || "");
         setLatestOrders(orders);
-
       } catch (error) {
         toast.error("Erro ao buscar livros favoritos.");
+        console.error("Error fetching favorite books:", error);
       }
     };
 

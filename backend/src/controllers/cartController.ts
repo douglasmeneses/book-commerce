@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import cartService from "../services/cartService";
 import { processCartItems } from "../utils/cartUtils";
 import { CartResponseDTO } from "../dtos/cartDTO";
+import { CartItemRequest } from "../types/cartTypes";
 
 const cartController = {
   addBookToCart: async (req: Request, res: Response) => {
@@ -71,7 +72,6 @@ const cartController = {
         ...cart,
         cartItem: cartItems,
       });
-
       return res.json(cartResponse);
     } catch (error) {
       return res
