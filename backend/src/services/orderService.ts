@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 export class OrderService {
   async createOrder(user_uuid: string, data: any) {
     const user = await prisma.user.findUnique({ where: { uuid: user_uuid } });
-    if (!user) throw new Error('Usuário não encontrado');
+    if (!user) throw new Error("Usuário não encontrado");
 
     const cart = await prisma.cart.findFirst({
       where: { user_id: user.id },
@@ -13,15 +13,17 @@ export class OrderService {
     });
 
     if (!cart || cart.cartItem.length === 0) {
-      throw new Error('Carrinho vazio ou inexistente');
+      throw new Error("Carrinho vazio ou inexistente");
     }
 
-    const subtotal = cart.cartItem.reduce((acc, item) => acc + item.price.toNumber() * item.quantity, 0);
+    const subtotal = cart.cartItem.reduce(
+      (acc, item) => acc + item.price.toNumber() * item.quantity,
+      0
+    );
     const shipping = 10;
     const total = subtotal + shipping;
 
     const order = await prisma.order.create({
-      
       data: {
         user_id: user.id,
         cart_id: cart.id,
@@ -32,7 +34,7 @@ export class OrderService {
         subtotal,
         shipping,
         total,
-        status: 'PENDING',
+        status: "PENDING",
       },
     });
 
@@ -43,7 +45,7 @@ export class OrderService {
           book_id: item.book_id,
           quantity: item.quantity,
           price: item.price,
-          total_price: item.price.toNumber() * item.quantity,
+          total_price: item.price,
         },
       });
     }
@@ -58,8 +60,6 @@ export class OrderService {
         updated_at: new Date(),
       },
     });
-    
-
 
     return order;
   }
@@ -71,13 +71,13 @@ export class OrderService {
         items: { include: { book: true } },
       },
     });
-    if (!order) throw new Error('Pedido não encontrado');
+    if (!order) throw new Error("Pedido não encontrado");
     return order;
   }
 
   async updateOrder(user_uuid: string, data: any) {
     const user = await prisma.user.findUnique({ where: { uuid: user_uuid } });
-    if (!user) throw new Error('Usuário não encontrado');
+    if (!user) throw new Error("Usuário não encontrado");
 
     const order = await prisma.order.updateMany({
       where: { user_id: user.id },
@@ -89,11 +89,11 @@ export class OrderService {
 
   async deleteOrder(user_uuid: string) {
     const user = await prisma.user.findUnique({ where: { uuid: user_uuid } });
-    if (!user) throw new Error('Usuário não encontrado');
+    if (!user) throw new Error("Usuário não encontrado");
 
     const orders = await prisma.order.findMany({
       where: { user_id: user.id },
-      select: { id: true }
+      select: { id: true },
     });
 
     for (const order of orders) {
@@ -106,21 +106,24 @@ export class OrderService {
       where: { user_id: user.id },
     });
 
-    return { message: 'Pedidos deletados com sucesso' };
+    return { message: "Pedidos deletados com sucesso" };
   }
 
   async getOrdersByUser(user_uuid: string) {
     const user = await prisma.user.findUnique({ where: { uuid: user_uuid } });
-    if (!user) throw new Error('Usuário não encontrado');
+    if (!user) throw new Error("Usuário não encontrado");
 
     const orders = await prisma.order.findMany({
       where: { user_id: user.id },
       include: {
-        items: { include: { book: true } },
+        items: { include: { book: true } as any },
       },
     });
 
+    if (orders.length === 0) {
+      return [];
+    }
+
     return orders;
   }
-
 }

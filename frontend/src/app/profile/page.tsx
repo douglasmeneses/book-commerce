@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Label } from "@radix-ui/react-label";
 import { User } from "@/types/userTypes";
-import { Book } from "@/types/bookTypes";
+import { Book, FavoriteBookResponse } from "@/types/bookTypes";
 import { getBooks, getFavoriteBooks } from "@/services/bookService";
+import { getOrdersByUser } from "@/services/orderService";
 import BooksPerfilCarousel from "@/components/BooksCarouselProfile";
+
 import ProfileHeaderInfos from "@/components/ProfileHeaderInfos";
 import ProfileBooksSection from "@/components/ProfileBooksSection";
+import { favoriteBook } from "@/services/favoriteService";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(() => {
@@ -16,32 +19,46 @@ export default function ProfilePage() {
   });
   const [loading, setLoading] = useState(true);
   const [favoritedBooks, setFavoritedBooks] = useState<Array<Book>>([]);
-  const [books, setBooks] = useState<Array<Book>>([]);
+  const [latestOrders, setLatestOrders] = useState<Array<Book>>([]);
+  const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
+  const handleFavoriteBook = async (book_uuid: string) => {
+    try {
+      await favoriteBook(book_uuid, user?.uuid || "");
+      setAccFetchsBooks((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error favoriting book:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        setLoading(true);
-        const Favorites = await getFavoriteBooks(user?.uuid || "");
-        setFavoritedBooks(Favorites);
-        const books = await getBooks({ search: "a" });
-        setBooks(books);
+        const Favorites = (await getFavoriteBooks(
+          user?.uuid || ""
+        )) as Array<FavoriteBookResponse>;
+        setFavoritedBooks(
+          Favorites.map((favoriteResponse) => favoriteResponse.book) || []
+        );
+
+        const orders = await getOrdersByUser(user?.uuid || "");
+        setLatestOrders(orders);
       } catch (error) {
-        console.log("Erro ao buscar livros:", error);
-      } finally {
-        setLoading(false);
+        toast.error("Erro ao buscar livros favoritos.");
+        console.error("Error fetching favorite books:", error);
       }
     };
 
     fetchBooks();
-  }, []);
+  }, [accFetchsBooks]);
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-[#FFFAF5]">
       <ProfileHeaderInfos user={user} />
       <ProfileBooksSection
         favoritedBooks={favoritedBooks}
-        LatestOrders={books} // tem que passar os livros mais recentes aqui, mas não tem no backend ainda
+        LatestOrders={latestOrders}
+        handleFavoriteBook={handleFavoriteBook}
+        isLogin={user ? true : false}
       />
       <div
         className="border border-[#E2E2E2] w-full absolute z-[1]"
