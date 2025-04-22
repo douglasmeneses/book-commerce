@@ -1,11 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getBooks } from "@/services/bookService";
 import { Book, Filter } from "@/types/bookTypes";
 import { Button } from "@/components/ui/button";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
@@ -20,6 +19,7 @@ import {
 import { addItemToCart } from "@/services/cartService";
 import { favoriteBook } from "@/services/favoriteService";
 import FavoriteButton from "@/components/FavoriteButton";
+import { LoaderCircle } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -27,19 +27,24 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-
 export default function SearchPage() {
   const user = localStorage.getItem("user");
   const user_uuid: string = user ? JSON.parse(user).uuid : "";
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
 
   useEffect(() => {
+    if (!query) {
+      return router.replace("/");
+    }
+
     const fetchBooks = async () => {
       const filter: Filter = {
         search: query || "",
@@ -66,11 +71,15 @@ export default function SearchPage() {
         if (error instanceof Error) {
           toast.error(error.message || "Erro ao buscar livros.");
         }
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 100);
       }
     };
 
     fetchBooks();
-  }, [query, currentPage]);
+  }, [query, currentPage, query]);
 
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
@@ -99,10 +108,17 @@ export default function SearchPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">
-        Resultados de: <span className="text-orange-500">{`"${query}"`}</span>
+        Resultados de:{" "}
+        <span className="text-orange-500">{`"${
+          loading ? "..." : query
+        }"`}</span>
       </h1>
       <section className="min-h-screen">
-        {books.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <LoaderCircle className="animate-spin text-orange-500" size={48} />
+          </div>
+        ) : books.length === 0 ? (
           <p className="text-gray-600">Nenhum livro encontrado.</p>
         ) : (
           <div>
