@@ -60,7 +60,7 @@ export default function CartPage() {
     } catch (error) {
       console.error("Error adding item to cart:", error);
       toast.error(
-        `Error adding item to cart: ${
+        `Erro ao adicionar item ao carrinho: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
@@ -87,7 +87,7 @@ export default function CartPage() {
       }
     } catch (error) {
       toast.error(
-        `Error removing item from cart: ${
+        `Erro ao remover item do carrinho: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
@@ -107,7 +107,7 @@ export default function CartPage() {
       toast.success("Item deletado com sucesso!");
     } catch (error) {
       toast.error(
-        `Error deleting item from cart: ${
+        `Erro ao deletar item do carrinho: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
