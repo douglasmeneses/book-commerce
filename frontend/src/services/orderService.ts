@@ -1,5 +1,6 @@
 import axios from "axios";
 import { cleanToken, handleNewToken } from "../utils/tokenUtils";
+import { Order } from "@/types/orderTypes";
 
 const API_URL = "http://localhost:3001/orders";
 
@@ -35,4 +36,32 @@ const ApiRequest = async (
 export const getOrdersByUser = async (user_uuid: string) => {
   const url = `${API_URL}/user/${user_uuid}`;
   return ApiRequest("get", url);
+};
+
+export const getOrderById = async (orderId: number): Promise<Order> => {
+  const url = `${API_URL}/by-id/${orderId}`;
+  return ApiRequest("get", url);
+};
+
+export const createOrder = async (
+  user_uuid: string,
+  orderData: Partial<Order>
+): Promise<Order> => {
+  const url = `${API_URL}/${user_uuid}`;
+  return ApiRequest("post", url, orderData);
+};
+
+export const updateOrder = async (
+  user_uuid: string,
+  updatedData: Partial<Order>
+): Promise<Order> => {
+  const url = `${API_URL}/${user_uuid}`;
+  return ApiRequest("put", url, updatedData);
+};
+
+export const deleteOrder = async (
+  user_uuid: string
+): Promise<{ message: string }> => {
+  const url = `${API_URL}/${user_uuid}`;
+  return ApiRequest("delete", url);
 };
