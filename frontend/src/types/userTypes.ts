@@ -32,3 +32,15 @@ export interface User {
   created_at: string;
   updated_at: string;
 }
+
+
+export interface Address {
+  street: string;
+  number: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  complement: string | null;
+}

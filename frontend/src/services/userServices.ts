@@ -88,3 +88,17 @@ export const deleteUser = async (user_uuid: string) => {
     throw new Error("Something went wrong to delete user");
   }
 };
+
+export const getUserAddress = async (user_uuid: string) => {
+  const url = `${API_URL}/${user_uuid}/address`;
+  try {
+    return await ApiRequest("get", url);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Error while fetching user address"
+      );
+    }
+    throw new Error("Something went wrong to fetch user address");
+  }
+};

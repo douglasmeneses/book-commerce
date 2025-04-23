@@ -7,8 +7,8 @@ const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
 
 const userController = {
   registerUser: async (req: Request, res: Response): Promise<Response> => {
-    const { name, username, email, password } = req.body;
-
+    const { name, username, email, password, address } = req.body;
+  
     try {
       const existingUser = await userService.getUserByEmail(email);
       if (existingUser) {
@@ -17,7 +17,7 @@ const userController = {
           message: "Tente outro.",
         });
       }
-
+  
       const existingUsername = await userService.getUserByUsername(username);
       if (existingUsername) {
         return res.status(400).json({
@@ -25,15 +25,16 @@ const userController = {
           message: "Este nome de usuário já está em uso. Tente outro.",
         });
       }
-
+  
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await userService.registerUser({
         name,
         username,
         email,
         password: hashedPassword,
+        address 
       });
-
+  
       return res
         .status(200)
         .json({ message: "Usuário registrado com sucesso", user: newUser });
@@ -43,6 +44,7 @@ const userController = {
       });
     }
   },
+  
 
   loginUser: async (req: Request, res: Response): Promise<Response> => {
     const { email, password } = req.body;
@@ -209,6 +211,20 @@ const userController = {
         .json({ error: `Erro ao fazer upload do avatar: ${errorMessage}` });
     }
   },
+  getUserAddress: async (req: Request, res: Response): Promise<Response> => {
+    const { uuid } = req.params;
+  
+    try {
+      const address = await userService.getUserAddresses(uuid);  // Verifique se o método 'getUserAddress' está funcionando corretamente
+      if (!address) {
+        return res.status(404).json({ message: "Endereço não encontrado" });
+      }
+      return res.status(200).json({ address });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  }
 };
 
 export default userController;
