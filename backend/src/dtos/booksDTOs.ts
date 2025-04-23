@@ -6,6 +6,7 @@ export class BookResponseDTO {
   image_url?: string;
   price: number;
   authors: string[];
+  rating?: number;
 
   constructor(book: any) {
     this.uuid = book.uuid;
@@ -15,5 +16,6 @@ export class BookResponseDTO {
     this.synopsis = book.synopsis;
     this.authors = book.authors.map((a: any) => a.author.name);
     this.image_url = book.image_url;
+    this.rating = book.rating;
   }
 }

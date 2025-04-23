@@ -43,6 +43,7 @@ export interface BookResponse {
   price: number;
   synopsis: string;
   authors: string[];
+  rating?: number;
 }
 
 export interface Filter {
