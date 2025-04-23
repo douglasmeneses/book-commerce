@@ -97,7 +97,10 @@ const bookService = {
       };
     }
   },
-  getBooks: async (filter: Filter): Promise<BookResponseDTO[] | error> => {
+  getBooks: async (
+    filter: Filter,
+    user_uuid: string | undefined
+  ): Promise<BookResponseDTO[] | error> => {
     const {
       search,
       author,
