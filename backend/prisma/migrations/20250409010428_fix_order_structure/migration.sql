@@ -20,9 +20,6 @@ CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'PAID', 'PROCESSING', 'SHIPPED', '
 -- CreateEnum
 CREATE TYPE "PaymentMethod" AS ENUM ('CREDIT_CARD', 'BOLETO', 'PIX');
 
--- DropForeignKey
-ALTER TABLE "Address" DROP CONSTRAINT "Address_user_id_fkey";
-
 -- AlterTable
 ALTER TABLE "Address" DROP COLUMN "user_id",
 ALTER COLUMN "country" SET DEFAULT 'Brasil';
@@ -30,8 +27,6 @@ ALTER COLUMN "country" SET DEFAULT 'Brasil';
 -- AlterTable
 ALTER TABLE "Author" ALTER COLUMN "image" DROP NOT NULL;
 
--- AlterTable
-ALTER TABLE "Book" ADD COLUMN     "image_url" TEXT DEFAULT '';
 
 -- AlterTable
 ALTER TABLE "Credit_card" ADD COLUMN     "is_default" BOOLEAN NOT NULL DEFAULT false;

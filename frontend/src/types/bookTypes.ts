@@ -8,6 +8,14 @@ export interface Author {
   updated_at: string;
 }
 
+export interface Favorite {
+  id: number;
+  book_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Genre {
   id: number;
   name: string;
@@ -51,12 +59,15 @@ export interface Book {
   image_url: string;
   authors: BookAuthor[];
   genres: BookGenre[];
+  favorites?: Favorite[];
 }
 
 export interface BookCarouselProps {
   books: Array<Book>;
   genres?: Array<string>;
   title: string;
+  handleFavoriteBook: (book_uuid: string) => void;
+  isLogin: boolean;
 }
 
 export interface Filter {
@@ -65,4 +76,13 @@ export interface Filter {
   page?: number;
   mostLiked?: boolean;
   mostRecent?: boolean;
+}
+
+export interface FavoriteBookResponse {
+  id: number;
+  book_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+  book: Book;
 }

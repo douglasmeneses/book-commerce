@@ -2,13 +2,19 @@ import { Label } from "@radix-ui/react-label";
 import BooksPerfilCarousel from "./BooksCarouselProfile";
 import { Book } from "@/types/bookTypes";
 
+interface ProfileBooksSectionProps {
+  favoritedBooks: Array<Book>;
+  LatestOrders: Array<Book>;
+  handleFavoriteBook: (book_uuid: string) => void;
+  isLogin: boolean;
+}
+
 export default function ProfileBooksSection({
   favoritedBooks,
   LatestOrders,
-}: {
-  favoritedBooks: Array<Book>;
-  LatestOrders: Array<Book>;
-}) {
+  handleFavoriteBook,
+  isLogin,
+}: ProfileBooksSectionProps) {
   return (
     <div className="mb-8">
       <Label className="text-2xl font-bold text-[#241400] mb-4">
@@ -16,7 +22,8 @@ export default function ProfileBooksSection({
       </Label>
       <BooksPerfilCarousel
         books={favoritedBooks}
-        title="" // esse campo não é utilizado no componente, mas é necessário para o tipo BookCarouselProps
+        handleFavoriteBook={handleFavoriteBook}
+        isLogin={isLogin}
       />
       <br></br>
       <Label className="text-2xl font-bold text-[#241400] mb-4">
@@ -24,7 +31,8 @@ export default function ProfileBooksSection({
       </Label>
       <BooksPerfilCarousel
         books={LatestOrders}
-        title="" // esse campo não é utilizado no componente, mas é necessário para o tipo BookCarouselProps
+        handleFavoriteBook={handleFavoriteBook}
+        isLogin={isLogin}
       />
     </div>
   );

@@ -30,7 +30,7 @@ export default function NavBar() {
   return (
     <nav className="navbar w-3/4 mx-auto px-4 py-2 rounded-md mt-4">
       <div className="container flex items-center justify-between">
-        <Link href="/home" className="navbar-brand">
+        <Link href="/" className="navbar-brand">
           <img
             src="/logoHome.png"
             alt="Logo"

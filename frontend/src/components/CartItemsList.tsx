@@ -12,16 +12,11 @@ interface CartItemsListProps {
     quantity: number
   ) => Promise<void>;
   handleRemoveItem: (
-    id: number,
     user_uuid: string,
     cartItem_id: number,
     quantity: number
   ) => Promise<void>;
-  handleDeleteItem: (
-    cartItem_id: number,
-    user_uuid: string,
-    cart_id: number
-  ) => Promise<void>;
+  handleDeleteItem: (cartItem_id: number, user_uuid: string) => Promise<void>;
 }
 
 export default function CartItemsList({
@@ -58,7 +53,7 @@ export default function CartItemsList({
                   <div>
                     <h2 className="text-[2rem] font-bold">{item.book.title}</h2>
                     <p className="text-[1rem] text-gray-500">
-                      {String(item.book.authors[0].author.name)}
+                      {item.book.authors.map((name) => name).join(", ")}
                     </p>
                     <p>
                       {item.book.stock_quantity > 0 ? (

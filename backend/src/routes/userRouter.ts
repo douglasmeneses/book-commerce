@@ -20,6 +20,13 @@ router.get("/:uuid", authMiddleware,(req: Request, res: Response) => {
 router.put("/:uuid", authMiddleware, (req: Request, res: Response) => {
   userController.updateUserProfile(req, res);
 });
+
+router.get("/address/:uuid", authMiddleware, (req: Request, res: Response) => {
+  userController.getUserAddress(req, res);
+
+});
+
+
 //rota de upload de imagem com a proteção
 router.put(
   "/:uuid/upload",
