@@ -5,8 +5,8 @@ import { stringify } from "querystring";
 const favoriteController = {
   favoriteBook: async (req: Request, res: Response) => {
     try {
-      const book_uuid = req.params.book_uuid;
-      const user_uuid = req.body.user_uuid;
+      const book_uuid = req.params.book_uuid as string;
+      const user_uuid = req.body.user_uuid as string;
 
       const favorite = await favoriteService.favoriteBook(book_uuid, user_uuid);
 

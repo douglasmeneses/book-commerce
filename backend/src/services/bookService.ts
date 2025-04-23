@@ -113,6 +113,9 @@ const bookService = {
       limit,
     } = filter;
 
+    const user = user_uuid ? await userExists(user_uuid) : null;
+    if (user && "error" in user) return { error: user.error };
+
     const skip = page && limit ? (page - 1) * limit : 0;
 
     const where: any = {
@@ -184,6 +187,7 @@ const bookService = {
           authors: { include: { author: true } },
           genres: { include: { genre: true } },
           publishers: { include: { publisher: true } },
+          favorites: user ? { where: { user_id: user.id } } : undefined,
         },
         take: limit,
         skip,

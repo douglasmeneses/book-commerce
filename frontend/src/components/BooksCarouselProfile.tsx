@@ -11,10 +11,22 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { BookCarouselProps } from "@/types/bookTypes";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+import FavoriteButton from "./FavoriteButton";
 
-export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
+interface BookCarouselProps {
+  books: Array<Book>;
+  handleFavoriteBook: (book_uuid: string) => void;
+  isLogin: boolean;
+}
+
+export default function BooksPerfilCarousel({
+  books,
+  handleFavoriteBook,
+  isLogin,
+}: BookCarouselProps) {
   const [Loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,7 +59,7 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
                 key={book.uuid}
                 className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
               >
-                <Card className="border shadow-sm overflow-hidden mx-1">
+                <Card className="border shadow-sm overflow-hidden mx-1  ">
                   <CardContent className="flex flex-col items-center justify-center">
                     <div className="w-full flex justify-center bg-white my-5">
                       <Image
@@ -74,9 +86,12 @@ export default function BooksPerfilCarousel({ books }: BookCarouselProps) {
                         <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
                           Adicionar
                         </Button>
-                        <FavoriteBorderIcon
-                          className="text-[#e67e22] cursor-pointer"
-                          fontSize="medium"
+
+                        <FavoriteButton
+                          book_uuid={book.uuid}
+                          favorite={book.favorites}
+                          handleFavoriteBook={handleFavoriteBook}
+                          isLogin={isLogin}
                         />
                       </div>
                     </div>

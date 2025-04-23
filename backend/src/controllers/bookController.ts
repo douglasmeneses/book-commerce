@@ -48,7 +48,9 @@ const bookController = {
         limit: parseInt(req.query.limit as string) || 10,
       };
 
-      const response = await bookService.getBooks(filter);
+      const user_uuid = req.query.user_uuid as string | undefined;
+
+      const response = await bookService.getBooks(filter, user_uuid);
 
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
