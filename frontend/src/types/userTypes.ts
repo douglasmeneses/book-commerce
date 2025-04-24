@@ -31,6 +31,7 @@ export interface User {
   isAdmin: boolean;
   created_at: string;
   updated_at: string;
+  address?: Address;
 }
 
 
