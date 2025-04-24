@@ -26,7 +26,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SearchPage() {
   const user = localStorage.getItem("user");
@@ -38,6 +39,7 @@ export default function SearchPage() {
 
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -82,6 +84,15 @@ export default function SearchPage() {
 
   const handleAddToCart = async (bookId: string) => {
     try {
+      if (!user_uuid) {
+        toast.error(
+          "Você precisa estar logado para adicionar livros ao carrinho."
+        );
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+        return;
+      }
       const response = await addItemToCart(user_uuid, String(bookId), 1);
 
       if (typeof response === "string") {
