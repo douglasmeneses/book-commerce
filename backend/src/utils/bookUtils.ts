@@ -1,7 +1,6 @@
 import sharp from "sharp";
 import { Book } from "@prisma/client";
-import { BookResponse, BookWithConvertedRating } from "../types/bookTypes";
-import { Decimal } from "@prisma/client/runtime/library";
+import { BookResponse } from "../types/bookTypes";
 
 export const processImage = async (
   imageBuffer: Buffer | null,
@@ -18,23 +17,22 @@ export const processImage = async (
   return Buffer.from(compressedImage).toString("base64");
 };
 
-export const processBookImages = async (
-  books: BookWithConvertedRating[]
-): Promise<BookResponse[]> => {
+export const processBookImages = async (books: BookResponse[]) => {
   return Promise.all(
-    books.map(async (book: BookWithConvertedRating) => {
+    books.map(async (book: BookResponse) => {
       if (book.image) {
-        const compressedImage = (book.image = await sharp(book.image)
+        const compressedImage = await sharp(book.image)
           .resize(100)
           .jpeg({ quality: 70 })
-          .toBuffer());
+          .toBuffer();
 
         const imageBase64 = compressedImage
           ? Buffer.from(compressedImage).toString("base64")
           : null;
+
         return {
           ...book,
-          image: `data:image/png;base64,${imageBase64}`,
+          image: imageBase64 ? `data:image/jpeg;base64,${imageBase64}` : null,
           image_url: null,
         };
       } else {
@@ -53,11 +51,13 @@ export const handleBookImage = async (book: Book): Promise<BookResponse> => {
       ...book,
       image: `data:image/png;base64,${imageBase64}`,
       image_url: null,
+      authors: [],
     };
   } else {
     bookResponse = {
       ...book,
       image: null,
+      authors: [],
     };
   }
 

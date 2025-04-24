@@ -112,7 +112,7 @@ export default function SearchPage() {
 
             {books.map((book) => (
               <div
-                key={book.id}
+                key={book.uuid}
                 className="flex p-5 mb-10 bg-white rounded shadow-md cursor-pointer"
               >
                 <Image
@@ -125,13 +125,8 @@ export default function SearchPage() {
                 <div className="ml-4 flex flex-col justify-between">
                   <div className="flex flex-col gap-3">
                     <h2 className="text-lg font-bold">{book.title}</h2>
-                    <p className="text-gray-600">
-                      {book.authors.map((author, index) => (
-                        <span key={index}>
-                          {author.author.name}{" "}
-                          {index < book.authors.length - 1 ? ", " : " "}
-                        </span>
-                      ))}
+                    <p className="text-xs text-gray-600 line-clamp-1">
+                      {book.authors.join(", ")}
                     </p>
 
                     <div className="flex items-center">
