@@ -99,7 +99,7 @@ const bookService = {
   },
   getBooks: async (
     filter: Filter,
-    user_uuid: string | undefined
+    user_uuid?: string
   ): Promise<BookResponseDTO[] | error> => {
     const {
       search,
@@ -107,6 +107,7 @@ const bookService = {
       genre,
       publisher,
       isbn,
+      title,
       mostLiked,
       mostRecent,
       orderByPrice,
@@ -175,6 +176,12 @@ const bookService = {
           publisher: { name: { contains: publisher, mode: "insensitive" } },
         },
       };
+    }
+    if (isbn) {
+      where.ISBN = { contains: isbn, mode: "insensitive" };
+    }
+    if (title) {
+      where.title = { contains: title, mode: "insensitive" };
     }
 
     const orderBy: any[] = [];
