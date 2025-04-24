@@ -41,6 +41,25 @@ export interface BookGenre {
   genre: Genre;
 }
 
+export interface Publisher {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BookPublisher {
+  id: number;
+  book_id: number;
+  publisher_id: number;
+  created_at: string;
+  updated_at: string;
+  publisher: Publisher;
+}
+
 export interface Book {
   uuid: string;
   id: number;
@@ -60,6 +79,7 @@ export interface Book {
   authors: BookAuthor[];
   genres: BookGenre[];
   favorites?: Favorite[];
+  publishers: BookPublisher[];
 }
 
 export interface BookCarouselProps {

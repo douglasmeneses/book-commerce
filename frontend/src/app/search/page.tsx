@@ -26,7 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { useRouter } from "next/navigation";
 
 export default function SearchPage() {
   const user = localStorage.getItem("user");
@@ -34,6 +34,7 @@ export default function SearchPage() {
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const router = useRouter();
   const itemsPerPage = 10;
 
   const searchParams = useSearchParams();
@@ -114,6 +115,7 @@ export default function SearchPage() {
               <div
                 key={book.id}
                 className="flex p-5 mb-10 bg-white rounded shadow-md cursor-pointer"
+                onClick={() => router.push(`/book/${book.uuid}`)}
               >
                 <Image
                   src={book.image_url || "/book-placeholder.png"}

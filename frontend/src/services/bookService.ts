@@ -55,3 +55,14 @@ export const getFavoriteBooks = async (user_uuid: string) => {
     return errorMessage;
   }
 };
+
+export const getBookByUUID = async (uuid: string) => {
+  try {
+    const url = `${API_URL}/${uuid}`;
+    return ApiRequest("get", url);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Erro ao buscar livro.";
+    return errorMessage;
+  }
+};

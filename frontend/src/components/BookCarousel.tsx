@@ -16,6 +16,7 @@ import { BookCarouselProps } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 import { favoriteBook } from "@/services/favoriteService";
 import FavoriteButton from "./FavoriteButton";
+import { useRouter } from "next/navigation";
 
 export default function BookCarousel({
   books,
@@ -31,6 +32,7 @@ export default function BookCarousel({
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -91,7 +93,10 @@ export default function BookCarousel({
             {filteredBooks.map((book) => (
               <CarouselItem
                 key={book.id}
-                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
+                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle hover:cursor-pointer"
+                onClick={(e) => {
+                  router.push(`/book/${book.uuid}`);
+                }}
               >
                 <div className="">
                   <Card className="border shadow-sm overflow-hidden mx-10">
