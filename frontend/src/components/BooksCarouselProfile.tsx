@@ -88,8 +88,8 @@ export default function BooksPerfilCarousel({
           <CarouselContent>
             {books.map((book) => (
               <CarouselItem
-                key={book.id}
-                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle min-w-[250px] max-w-[250px]"
+                key={book.uuid}
+                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
               >
                 <Card className="border shadow-sm overflow-hidden mx-1  ">
                   <CardContent className="flex flex-col items-center justify-center">
@@ -112,12 +112,7 @@ export default function BooksPerfilCarousel({
                         {book.title}
                       </p>
                       <p className="text-xs text-gray-600 line-clamp-1">
-                        {book.authors.map((author, index) => (
-                          <span key={index}>
-                            {author.author.name}
-                            {index < book.authors.length - 1 ? ", " : ""}
-                          </span>
-                        ))}
+                        {book.authors.join(", ")}
                       </p>
                       <div className="flex gap-2 items-center mt-2">
                         <Button
