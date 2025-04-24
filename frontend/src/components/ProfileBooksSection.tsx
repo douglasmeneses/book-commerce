@@ -5,6 +5,7 @@ import { Book } from "@/types/bookTypes";
 interface ProfileBooksSectionProps {
   favoritedBooks: Array<Book>;
   LatestOrders: Array<Book>;
+  recomendations: Array<Book>;
   handleFavoriteBook: (book_uuid: string) => void;
   isLogin: boolean;
 }
@@ -12,6 +13,7 @@ interface ProfileBooksSectionProps {
 export default function ProfileBooksSection({
   favoritedBooks,
   LatestOrders,
+  recomendations,
   handleFavoriteBook,
   isLogin,
 }: ProfileBooksSectionProps) {
@@ -34,6 +36,19 @@ export default function ProfileBooksSection({
         handleFavoriteBook={handleFavoriteBook}
         isLogin={isLogin}
       />
+      <br></br>
+      {recomendations.length > 1 && (
+        <>
+          <Label className="text-2xl font-bold text-[#241400] mb-4">
+            Recomendados para você
+          </Label>
+          <BooksPerfilCarousel
+            books={recomendations}
+            handleFavoriteBook={handleFavoriteBook}
+            isLogin={isLogin}
+          />
+        </>
+      )}
     </div>
   );
 }

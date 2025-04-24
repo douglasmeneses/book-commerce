@@ -26,6 +26,13 @@ router.get("/address/:uuid", authMiddleware, (req: Request, res: Response) => {
   userController.getUserAddress(req, res);
 });
 
+router.get(
+  "/recommendations/:uuid",
+  authMiddleware,
+  (req: Request, res: Response) => {
+    recomendationController.getRecommendations(req, res);
+  }
+);
 //rota de upload de imagem com a proteção
 router.put(
   "/:uuid/upload",
@@ -40,11 +47,4 @@ router.delete("/:uuid", authMiddleware, (req: Request, res: Response) => {
   userController.deleteUser(req, res);
 });
 
-router.get(
-  "/recommendations/:uuid",
-
-  (req: Request, res: Response) => {
-    recomendationController.getRecommendations(req, res);
-  }
-);
 export default router;
