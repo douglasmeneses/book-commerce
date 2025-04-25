@@ -32,7 +32,7 @@ export default function NavBar() {
     <>
       <nav className="navbar fixed top-0 left-0 w-full bg-white shadow-md z-50 px-4 py-2">
         <div className="container flex items-center justify-between">
-          <Link href="/home" className="navbar-brand">
+          <Link href="/" className="navbar-brand">
             <img
               src="/logoHome.png"
               alt="Logo"
