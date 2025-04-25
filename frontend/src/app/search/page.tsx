@@ -1,11 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getBooks } from "@/services/bookService";
 import { Book, Filter } from "@/types/bookTypes";
 import { Button } from "@/components/ui/button";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
@@ -20,13 +19,15 @@ import {
 import { addItemToCart } from "@/services/cartService";
 import { favoriteBook } from "@/services/favoriteService";
 import FavoriteButton from "@/components/FavoriteButton";
+import { LoaderCircle } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SearchPage() {
   const user = localStorage.getItem("user");
@@ -34,12 +35,19 @@ export default function SearchPage() {
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  const router = useRouter();
 
   useEffect(() => {
+    if (!query) {
+      return router.replace("/");
+    }
+
     const fetchBooks = async () => {
       const filter: Filter = {
         search: query || "",
@@ -66,11 +74,15 @@ export default function SearchPage() {
         if (error instanceof Error) {
           toast.error(error.message || "Erro ao buscar livros.");
         }
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 100);
       }
     };
 
     fetchBooks();
-  }, [query, currentPage]);
+  }, [query, currentPage, query]);
 
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
@@ -82,6 +94,15 @@ export default function SearchPage() {
 
   const handleAddToCart = async (bookId: string) => {
     try {
+      if (!user_uuid) {
+        toast.error(
+          "Você precisa estar logado para adicionar livros ao carrinho."
+        );
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+        return;
+      }
       const response = await addItemToCart(user_uuid, String(bookId), 1);
 
       if (typeof response === "string") {
@@ -99,10 +120,17 @@ export default function SearchPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">
-        Resultados de: <span className="text-orange-500">{`"${query}"`}</span>
+        Resultados de:{" "}
+        <span className="text-orange-500">{`"${
+          loading ? "..." : query
+        }"`}</span>
       </h1>
       <section className="min-h-screen">
-        {books.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <LoaderCircle className="animate-spin text-orange-500" size={48} />
+          </div>
+        ) : books.length === 0 ? (
           <p className="text-gray-600">Nenhum livro encontrado.</p>
         ) : (
           <div>
@@ -112,7 +140,7 @@ export default function SearchPage() {
 
             {books.map((book) => (
               <div
-                key={book.id}
+                key={book.uuid}
                 className="flex p-5 mb-10 bg-white rounded shadow-md cursor-pointer"
               >
                 <Image
@@ -125,13 +153,8 @@ export default function SearchPage() {
                 <div className="ml-4 flex flex-col justify-between">
                   <div className="flex flex-col gap-3">
                     <h2 className="text-lg font-bold">{book.title}</h2>
-                    <p className="text-gray-600">
-                      {book.authors.map((author, index) => (
-                        <span key={index}>
-                          {author.author.name}{" "}
-                          {index < book.authors.length - 1 ? ", " : " "}
-                        </span>
-                      ))}
+                    <p className="text-xs text-gray-600 line-clamp-1">
+                      {book.authors.join(", ")}
                     </p>
 
                     <div className="flex items-center">

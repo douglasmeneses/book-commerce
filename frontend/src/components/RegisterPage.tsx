@@ -44,8 +44,8 @@ export default function RegisterPage() {
     try {
       const response = await registerUser({ ...formData, ...data });
       toast({
-        title: "Success",
-        description: "User registered successfully",
+        title: "Sucesso!",
+        description: "Usuário cadastrado com sucesso!",
       });
       setTimeout(() => {
         router.push("/login");
@@ -53,7 +53,7 @@ export default function RegisterPage() {
     } catch (error) {
       error instanceof Error ? error.message : "Erro ao registrar usuário";
       toast({
-        title: "Error",
+        title: "Erro",
         description: "Erro ao registrar usuário",
         variant: "destructive",
       });

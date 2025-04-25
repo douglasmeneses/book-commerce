@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CircleUserRound } from "lucide-react";
-import { User } from "@/types/userTypes";
+import { User, Address } from "@/types/userTypes";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Card,
@@ -51,6 +51,14 @@ export default function UserProfileCard({
         <p className="text-sm text-[#241400]">{userData?.name || "N/A"}</p>
         <p className="font-semibold text-sm text-[#241400]">Email:</p>
         <p className="text-sm text-[#241400]">{userData?.email || "N/A"}</p>
+        <p className="font-semibold text-sm text-[#241400]">Endereço:</p>
+        <p className="text-sm text-[#241400]">
+          {userData?.address && userData.address.street && userData.address.number && userData.address.city && userData.address.state
+            ? `${userData.address.street}, ${userData.address.number}, ${userData.address.city} - ${userData.address.state}`
+            : "N/A"}
+        </p>
+
+
         <p className="font-semibold text-sm text-[#241400]">Data de criação:</p>
         <p className="text-sm text-[#241400]">
           {userData?.created_at ? dateFormater(userData.created_at) : "N/A"}

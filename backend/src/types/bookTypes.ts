@@ -37,21 +37,13 @@ export interface UpdateBook {
 
 export interface BookResponse {
   uuid: string;
-  id: number;
   title: string;
+  image?: string | null;
+  image_url?: string | null;
+  price: number;
   synopsis: string;
-  image: string | null;
-  image_url: string | null;
-  language: string;
-  price: Decimal;
-  ISBN: string;
-  rating: Decimal;
-  favorite_count: number;
-  page_count: number;
-  release_date: Date;
-  stock_quantity: number;
-  created_at: Date;
-  updated_at: Date;
+  authors: string[];
+  rating?: number;
 }
 
 export interface Filter {

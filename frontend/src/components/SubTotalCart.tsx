@@ -25,7 +25,7 @@ export default function SubTotalCart({ cart }: { cart: Cart }) {
           variant="secondary"
           className="mt-4 bg-orange-600 text-white rounded-md p-2 w-full text-base hover:bg-black"
           onClick={() => {
-            toast.success("Checkout successful!");
+            toast.success("Compra realizada com sucesso!");
           }}
         >
           Concluir Compra

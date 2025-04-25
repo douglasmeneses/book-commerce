@@ -42,8 +42,8 @@ export default function LoginPage() {
       );
       localStorage.setItem("user", JSON.stringify(response.user));
       toast({
-        title: "Success",
-        description: "Login successfully",
+        title: "Sucesso!",
+        description: "Login realizado com sucesso!",
       });
       toast({
         title: "Bem vindo!",
@@ -54,10 +54,10 @@ export default function LoginPage() {
       }, 2000);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Error while login user";
+        error instanceof Error ? error.message : "Erro ao realizar login";
       toast({
-        title: "Error",
-        description: errorMessage,
+        title: "Erro",
+        description: `Erro ao realizar login: ${errorMessage}`,
         variant: "destructive",
         action: <ToastAction altText="Close">Fechar</ToastAction>,
       });
