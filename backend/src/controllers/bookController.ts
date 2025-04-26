@@ -8,11 +8,11 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
-    const user_id = req.body.user_id;
     const book = req.body.book;
+    const user_uuid = req.body.user_uuid;
 
     try {
-      const response = await bookService.bookRegister(book, user_id);
+      const response = await bookService.bookRegister(book, user_uuid);
 
       if ("error" in response) {
         return res.status(400).json({ error: response.error });

@@ -10,7 +10,7 @@ const favoriteController = {
 
       const favorite = await favoriteService.favoriteBook(book_uuid, user_uuid);
 
-      if (favorite && "error" in favorite) {
+      if (favorite && typeof favorite === "object" && "error" in favorite) {
         return res.status(404).json({ error: favorite.error });
       }
       return res
