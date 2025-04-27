@@ -21,7 +21,7 @@ export default function BookDetails({
   isLogin,
 }: BookDetailsProps) {
   return (
-    <div className="flex flex-col lg:flex-row gap-20 p-8 bg-white rounded shadow-md">
+    <div className="flex flex-col lg:flex-row gap-20 p-8 bg-white">
       <div className="flex-shrink-0">
         <Image
           src={book.image_url || "/book-placeholder.png"}
