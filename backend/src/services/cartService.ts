@@ -7,7 +7,7 @@ import {
 } from "../middlewares/cartValidators";
 import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
-import { CartItemRequest, CartResponse } from "../types/cartTypes";
+import { CartResponse } from "../types/cartTypes";
 
 const prisma = new PrismaClient();
 

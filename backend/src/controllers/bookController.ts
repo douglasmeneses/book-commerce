@@ -134,17 +134,12 @@ const bookController = {
   uploadBookImage: async (req: Request, res: Response) => {
     try {
       const uuid = req.params.uuid;
-      const { user_uuid } = req.body;
 
       if (!req.file) {
         return res.status(400).json({ error: "Nenhuma imagem enviada" });
       }
 
-      const response = await bookService.uploadBookImage(
-        uuid,
-        user_uuid,
-        req.file.buffer
-      );
+      const response = await bookService.uploadBookImage(uuid, req.file.buffer);
       if ("error" in response) {
         return res.status(400).json(response);
       }

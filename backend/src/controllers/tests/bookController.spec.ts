@@ -366,7 +366,6 @@ describe("bookController.uploadBookImage", () => {
   it("deve fazer upload de uma imagem com sucesso", async () => {
     const req = mockRequest({
       params: { uuid: "123-abc" },
-      body: { user_uuid: "user123" },
       file: { buffer: Buffer.from("image data") },
     });
     const res = mockResponse();
@@ -387,7 +386,6 @@ describe("bookController.uploadBookImage", () => {
 
     expect(bookService.uploadBookImage).toHaveBeenCalledWith(
       "123-abc",
-      "user123",
       expect.any(Buffer)
     );
     expect(handleBookImage).toHaveBeenCalledWith(uploadResponseMock);
@@ -398,7 +396,6 @@ describe("bookController.uploadBookImage", () => {
   it("deve retornar erro se nenhuma imagem for enviada", async () => {
     const req = mockRequest({
       params: { uuid: "123-abc" },
-      body: { user_uuid: "user123" },
     });
     const res = mockResponse();
 
@@ -411,7 +408,6 @@ describe("bookController.uploadBookImage", () => {
   it("deve retornar erro se o bookService retornar erro", async () => {
     const req = mockRequest({
       params: { uuid: "123-abc" },
-      body: { user_uuid: "user123" },
       file: { buffer: Buffer.from("image data") },
     });
     const res = mockResponse();
@@ -429,7 +425,6 @@ describe("bookController.uploadBookImage", () => {
   it("deve retornar erro se os dados da imagem estiverem ausentes", async () => {
     const req = mockRequest({
       params: { uuid: "123-abc" },
-      body: { user_uuid: "user123" },
       file: { buffer: Buffer.from("image data") },
     });
     const res = mockResponse();
@@ -445,7 +440,6 @@ describe("bookController.uploadBookImage", () => {
   it("deve tratar exceção e retornar 500", async () => {
     const req = mockRequest({
       params: { uuid: "123-abc" },
-      body: { user_uuid: "user123" },
       file: { buffer: Buffer.from("image data") },
     });
     const res = mockResponse();
