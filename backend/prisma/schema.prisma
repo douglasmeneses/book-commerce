@@ -8,26 +8,25 @@ datasource db {
 }
 
 model User {
-  uuid       String    @unique @default(uuid())
-  id         Int       @id @unique @default(autoincrement())
-  email      String    @unique
+  uuid       String        @unique @default(uuid())
+  id         Int           @id @unique @default(autoincrement())
+  email      String        @unique
   password   String
   name       String
-  username   String    @unique
+  username   String        @unique
   avatar     Bytes?
   birth_date DateTime?
-  cpf        String?   @unique
+  cpf        String?       @unique
   phone      String?
-  isAdmin    Boolean   @default(false)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-
+  isAdmin    Boolean       @default(false)
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
   cart       Cart[]
-  addresses  userAddress[]
   creditCard Credit_card[]
   favorites  Favorites[]
   orders     Order[]
   reviews    Review[]
+  addresses  userAddress[]
 }
 
 model Credit_card {
@@ -36,12 +35,11 @@ model Credit_card {
   name       String
   expiration String
   flag       String
-  is_default Boolean  @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  orders Order[]
+  is_default Boolean  @default(false)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  orders     Order[]
 
   @@id([user_id, number])
 }
@@ -62,24 +60,22 @@ model Review {
 model Order {
   id                  Int           @id @default(autoincrement())
   user_id             Int
-  cart_id             Int
-  status              OrderStatus   @default(PENDING)
-  payment             PaymentMethod
-  address_id          Int
-  subtotal            Decimal       @db.Decimal(10, 2)
-  shipping            Decimal       @db.Decimal(10, 2)
   total               Decimal       @db.Decimal(10, 2)
-  credit_card_user_id Int?
-  credit_card_number  String?
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
-
-  user        User         @relation(fields: [user_id], references: [id])
-  address     Address      @relation(fields: [address_id], references: [id])
-  credit_card Credit_card? @relation(fields: [credit_card_user_id, credit_card_number], references: [user_id, number])
-  cart        Cart         @relation(fields: [cart_id], references: [id])
-
-  items OrderItem[]
+  address_id          Int
+  cart_id             Int
+  credit_card_number  String?
+  credit_card_user_id Int?
+  payment             PaymentMethod
+  shipping            Decimal       @db.Decimal(10, 2)
+  status              OrderStatus   @default(PENDING)
+  subtotal            Decimal       @db.Decimal(10, 2)
+  address             Address       @relation(fields: [address_id], references: [id])
+  cart                Cart          @relation(fields: [cart_id], references: [id])
+  credit_card         Credit_card?  @relation(fields: [credit_card_user_id, credit_card_number], references: [user_id, number])
+  user                User          @relation(fields: [user_id], references: [id])
+  items               OrderItem[]
 }
 
 model OrderItem {
@@ -87,26 +83,10 @@ model OrderItem {
   order_id    Int
   book_id     Int
   quantity    Int
-  price      Decimal  @default(0.00) @db.Decimal(10, 2)
+  price       Decimal @default(0.00) @db.Decimal(10, 2)
   total_price Decimal @db.Decimal(10, 2)
-
-  book  Book  @relation(fields: [book_id], references: [id])
-  order Order @relation(fields: [order_id], references: [id])
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
-enum PaymentMethod {
-  CREDIT_CARD
-  BOLETO
-  PIX
+  book        Book    @relation(fields: [book_id], references: [id])
+  order       Order   @relation(fields: [order_id], references: [id])
 }
 
 model Cart {
@@ -133,7 +113,7 @@ model CartItem {
 }
 
 model Address {
-  id           Int      @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   street       String
   number       String
   neighborhood String?
@@ -141,25 +121,23 @@ model Address {
   city         String
   state        String
   zip_code     String
-  country      String   @default("Brasil")
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-
-  userAddress userAddress[]
-  orders      Order[]
+  country      String        @default("Brasil")
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  orders       Order[]
+  userAddress  userAddress[]
 }
 
 model userAddress {
   id         String   @id @default(uuid())
   user_id    Int
   address_id Int
-  is_default Boolean  @default(false)
-  label      String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  address Address @relation(fields: [address_id], references: [id])
-  user    User    @relation(fields: [user_id], references: [id])
+  is_default Boolean  @default(false)
+  label      String?
+  address    Address  @relation(fields: [address_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 
   @@unique([user_id, address_id])
 }
@@ -168,7 +146,6 @@ model Book {
   title          String
   synopsis       String
   image          Bytes?
-  image_url      String?         @default("")
   language       String
   price          Decimal
   ISBN           String          @unique
@@ -181,6 +158,7 @@ model Book {
   uuid           String          @unique @default(uuid())
   id             Int             @id @default(autoincrement())
   stock_quantity Int             @default(0)
+  image_url      String?         @default("")
   cartItem       CartItem[]
   favorites      Favorites[]
   orderItem      OrderItem[]
@@ -267,4 +245,19 @@ model Favorites {
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, book_id])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BOLETO
+  PIX
 }
