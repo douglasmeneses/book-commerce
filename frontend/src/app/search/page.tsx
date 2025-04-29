@@ -26,8 +26,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Router } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function SearchPage() {
   const user = localStorage.getItem("user");
@@ -37,7 +35,6 @@ export default function SearchPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
-  const router = useRouter();
 
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
