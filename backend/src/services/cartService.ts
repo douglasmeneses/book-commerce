@@ -7,8 +7,8 @@ import {
 } from "../middlewares/cartValidators";
 import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
-import { CartResponse } from "../types/cartTypes";
-
+import { CartItemRequest, CartResponse } from "../types/cartTypes";
+import recomendationService from "./recomendationService";
 const prisma = new PrismaClient();
 
 const cartService = {
@@ -68,6 +68,12 @@ const cartService = {
       if (!cart) {
         return { error: "Cart not found!" };
       }
+
+      await recomendationService.registerBookForRecomendations(
+        book.id,
+        user.id
+      );
+
       return cart;
     } catch (error) {
       return { error: error instanceof Error ? error.message : "error" };

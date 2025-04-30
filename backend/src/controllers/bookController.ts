@@ -35,6 +35,7 @@ const bookController = {
         genre: req.query.genre as string,
         publisher: req.query.publisher as string,
         isbn: req.query.isbn as string,
+        title: req.query.title as string,
         mostLiked: req.query.mostLiked === "true",
         mostRecent: req.query.mostRecent === "true",
         orderByPrice: req.query.orderByPrice as "asc" | "desc",

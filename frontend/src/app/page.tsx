@@ -8,6 +8,8 @@ import { Book } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 import { favoriteBook } from "@/services/favoriteService";
 import { toast } from "sonner";
+import { getRecommendations } from "@/services/userServices";
+import { set } from "react-hook-form";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -15,6 +17,9 @@ export default function Home() {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [recomendationsBooks, setRecomendationsBooks] = useState<Array<Book>>(
+    []
+  );
   const [mostLikedBooks, setMostLikedBooks] = useState<Array<Book>>([]);
   const [mostRecentBooks, setMostRecentBooks] = useState<Array<Book>>([]);
 
@@ -38,8 +43,13 @@ export default function Home() {
           user?.uuid || ""
         );
         setMostRecentBooks(mostRecent);
+        if (user) {
+          const recomendations = await getRecommendations(user?.uuid);
+          setRecomendationsBooks(recomendations);
+        }
       } catch (error) {
         toast.error("Erro ao buscar livros");
+        console.error("Error fetching books:", error);
       } finally {
         setLoading(false);
       }
@@ -110,6 +120,20 @@ export default function Home() {
             />
           </div>
         </section>
+        {user && recomendationsBooks.length > 0 && (
+          <section id="catalog" className="flex flex-col pt-40">
+            {loading ? (
+              <p>Carregando...</p>
+            ) : (
+              <BookCarousel
+                books={recomendationsBooks}
+                title={"Recomendados para você"}
+                handleFavoriteBook={handleFavoriteBook}
+                isLogin={!!user}
+              />
+            )}
+          </section>
+        )}
         <section id="catalog" className="flex flex-col pt-40">
           {loading ? (
             <p>Carregando...</p>
