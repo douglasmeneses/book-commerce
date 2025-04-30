@@ -16,7 +16,9 @@ import { BookCarouselProps } from "@/types/bookTypes";
 import { getBooks } from "@/services/bookService";
 import { favoriteBook } from "@/services/favoriteService";
 import FavoriteButton from "./FavoriteButton";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { addItemToCart } from "@/services/cartService";
 
 export default function BookCarousel({
   books,
@@ -32,6 +34,7 @@ export default function BookCarousel({
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const user_uuid: string = user ? user.uuid : "";
   const router = useRouter();
 
   useEffect(() => {
@@ -57,6 +60,31 @@ export default function BookCarousel({
 
     fetchBooks();
   }, [selectedGenre, books]);
+
+  const handleAddToCart = async (bookId: string) => {
+    try {
+      if (!user_uuid) {
+        toast.error(
+          "Você precisa estar logado para adicionar livros ao carrinho."
+        );
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+        return;
+      }
+      const response = await addItemToCart(user_uuid, String(bookId), 1);
+
+      if (typeof response === "string") {
+        throw new Error(response);
+      }
+
+      toast.success("Livro adicionado ao carrinho com sucesso!");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error("Erro ao adicionar livro ao carrinho.");
+      }
+    }
+  };
 
   return (
     <div className="w-full">
@@ -123,7 +151,10 @@ export default function BookCarousel({
                           {book.authors.join(", ")}
                         </p>
                         <div className="flex gap-2 items-center mt-2">
-                          <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
+                          <Button
+                            className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm"
+                            onClick={() => handleAddToCart(book.uuid)}
+                          >
                             Adicionar
                           </Button>
                           <FavoriteButton

@@ -32,7 +32,7 @@ export default function NavBar() {
     <>
       <nav className="navbar fixed top-0 left-0 w-full bg-white shadow-md z-50 px-4 py-2">
         <div className="container flex items-center justify-between">
-          <Link href="/home" className="navbar-brand">
+          <Link href="/" className="navbar-brand">
             <img
               src="/logoHome.png"
               alt="Logo"
@@ -61,11 +61,6 @@ export default function NavBar() {
               <>
                 {user ? (
                   <div className="flex gap-[14px]">
-                    <Heart
-                      size={30}
-                      color="#E16A00"
-                      className="cursor-pointer p-1 hover:bg-gray-100 rounded-full"
-                    />
                     <Link href="/cart">
                       <ShoppingCart
                         size={30}

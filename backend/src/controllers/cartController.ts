@@ -26,7 +26,6 @@ const cartController = {
       });
       return res.json(cartResponse);
     } catch (error) {
-      console.error("Error adding book to cart:", error);
       return res
         .status(500)
         .json({ error: error instanceof Error ? error.message : error });

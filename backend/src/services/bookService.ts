@@ -1,10 +1,4 @@
-import {
-  RegisterBook,
-  Filter,
-  UpdateBook,
-  error,
-  BookWithConvertedRating,
-} from "../types/bookTypes";
+import { RegisterBook, Filter, UpdateBook, error } from "../types/bookTypes";
 import { Book, PrismaClient } from "@prisma/client";
 import {
   bookExists,
@@ -99,7 +93,7 @@ const bookService = {
   },
   getBooks: async (
     filter: Filter,
-    user_uuid: string | undefined
+    user_uuid?: string
   ): Promise<BookResponseDTO[] | error> => {
     const {
       search,
@@ -107,6 +101,7 @@ const bookService = {
       genre,
       publisher,
       isbn,
+      title,
       mostLiked,
       mostRecent,
       orderByPrice,
@@ -175,6 +170,12 @@ const bookService = {
           publisher: { name: { contains: publisher, mode: "insensitive" } },
         },
       };
+    }
+    if (isbn) {
+      where.ISBN = { contains: isbn, mode: "insensitive" };
+    }
+    if (title) {
+      where.title = { contains: title, mode: "insensitive" };
     }
 
     const orderBy: any[] = [];
@@ -247,21 +248,27 @@ const bookService = {
       return { error: user.error };
     }
 
-    const book = await prisma.book.findUnique({
-      where: { uuid: uuid },
-      include: {
-        authors: { include: { author: true } },
-        genres: { include: { genre: true } },
-        publishers: { include: { publisher: true } },
-        favorites: user ? { where: { user_id: user.id } } : undefined,
-      },
-    });
+    try {
+      const book = await prisma.book.findUnique({
+        where: { uuid: uuid },
+        include: {
+          authors: { include: { author: true } },
+          genres: { include: { genre: true } },
+          publishers: { include: { publisher: true } },
+          favorites: user ? { where: { user_id: user.id } } : undefined,
+        },
+      });
 
-    if (!book) {
-      return { error: "Book not found" };
+      if (!book) {
+        return { error: "Book not found" };
+      }
+
+      return book;
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
     }
-
-    return book;
   },
   getBookByISBN: async (isbn: string): Promise<Book | null> => {
     const book = await prisma.book.findFirst({
@@ -377,11 +384,7 @@ const bookService = {
     }
   },
 
-  uploadBookImage: async (
-    uuid: string,
-    user_uuid: string,
-    imageBuffer: Buffer
-  ) => {
+  uploadBookImage: async (uuid: string, imageBuffer: Buffer) => {
     try {
       const book = await bookExists(uuid);
       if (book && "error" in book) {

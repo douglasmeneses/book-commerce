@@ -15,6 +15,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import FavoriteButton from "./FavoriteButton";
+import { useRouter } from "next/navigation";
+import { addItemToCart } from "@/services/cartService";
 
 interface BookCarouselProps {
   books: Array<Book>;
@@ -28,6 +30,36 @@ export default function BooksPerfilCarousel({
   isLogin,
 }: BookCarouselProps) {
   const [Loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const handleAddToCart = async (bookId: string) => {
+    try {
+      const user = localStorage.getItem("user");
+      const user_uuid: string = user ? JSON.parse(user).uuid : "";
+
+      if (!user_uuid) {
+        toast.error(
+          "Você precisa estar logado para adicionar livros ao carrinho."
+        );
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+        return;
+      }
+
+      const response = await addItemToCart(user_uuid, String(bookId), 1);
+
+      if (typeof response === "string") {
+        throw new Error(response);
+      }
+
+      toast.success("Livro adicionado ao carrinho com sucesso!");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error("Erro ao adicionar livro ao carrinho.");
+      }
+    }
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,9 +89,9 @@ export default function BooksPerfilCarousel({
             {books.map((book) => (
               <CarouselItem
                 key={book.uuid}
-                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle"
+                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle min-w-[250px] max-w-[250px]"
               >
-                <Card className="border shadow-sm overflow-hidden mx-1  ">
+                <Card className="border shadow-sm overflow-hidden mx-1 ">
                   <CardContent className="flex flex-col items-center justify-center">
                     <div className="w-full flex justify-center bg-white my-5">
                       <Image
@@ -83,7 +115,10 @@ export default function BooksPerfilCarousel({
                         {book.authors.join(", ")}
                       </p>
                       <div className="flex gap-2 items-center mt-2">
-                        <Button className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm">
+                        <Button
+                          className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm"
+                          onClick={() => handleAddToCart(book.uuid)}
+                        >
                           Adicionar
                         </Button>
 
