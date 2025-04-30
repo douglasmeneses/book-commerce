@@ -801,7 +801,7 @@ describe("bookService.bookFavorite", () => {
       data: { favorite_count: 4 },
     });
 
-    expect(response).toBeUndefined(); // a função não retorna nada se sucesso
+    expect(response).toBeUndefined();
   });
 
   it("deve incrementar o favorite_count se o livro já está favoritado", async () => {
@@ -822,9 +822,7 @@ describe("bookService.bookFavorite", () => {
 
   it("deve retornar erro se ocorrer uma exceção", async () => {
     (bookExists as jest.Mock).mockRejectedValue(new Error("Erro inesperado"));
-
     const response = await bookService.bookFavorite("book-uuid", "user-uuid");
-
     expect(response).toEqual({ error: "Erro inesperado" });
   });
 });
