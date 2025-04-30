@@ -9,7 +9,6 @@ import cartItemService from "./cartItem";
 import { error } from "../types/bookTypes";
 import { CartItemRequest, CartResponse } from "../types/cartTypes";
 import recomendationService from "./recomendationService";
-
 const prisma = new PrismaClient();
 
 const cartService = {
