@@ -1,27 +1,32 @@
 import axios from "axios";
-import { cleanToken } from "../utils/tokenUtils";
-import { handleNewToken } from "../utils/tokenUtils";
+import { cleanToken, handleNewToken } from "../utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/favorites";
-
-const TOKEN = cleanToken(localStorage.getItem("token") || "");
-const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
   url: string,
   data?: any
 ) => {
+  let token = "";
+  let refreshToken = "";
+
+  if (typeof window !== "undefined") {
+    token = cleanToken(localStorage.getItem("token") || "");
+    refreshToken = cleanToken(localStorage.getItem("refreshToken") || "");
+  }
+
   try {
     const tokenConfig = {
       headers: {
-        authorization: `Bearer ${TOKEN}`,
-        "x-refresh-token": REFRESH_TOKEN,
+        authorization: `Bearer ${token}`,
+        "x-refresh-token": refreshToken,
       },
     };
     const response = data
       ? await axios[method](url, data, tokenConfig)
       : await axios[method](url, tokenConfig);
+    handleNewToken(response);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -36,4 +41,3 @@ export const favoriteBook = async (book_uuid: string, user_uuid: string) => {
   const data = { user_uuid };
   return ApiRequest("post", url, data);
 };
-

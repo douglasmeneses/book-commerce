@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@/types/userTypes";
-import { Book, FavoriteBookResponse } from "@/types/bookTypes";
+import { Book } from "@/types/bookTypes";
 import { getFavoriteBooks } from "@/services/bookService";
 import { getOrdersByUser } from "@/services/orderService";
 import { getRecommendations } from "@/services/userServices";
@@ -12,19 +12,27 @@ import { favoriteBook } from "@/services/favoriteService";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const [user, setUser] = useState<User | null>(null);
   const [favoritedBooks, setFavoritedBooks] = useState<Array<Book>>([]);
   const [latestOrders, setLatestOrders] = useState<Array<Book>>([]);
   const [recomendationsBooks, setRecomendationsBooks] = useState<Array<Book>>(
     []
   );
   const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
+
+  useEffect(() => {
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+  }, []);
+
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
-      await favoriteBook(book_uuid, user?.uuid || "");
+      if (!user?.uuid) {
+        toast.error("Você precisa estar logado para favoritar um livro.");
+        return;
+      }
+      await favoriteBook(book_uuid, user.uuid);
       setAccFetchsBooks((prev) => prev + 1);
     } catch (error) {
       console.error("Error favoriting book:", error);
@@ -34,24 +42,29 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const Favorites = await getFavoriteBooks(user?.uuid || "");
-        setFavoritedBooks(Favorites);
-
-        if (user) {
-          const recomendations = await getRecommendations(user?.uuid);
-          setRecomendationsBooks(recomendations);
+        if (!user?.uuid) {
+          toast.error("Você precisa estar logado para acessar esta página.");
+          return;
         }
 
-        const orders = await getOrdersByUser(user?.uuid || "");
+        const Favorites = await getFavoriteBooks(user.uuid);
+        setFavoritedBooks(Favorites);
+
+        const recomendations = await getRecommendations(user.uuid);
+        setRecomendationsBooks(recomendations);
+
+        const orders = await getOrdersByUser(user.uuid);
         setLatestOrders(orders);
       } catch (error) {
-        toast.error("Erro ao buscar livros favoritos.");
-        console.error("Error fetching favorite books:", error);
+        toast.error("Erro ao buscar dados do perfil.");
+        console.error("Error fetching profile data:", error);
       }
     };
 
-    fetchBooks();
-  }, [accFetchsBooks]);
+    if (user) {
+      fetchBooks();
+    }
+  }, [user, accFetchsBooks]);
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-[#FFFAF5]">
@@ -61,7 +74,7 @@ export default function ProfilePage() {
         LatestOrders={latestOrders}
         recomendations={recomendationsBooks}
         handleFavoriteBook={handleFavoriteBook}
-        isLogin={user ? true : false}
+        isLogin={!!user}
       />
       <div
         className="border border-[#E2E2E2] w-full absolute z-[1]"

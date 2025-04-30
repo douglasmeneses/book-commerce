@@ -4,19 +4,23 @@ import { cleanToken } from "@/utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/books";
 
-const TOKEN = cleanToken(localStorage.getItem("token") || "");
-const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
-
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
   url: string,
   data?: any
 ) => {
+  let token = "";
+  let refreshToken = "";
+
+  if (typeof window !== "undefined") {
+    token = cleanToken(localStorage.getItem("token") || "");
+    refreshToken = cleanToken(localStorage.getItem("refreshToken") || "");
+  }
   try {
     const tokenConfig = {
       headers: {
-        authorization: `Bearer ${TOKEN}`,
-        "x-refresh-token": REFRESH_TOKEN,
+        authorization: `Bearer ${token}`,
+        "x-refresh-token": refreshToken,
       },
     };
     const response = data
