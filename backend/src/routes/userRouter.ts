@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import userController from "../controllers/userController";
 import { authMiddleware } from "../middlewares/auth";
 import upload from "../middlewares/upload";
+import recomendationController from "../controllers/recomendationController";
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.post("/login", (req: Request, res: Response) => {
   userController.loginUser(req, res);
 });
 
-router.get("/:uuid", authMiddleware,(req: Request, res: Response) => {
+router.get("/:uuid", authMiddleware, (req: Request, res: Response) => {
   userController.getUserByUUID(req, res);
 });
 
@@ -23,10 +24,15 @@ router.put("/:uuid", authMiddleware, (req: Request, res: Response) => {
 
 router.get("/address/:uuid", authMiddleware, (req: Request, res: Response) => {
   userController.getUserAddress(req, res);
-
 });
 
-
+router.get(
+  "/recommendations/:uuid",
+  authMiddleware,
+  (req: Request, res: Response) => {
+    recomendationController.getRecommendations(req, res);
+  }
+);
 //rota de upload de imagem com a proteção
 router.put(
   "/:uuid/upload",

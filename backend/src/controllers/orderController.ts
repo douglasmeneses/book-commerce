@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { OrderService } from "../services/orderService";
 
-const service = new OrderService();
+export const service = new OrderService();
 
 export async function createOrder(req: Request, res: Response) {
   try {

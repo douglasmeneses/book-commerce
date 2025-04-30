@@ -1,0 +1,54 @@
+export const removePrepositionsAndArticles = (titles: string[]): string[] => {
+  const stopWords = [
+    "de",
+    "do",
+    "da",
+    "dos",
+    "das",
+    "e",
+    "a",
+    "o",
+    "as",
+    "os",
+    "em",
+    "por",
+    "para",
+    "com",
+    "no",
+    "na",
+    "nos",
+    "nas",
+    "um",
+    "uma",
+    "uns",
+    "umas",
+    "the",
+    "of",
+    "and",
+    "in",
+    "on",
+    "at",
+    "to",
+    "for",
+    "with",
+    "a",
+    "an",
+    "by",
+    "as",
+    "from",
+    "into",
+    "about",
+    "over",
+    "under",
+    "between",
+    "out",
+    "up",
+    "down",
+  ];
+  return titles.flatMap((title) =>
+    title
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((word) => !stopWords.includes(word))
+  );
+};

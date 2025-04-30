@@ -23,15 +23,6 @@ export interface Genre {
   updated_at: string;
 }
 
-export interface BookAuthor {
-  id: number;
-  book_id: number;
-  author_id: number;
-  created_at: string;
-  updated_at: string;
-  author: Author;
-}
-
 export interface BookGenre {
   id: number;
   book_id: number;
@@ -76,7 +67,7 @@ export interface Book {
   created_at: string;
   updated_at: string;
   image_url: string;
-  authors: BookAuthor[];
+  authors: string[];
   genres: BookGenre[];
   favorites?: Favorite[];
   publishers: BookPublisher[];

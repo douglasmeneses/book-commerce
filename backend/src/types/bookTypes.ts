@@ -52,6 +52,7 @@ export interface Filter {
   genre?: string;
   publisher?: string;
   isbn?: string;
+  title?: string;
   mostLiked?: boolean;
   mostRecent?: boolean;
   orderByPrice?: "asc" | "desc";

@@ -14,10 +14,6 @@ router.get("/", (req: Request, res: Response) => {
   bookController.getBooks(req, res);
 });
 
-router.get("/search", (req: Request, res: Response) => {
-  bookController.searchBook(req, res);
-});
-
 router.get("/:uuid", (req: Request, res: Response) => {
   bookController.getBookByUUID(req, res);
 });
@@ -29,7 +25,6 @@ router.put("/:uuid", authMiddleware, (req: Request, res: Response) => {
 router.delete("/:uuid", authMiddleware, (req: Request, res: Response) => {
   bookController.bookDelete(req, res);
 });
-
 
 router.put(
   "/:uuid/upload",
