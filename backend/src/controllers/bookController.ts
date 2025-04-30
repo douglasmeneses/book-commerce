@@ -8,11 +8,11 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
-    const user_id = req.body.user_id;
     const book = req.body.book;
+    const user_uuid = req.body.user_uuid;
 
     try {
-      const response = await bookService.bookRegister(book, user_id);
+      const response = await bookService.bookRegister(book, user_uuid);
 
       if ("error" in response) {
         return res.status(400).json({ error: response.error });
@@ -135,17 +135,12 @@ const bookController = {
   uploadBookImage: async (req: Request, res: Response) => {
     try {
       const uuid = req.params.uuid;
-      const { user_uuid } = req.body;
 
       if (!req.file) {
         return res.status(400).json({ error: "Nenhuma imagem enviada" });
       }
 
-      const response = await bookService.uploadBookImage(
-        uuid,
-        user_uuid,
-        req.file.buffer
-      );
+      const response = await bookService.uploadBookImage(uuid, req.file.buffer);
       if ("error" in response) {
         return res.status(400).json(response);
       }

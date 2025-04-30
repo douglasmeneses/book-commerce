@@ -1,23 +1,7 @@
 import { CartItem, PrismaClient } from "@prisma/client";
-import { Cart } from "@prisma/client";
 import bookService from "./bookService";
 import { error } from "../types/bookTypes";
-import { Decimal } from "@prisma/client/runtime/library";
 
-interface CartItemResponse {
-  id: number;
-  created_at: Date;
-  updated_at: Date;
-  price: Decimal;
-  cart_id: number;
-  book_id: number;
-  quantity: number;
-  book: {
-    id: number;
-    title: string;
-    price: Decimal;
-  };
-}
 const prisma = new PrismaClient();
 
 const cartItemService = {
