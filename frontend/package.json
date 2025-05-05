@@ -6,7 +6,14 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:open-e2e": "cypress open --e2e",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 cy:open-e2e",
+    "test:component": "cypress open --component",
+    "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run --e2e",
+    "test:component:ci": "cypress run --component"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -41,13 +48,18 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@cypress/react": "^9.0.1",
+    "@cypress/react18": "^2.0.1",
+    "@cypress/webpack-dev-server": "^4.0.2",
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
+    "@types/node": "^20.17.32",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^14.3.2",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",
+    "start-server-and-test": "^2.0.11",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
