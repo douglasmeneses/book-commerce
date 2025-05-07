@@ -29,13 +29,16 @@ export default function BookCarousel({
 }: BookCarouselProps) {
   const [filteredBooks, setFilteredBooks] = useState<Array<Book>>(books);
   const [selectedGenre, setSelectedGenre] = useState<string>("Todos");
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-  const user_uuid: string = user ? user.uuid : "";
+  const [user, setUser] = useState<any>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+  }, []);
+
+  const user_uuid: string = user ? user.uuid : "";
 
   useEffect(() => {
     const fetchBooks = async () => {
