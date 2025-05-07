@@ -32,7 +32,9 @@ function SearchContent() {
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
+
   const itemsPerPage = 10;
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
@@ -146,6 +148,7 @@ function SearchContent() {
               <div
                 key={book.uuid}
                 className="flex p-5 mb-10 bg-white rounded shadow-md cursor-pointer"
+                onClick={() => router.push(`/book/${book.uuid}`)}
               >
                 <Image
                   src={book.image_url || "/book-placeholder.png"}

@@ -53,7 +53,7 @@ model Review {
   uuid       String   @unique @default(uuid())
   user_id    Int
   book_id    Int
-  rating     Decimal  @default(0.0) @db.Decimal(2, 1)
+  rating     Decimal  @default(0.0) @db.Decimal(3, 1)
   content    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
