@@ -1,17 +1,13 @@
-
-
-services:  
-  db:  
-    image: postgres:15  
-    container_name: my_postgres  
-    environment:  
-      POSTGRES_DB: ${POSTGRES_DB}  
-      POSTGRES_USER: ${POSTGRES_USER}  
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  
-    ports:  
-      - "5433:5432"  
-    volumes:  
-      - pgdata:/var/lib/postgresql/data 
-
-volumes:  
-  pgdata:  
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgres://postgres:password@localhost:5432/bookcommerce
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev
