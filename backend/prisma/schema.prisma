@@ -23,12 +23,13 @@ model User {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
 
-  cart       Cart[]
-  addresses  userAddress[]
-  creditCard Credit_card[]
-  favorites  Favorites[]
-  orders     Order[]
-  reviews    Review[]
+  cart          Cart[]
+  addresses     userAddress[]
+  creditCard    Credit_card[]
+  favorites     Favorites[]
+  orders        Order[]
+  reviews       Review[]
+  Recomendation Recomendation[]
 }
 
 model Credit_card {
@@ -173,7 +174,7 @@ model Book {
   language       String
   price          Decimal
   ISBN           String          @unique
-  rating         Decimal         @default(0) @db.Decimal(2, 1)
+  rating         Float           @default(0)
   favorite_count Int             @default(0)
   page_count     Int
   release_date   DateTime
@@ -190,6 +191,16 @@ model Book {
   authors        bookAuthor[]
   genres         bookGenre[]
   publishers     bookPublisher[]
+  Recomendation  Recomendation[]
+}
+
+model Recomendation {
+  id      String @id @default(uuid())
+  user_id Int
+  book_id Int
+
+  book Book @relation(fields: [book_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model Genre {

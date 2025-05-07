@@ -3,6 +3,7 @@ import { bookExists } from "../middlewares/bookValidators";
 import { userExists } from "../middlewares/userValidators";
 import bookService from "./bookService";
 import { error, Filter } from "../types/bookTypes";
+import { Book } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -70,7 +71,7 @@ const favoriteService = {
         orderBy: { created_at: "desc" },
       });
 
-      return favorites;
+      return favorites.map((favorite) => favorite.book);
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : "An error occurred",

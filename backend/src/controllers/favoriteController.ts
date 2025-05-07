@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import favoriteService from "../services/favoriteService";
-import { stringify } from "querystring";
+import { BookResponseDTO } from "../dtos/booksDTOs";
 
 const favoriteController = {
   favoriteBook: async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ const favoriteController = {
 
       const favorite = await favoriteService.favoriteBook(book_uuid, user_uuid);
 
-      if (favorite && "error" in favorite) {
+      if (favorite && typeof favorite === "object" && "error" in favorite) {
         return res.status(404).json({ error: favorite.error });
       }
       return res
@@ -30,7 +30,10 @@ const favoriteController = {
       if (favorites && "error" in favorites) {
         return res.status(404).json({ error: favorites.error });
       }
-      return res.status(200).json(favorites);
+
+      return res
+        .status(200)
+        .json(favorites.map((favorite) => new BookResponseDTO(favorite)));
     } catch (error) {
       return res.status(500).json({
         error: error instanceof Error ? error.message : "internal erro",

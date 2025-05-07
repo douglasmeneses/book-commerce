@@ -1,10 +1,11 @@
 import axios from "axios";
 import { RegisterUser } from "@/types/userTypes";
+import { cleanToken } from "@/utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/users";
 
-const TOKEN = localStorage.getItem("token") || "";
-const REFRESH_TOKEN = localStorage.getItem("refresh_token") || "";
+const TOKEN = cleanToken(localStorage.getItem("token") || "");
+const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
@@ -19,7 +20,9 @@ const ApiRequest = async (
       },
     };
 
-    const response = await axios[method](url, data, tokenConfig);
+    const response = data
+      ? await axios[method](url, data, tokenConfig)
+      : await axios[method](url, tokenConfig);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -100,5 +103,21 @@ export const getUserAddress = async (user_uuid: string) => {
       );
     }
     throw new Error("Something went wrong to fetch user address");
+  }
+};
+
+export const getRecommendations = async (user_uuid: string) => {
+  try {
+    const url = `${API_URL}/recommendations/${user_uuid}`;
+    const response = await ApiRequest("get", url);
+    console.log("response", response);
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Error while fetching recommendations"
+      );
+    }
+    throw new Error("Something went wrong to fetch recommendations");
   }
 };

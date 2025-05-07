@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { User } from "@/types/userTypes";
 import { Book, FavoriteBookResponse } from "@/types/bookTypes";
-import { getBooks, getFavoriteBooks } from "@/services/bookService";
+import { getFavoriteBooks } from "@/services/bookService";
 import { getOrdersByUser } from "@/services/orderService";
-import BooksPerfilCarousel from "@/components/BooksCarouselProfile";
-
+import { getRecommendations } from "@/services/userServices";
 import ProfileHeaderInfos from "@/components/ProfileHeaderInfos";
 import ProfileBooksSection from "@/components/ProfileBooksSection";
 import { favoriteBook } from "@/services/favoriteService";
@@ -17,9 +16,11 @@ export default function ProfilePage() {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const [loading, setLoading] = useState(true);
   const [favoritedBooks, setFavoritedBooks] = useState<Array<Book>>([]);
   const [latestOrders, setLatestOrders] = useState<Array<Book>>([]);
+  const [recomendationsBooks, setRecomendationsBooks] = useState<Array<Book>>(
+    []
+  );
   const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
@@ -33,12 +34,13 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const Favorites = (await getFavoriteBooks(
-          user?.uuid || ""
-        )) as Array<FavoriteBookResponse>;
-        setFavoritedBooks(
-          Favorites.map((favoriteResponse) => favoriteResponse.book) || []
-        );
+        const Favorites = await getFavoriteBooks(user?.uuid || "");
+        setFavoritedBooks(Favorites);
+
+        if (user) {
+          const recomendations = await getRecommendations(user?.uuid);
+          setRecomendationsBooks(recomendations);
+        }
 
         const orders = await getOrdersByUser(user?.uuid || "");
         setLatestOrders(orders);
@@ -57,6 +59,7 @@ export default function ProfilePage() {
       <ProfileBooksSection
         favoritedBooks={favoritedBooks}
         LatestOrders={latestOrders}
+        recomendations={recomendationsBooks}
         handleFavoriteBook={handleFavoriteBook}
         isLogin={user ? true : false}
       />
