@@ -1,1 +1,8 @@
-{}
+{
+  "scripts": {
+    "start:all": "concurrently \"npm run dev --prefix auth-service\" \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
