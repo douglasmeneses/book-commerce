@@ -1,11 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "app.ts",
+  "main": "src/app.ts",
   "scripts": {
     "dev": "ts-node src/app.ts",
     "build": "npm run prisma:generate && tsc",
     "start": "node dist/app.js",
+    "postinstall": "prisma generate && prisma migrate deploy",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy"
   },
@@ -36,7 +37,7 @@
     "@types/sharp": "^0.31.1",
     "cors": "^2.8.5",
     "jest": "^29.7.0",
-    "prisma": "^6.4.1",
+    "prisma": "^6.7.0",
     "sharp": "^0.33.5",
     "ts-jest": "^29.3.2",
     "ts-node-dev": "^2.0.0",
