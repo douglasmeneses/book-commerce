@@ -8,7 +8,7 @@ const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
 const userController = {
   registerUser: async (req: Request, res: Response): Promise<Response> => {
     const { name, username, email, password, address } = req.body;
-  
+
     try {
       const existingUser = await userService.getUserByEmail(email);
       if (existingUser) {
@@ -17,7 +17,7 @@ const userController = {
           message: "Tente outro.",
         });
       }
-  
+
       const existingUsername = await userService.getUserByUsername(username);
       if (existingUsername) {
         return res.status(400).json({
@@ -25,18 +25,18 @@ const userController = {
           message: "Este nome de usuário já está em uso. Tente outro.",
         });
       }
-  
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await userService.registerUser({
         name,
         username,
         email,
         password: hashedPassword,
-        address 
+        address,
       });
-  
+
       return res
-        .status(200)
+        .status(201)
         .json({ message: "Usuário registrado com sucesso", user: newUser });
     } catch (error) {
       return res.status(400).json({
@@ -44,7 +44,6 @@ const userController = {
       });
     }
   },
-  
 
   loginUser: async (req: Request, res: Response): Promise<Response> => {
     const { email, password } = req.body;
@@ -123,13 +122,13 @@ const userController = {
     const uuid = req.params.uuid;
     const { username, name, password, avatar, cpf, phone, birth_date } =
       req.body;
-      if (birth_date && !/^\d{4}-\d{2}-\d{2}$/.test(birth_date)) {
-        return res.status(400).json({ error: "Data de nascimento inválida. O formato correto é YYYY-MM-DD." });
-      }
-  
-    
-    try {
+    if (birth_date && !/^\d{4}-\d{2}-\d{2}$/.test(birth_date)) {
+      return res.status(400).json({
+        error: "Data de nascimento inválida. O formato correto é YYYY-MM-DD.",
+      });
+    }
 
+    try {
       const formattedBirthDate = birth_date ? new Date(birth_date) : undefined;
       const user = await userService.updateUserProfile(uuid, {
         username,
@@ -185,7 +184,7 @@ const userController = {
           .status(400)
           .json({ error: "Arquivo enviado não é uma imagem válida" });
       }
-      
+
       const response = await userService.uploadAvatar(uuid, req.file.buffer);
       if (response && "error" in response) {
         return res.status(400).json({ error: response.error });
@@ -213,9 +212,9 @@ const userController = {
   },
   getUserAddress: async (req: Request, res: Response): Promise<Response> => {
     const { uuid } = req.params;
-  
+
     try {
-      const address = await userService.getUserAddresses(uuid);  // Verifique se o método 'getUserAddress' está funcionando corretamente
+      const address = await userService.getUserAddresses(uuid); // Verifique se o método 'getUserAddress' está funcionando corretamente
       if (!address) {
         return res.status(404).json({ message: "Endereço não encontrado" });
       }
@@ -224,7 +223,7 @@ const userController = {
       console.error(error);
       return res.status(500).json({ message: "Erro interno do servidor" });
     }
-  }
+  },
 };
 
 export default userController;
