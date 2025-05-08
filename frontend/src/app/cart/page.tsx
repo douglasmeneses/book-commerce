@@ -11,12 +11,20 @@ import { LoaderCircle } from "lucide-react";
 
 export default function CartPage() {
   const router = useRouter();
-  const user = localStorage.getItem("user");
-  const user_uuid = user ? JSON.parse(user).uuid : "";
+  const [user, setUser] = useState<any>(null);
+  const [user_uuid, setUserUuid] = useState<string>("");
   const [cart, setCart] = useState<Cart>({} as Cart);
   const [accFetchCarts, setAccFetchCarts] = useState<number>(0);
   const [accCart, setAccCart] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    setUser(parsedUser);
+    setUserUuid(parsedUser?.uuid || "");
+  }, []);
 
   const fetchCart = async () => {
     if (accFetchCarts == 0) setLoading(true);

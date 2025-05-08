@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getBooks } from "@/services/bookService";
 import { Book, Filter } from "@/types/bookTypes";
 import { Button } from "@/components/ui/button";
@@ -27,18 +27,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function SearchPage() {
-  const user = localStorage.getItem("user");
-  const user_uuid: string = user ? JSON.parse(user).uuid : "";
+function SearchContent() {
+  const [user, setUser] = useState<any>(null);
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const itemsPerPage = 10;
 
+  const itemsPerPage = 10;
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const router = useRouter();
+
+  useEffect(() => {
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+  }, []);
+
+  const user_uuid: string = user ? user.uuid : "";
 
   useEffect(() => {
     if (!query) {
@@ -52,6 +60,7 @@ export default function SearchPage() {
         limit: itemsPerPage,
       };
       try {
+        setLoading(true);
         const books = await getBooks(filter, user_uuid);
         setBooks(books);
 
@@ -79,7 +88,7 @@ export default function SearchPage() {
     };
 
     fetchBooks();
-  }, [query, currentPage, query]);
+  }, [query, currentPage, user_uuid]);
 
   const handleFavoriteBook = async (book_uuid: string) => {
     try {
@@ -139,6 +148,7 @@ export default function SearchPage() {
               <div
                 key={book.uuid}
                 className="flex p-5 mb-10 bg-white rounded shadow-md cursor-pointer"
+                onClick={() => router.push(`/book/${book.uuid}`)}
               >
                 <Image
                   src={book.image_url || "/book-placeholder.png"}
@@ -207,7 +217,6 @@ export default function SearchPage() {
                 </div>
               </div>
             ))}
-
             <Pagination className="mt-8 flex">
               <PaginationContent>
                 <PaginationItem>
@@ -258,5 +267,19 @@ export default function SearchPage() {
         )}
       </section>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <LoaderCircle className="animate-spin text-orange-500" size={48} />
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }

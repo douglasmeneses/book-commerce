@@ -3,19 +3,25 @@ import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { cleanToken, handleNewToken } from "@/utils/tokenUtils";
 
 const API_URL = "http://localhost:3001/carts/user";
-const TOKEN = cleanToken(localStorage.getItem("token") || "");
-const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
   url: string,
   data?: any
 ): Promise<string | Cart> => {
+  let token = "";
+  let refreshToken = "";
+
+  if (typeof window !== "undefined") {
+    token = cleanToken(localStorage.getItem("token") || "");
+    refreshToken = cleanToken(localStorage.getItem("refreshToken") || "");
+  }
+
   try {
     const tokenConfig = {
       headers: {
-        authorization: `Bearer ${TOKEN}`,
-        "x-refresh-token": REFRESH_TOKEN,
+        authorization: `Bearer ${token}`,
+        "x-refresh-token": refreshToken,
       },
     };
 

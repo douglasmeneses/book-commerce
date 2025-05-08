@@ -94,8 +94,7 @@ const reviewService = {
         },
       });
 
-      if (reviews.length === 0)
-        return { message: "No reviews found", error: 404 };
+      if (reviews.length === 0) return [];
 
       return reviews;
     } catch (error) {

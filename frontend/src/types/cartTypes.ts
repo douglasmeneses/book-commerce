@@ -4,12 +4,14 @@ export interface Cart {
 }
 
 export interface CartItem {
+  cart_id(arg0: string, id: number, arg2: string, cart_id: any): unknown;
   id: number;
   created_at: Date;
   updated_at: Date;
   price: number;
   quantity: number;
   book: Book;
+  cart_id: number;
 }
 
 export interface Book {

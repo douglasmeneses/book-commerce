@@ -12,6 +12,7 @@ import { updateUserProfile } from "@/services/userServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DeleteUserButton from "@/components/DeleteUserButton";
 import { Save } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const profileUpdateSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
@@ -36,13 +37,7 @@ const profileUpdateSchema = z.object({
     .string()
     .refine((value) => !isNaN(Date.parse(value)), "Data de nascimento inválida")
     .optional(),
-  avatar: z
-    .instanceof(File)
-    .optional()
-    .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
-      message: "O avatar deve ter no máximo 5MB",
-    })
-    .optional(),
+  avatar: z.any().optional(),
 });
 
 type ProfileUpdateForm = z.infer<typeof profileUpdateSchema>;
@@ -50,8 +45,14 @@ type ProfileUpdateForm = z.infer<typeof profileUpdateSchema>;
 export default function ProfileUpdatePage() {
   const { toast } = useToast();
   const router = useRouter();
-  const user = localStorage.getItem("user") || "";
-  const user_uuid: string = user ? JSON.parse(user).uuid : "";
+  const [user_uuid, setUserUuid] = useState<string>("");
+
+  useEffect(() => {
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    setUserUuid(parsedUser?.uuid || "");
+  }, []);
 
   const form = useForm<ProfileUpdateForm>({
     resolver: zodResolver(profileUpdateSchema),
@@ -65,7 +66,7 @@ export default function ProfileUpdatePage() {
     },
   });
 
-  const handleSubmit = async (data: ProfileUpdateForm, user_uuid: string) => {
+  const handleSubmit = async (data: ProfileUpdateForm) => {
     try {
       const formData = new FormData();
       formData.append("username", data.username || "");
@@ -97,7 +98,7 @@ export default function ProfileUpdatePage() {
     <div className="max-w-7xl mx-auto p-6">
       <form
         className="space-y-4"
-        onSubmit={form.handleSubmit((data) => handleSubmit(data, user_uuid))}
+        onSubmit={form.handleSubmit(handleSubmit)}
         encType="multipart/form-data"
       >
         <div className="flex flex-row justify-between items-center gap-8 mb-4">
@@ -114,7 +115,9 @@ export default function ProfileUpdatePage() {
             />
             {form.formState.errors.avatar && (
               <p className="text-red-500 text-sm">
-                {form.formState.errors.avatar.message}
+                {typeof form.formState.errors.avatar.message === "string"
+                  ? form.formState.errors.avatar.message
+                  : "Erro no campo avatar"}
               </p>
             )}
             <Avatar className="w-24 h-24 mb-4">

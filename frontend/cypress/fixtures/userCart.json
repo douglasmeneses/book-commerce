@@ -1,0 +1,18 @@
+{
+    "cartItem": [
+      {
+        "id": 1,
+        "price": 29.9,
+        "quantity": 1,
+        "book": {
+          "uuid": "1",
+          "title": "Livro Teste",
+          "authors": ["Autor Teste"],
+          "image_url": "/test.jpg",
+          "price": 29.9,
+          "stock_quantity": 10
+        }
+      }
+    ],
+    "totalPrice": 29.9
+  }

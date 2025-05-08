@@ -9,18 +9,24 @@ import ConfirmOrder from "@/components/ConfirmOrder";
 import { Cart } from "@/types/cartTypes";
 import * as cartService from "@/services/cartService";
 import * as orderService from "@/services/orderService";
-import { Book, BookAuthor } from "@/types/bookTypes";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const user = localStorage.getItem("user");
-  const user_uuid = user ? JSON.parse(user).uuid : "";
+  const [user, setUser] = useState<any>(null); // Inicializa como null
   const [cart, setCart] = useState<Cart>({} as Cart);
   const [paymentMethod, setPaymentMethod] = useState<string>("PIX");
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+  }, []);
+
+  const user_uuid: string = user ? user.uuid : "";
 
   const fetchCart = async () => {
     setLoading(true);
@@ -39,29 +45,36 @@ export default function CheckoutPage() {
       toast.error("Seu carrinho está vazio!");
       return;
     }
-  
+
     const total = cart.cartItem.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
     );
-  
+
     // Obtendo o endereço selecionado
-    const address_id = "some_address_id"; 
-  
+    const address_id = "some_address_id";
+
     const order = {
       status: "PENDING",
-      total: cart.cartItem.reduce((acc, item) => acc + item.price * item.quantity, 0),
+      total: cart.cartItem.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      ),
       payment_method: paymentMethod,
       address_id: address_id,
-      credit_card_user_id: paymentMethod === "CARTÃO DE CRÉDITO" ? selectedCard : undefined, // Se for cartão de crédito, passa o selectedCard como ID do cartão
-      credit_card_number: paymentMethod === "CARTÃO DE CRÉDITO" ? "**** **** **** 1289" : undefined, // Se for cartão de crédito, passa o número do cartão
+      credit_card_user_id:
+        paymentMethod === "CARTÃO DE CRÉDITO" ? selectedCard : undefined, // Se for cartão de crédito, passa o selectedCard como ID do cartão
+      credit_card_number:
+        paymentMethod === "CARTÃO DE CRÉDITO"
+          ? "**** **** **** 1289"
+          : undefined, // Se for cartão de crédito, passa o número do cartão
       items: cart.cartItem.map((item) => ({
         book_uuid: item.book.uuid,
         quantity: item.quantity,
         price: item.price,
       })),
     };
-  
+
     try {
       await orderService.createOrder(user_uuid, order);
       toast.success("Pedido realizado com sucesso!");
@@ -70,7 +83,6 @@ export default function CheckoutPage() {
       toast.error("Erro ao finalizar pedido.");
     }
   };
-  
 
   useEffect(() => {
     fetchCart();
@@ -81,7 +93,10 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2 flex flex-col gap-4">
           <AddressForm />
-          <PaymentMethods selected={paymentMethod} onChange={setPaymentMethod} />
+          <PaymentMethods
+            selected={paymentMethod}
+            onChange={setPaymentMethod}
+          />
           {paymentMethod === "CARTÃO DE CRÉDITO" && (
             <SavedCards
               cards={[
@@ -111,24 +126,26 @@ export default function CheckoutPage() {
                 .map((item) => ({
                   title: item.book.title,
                   quantity: item.quantity,
-                  author: item.book.authors.join(", "), 
+                  author: item.book.authors.join(", "),
                   price: item.price,
-                  image: typeof item.book.image_url === "string" ? item.book.image_url : item.book.image ? "/default-book.png" : "/default-book.png",
-
-
+                  image:
+                    typeof item.book.image_url === "string"
+                      ? item.book.image_url
+                      : item.book.image
+                      ? "/default-book.png"
+                      : "/default-book.png",
                 })) || []
             }
           />
-
         </div>
         <div>
           <ConfirmOrder
             total={
               cart?.cartItem
                 ? cart.cartItem.reduce(
-                  (acc, item) => acc + item.price * item.quantity,
-                  0
-                )
+                    (acc, item) => acc + item.price * item.quantity,
+                    0
+                  )
                 : 0
             }
             onConfirm={handleConfirm}
