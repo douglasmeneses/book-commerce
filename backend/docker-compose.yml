@@ -1,4 +1,18 @@
+version: "3.8"
+
 services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bookcommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   backend:
     build:
       context: .
@@ -6,8 +20,13 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DATABASE_URL: postgres://postgres:password@localhost:5432/bookcommerce
+      DATABASE_URL: postgres://postgres:password@db:5432/bookcommerce
     volumes:
       - ./:/app
       - /app/node_modules
-    command: npm run dev
+    depends_on:
+      - db
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run dev"
+
+volumes:
+  postgres_data:

@@ -6,7 +6,7 @@
     "dev": "ts-node src/app.ts",
     "build": "npm run prisma:generate && tsc",
     "start": "node dist/app.js",
-    "postinstall": "prisma generate && prisma migrate deploy",
+    "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy"
   },
