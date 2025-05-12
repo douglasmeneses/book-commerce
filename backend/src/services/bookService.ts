@@ -12,7 +12,7 @@ import { userExists, validUser } from "../middlewares/userValidators";
 import { BookResponseDTO } from "../dtos/booksDTOs";
 import redisClient from "../redisClient";
 
-const CACHE_EXPIRATION = 60 * 5;
+const CACHE_EXPIRATION = 60 * 60 * 24;
 
 const prisma = new PrismaClient();
 
