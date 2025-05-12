@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
+const AUTH_SERVICE_URL = "https://api-auth-4gd7.onrender.com/api/auth";
 
 interface TokenResponse {
   token: string;
