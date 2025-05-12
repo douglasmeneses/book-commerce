@@ -2,7 +2,7 @@ import axios from "axios";
 import { Filter } from "@/types/bookTypes";
 import { cleanToken } from "@/utils/tokenUtils";
 
-const API_URL = "http://localhost:3001/books";
+const API_URL = "https://backend-llyr.onrender.com/books";
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
@@ -51,7 +51,7 @@ export const getBooks = async (filtro: Filter, user_uuid?: string) => {
 
 export const getFavoriteBooks = async (user_uuid: string) => {
   try {
-    const url = `http://localhost:3001/favorites/user/${user_uuid}/`;
+    const url = `https://backend-llyr.onrender.com/favorites/user/${user_uuid}/`;
     return ApiRequest("get", url);
   } catch (error) {
     const errorMessage =

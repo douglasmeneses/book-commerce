@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cleanToken, handleNewToken } from "../utils/tokenUtils";
 
-const API_URL = "http://localhost:3001/favorites";
+const API_URL = "https://backend-llyr.onrender.com/favorites";
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
