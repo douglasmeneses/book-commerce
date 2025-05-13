@@ -2,8 +2,6 @@ import axios from "axios";
 import { Request, Response, NextFunction } from "express";
 import { verifyToken, refreshTokenRequest } from "../utils/authUtils";
 
-const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
-
 export const authMiddleware = async (
   req: Request,
   res: Response,
