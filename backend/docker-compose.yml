@@ -6,8 +6,31 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DATABASE_URL: postgres://postgres:password@localhost:5432/bookcommerce
+      DATABASE_URL: postgres://postgres:P@ssword@db:5432/bookcommerce
+      REDIS_URL: redis://redis:6379
     volumes:
       - ./:/app
       - /app/node_modules
     command: npm run dev
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssword
+      POSTGRES_DB: bookcommerce
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  db_data:
+  redis_data:
