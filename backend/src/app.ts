@@ -7,6 +7,7 @@ import cartRouter from "./routes/cartRouter";
 import userRouter from "./routes/userRouter";
 import reviewRouter from "./routes/reviewRouter";
 import orderRouter from "./routes/orderRouter";
+import "./redisClient";
 
 const PORT = process.env.PORT || 3001;
 
