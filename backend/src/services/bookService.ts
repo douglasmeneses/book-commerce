@@ -10,6 +10,9 @@ import { updateGenres } from "./genreService";
 import { updatePublishers } from "./publisherService";
 import { userExists, validUser } from "../middlewares/userValidators";
 import { BookResponseDTO } from "../dtos/booksDTOs";
+import redisClient from "../redisClient";
+
+const CACHE_EXPIRATION = 60 * 60 * 24;
 
 const prisma = new PrismaClient();
 
@@ -183,7 +186,19 @@ const bookService = {
     if (mostRecent) orderBy.push({ created_at: "desc" });
     if (orderByPrice) orderBy.push({ price: orderByPrice });
 
+    const cacheKey = `books:${JSON.stringify({
+      mostLiked,
+      mostRecent,
+      page,
+      limit,
+    })}`;
+
     try {
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        return JSON.parse(cachedData);
+      }
+
       const books = await prisma.book.findMany({
         where,
         orderBy,
@@ -197,6 +212,11 @@ const bookService = {
         skip,
       });
       const booksDTO = books.map((book) => new BookResponseDTO(book));
+
+      await redisClient.set(cacheKey, JSON.stringify(booksDTO), {
+        EX: CACHE_EXPIRATION,
+      });
+
       return booksDTO;
     } catch (error) {
       return {
@@ -328,7 +348,6 @@ const bookService = {
       };
     }
   },
-
   bookDelete: async (uuid: string, user_uuid: string) => {
     try {
       const userValidation = await validUser(user_uuid);
@@ -383,7 +402,6 @@ const bookService = {
       };
     }
   },
-
   uploadBookImage: async (uuid: string, imageBuffer: Buffer) => {
     try {
       const book = await bookExists(uuid);
