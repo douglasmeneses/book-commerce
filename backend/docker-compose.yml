@@ -13,6 +13,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
   backend:
     build:
       context: .
@@ -21,12 +28,15 @@ services:
       - "3001:3001"
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/bookcommerce
+      REDIS_URL: redis://redis:6379
     volumes:
       - ./:/app
       - /app/node_modules
     depends_on:
       - db
+      - redis
     command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run dev"
 
 volumes:
   postgres_data:
+  redis_data:

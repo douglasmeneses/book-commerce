@@ -18,7 +18,6 @@ export interface RegisterBook {
 }
 
 export interface UpdateBook {
-  uuid: string;
   title?: string;
   synopsis?: string;
   image?: Buffer;
