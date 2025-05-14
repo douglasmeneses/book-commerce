@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import { processAvatar } from "../utils/userUtils";
-const AUTH_SERVICE_URL = "http://localhost:3002/api/auth";
+
+const AUTH_SERVICE_URL = "https://api-auth-4gd7.onrender.com/api/auth/";
 
 const userController = {
   registerUser: async (req: Request, res: Response): Promise<Response> => {
