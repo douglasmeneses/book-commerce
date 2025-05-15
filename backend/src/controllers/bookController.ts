@@ -1,10 +1,8 @@
 import bookService from "../services/bookService";
-import { Filter, BookResponse } from "../types/bookTypes";
+import { bookImageService } from "../services/bookImageService";
+import { Filter } from "../types/bookTypes";
 import { Request, Response } from "express";
 import { processBookImages, handleBookImage } from "../utils/bookUtils";
-import { BookWithConvertedRating } from "../types/bookTypes";
-import { ProcessedBook } from "../types/bookTypes";
-import { Decimal } from "@prisma/client/runtime/library";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
@@ -140,7 +138,10 @@ const bookController = {
         return res.status(400).json({ error: "Nenhuma imagem enviada" });
       }
 
-      const response = await bookService.uploadBookImage(uuid, req.file.buffer);
+      const response = await bookImageService.uploadBookImage(
+        uuid,
+        req.file.buffer
+      );
       if ("error" in response) {
         return res.status(400).json(response);
       }
