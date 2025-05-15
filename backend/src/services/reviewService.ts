@@ -160,7 +160,7 @@ const reviewService = {
   },
 };
 
-const updateBookRating = async (book_id: number) => {
+export const updateBookRating = async (book_id: number) => {
   const allReviews = await prisma.review.findMany({ where: { book_id } });
   const newRating = averageRating(allReviews);
   await prisma.book.update({
