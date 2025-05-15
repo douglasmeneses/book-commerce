@@ -7,6 +7,7 @@ export class BookResponseDTO {
   price: number;
   authors: string[];
   rating?: number;
+  favorites: { id: number }[];
 
   constructor(book: any) {
     this.uuid = book.uuid;
@@ -17,5 +18,8 @@ export class BookResponseDTO {
     this.authors = book.authors.map((a: any) => a.author.name);
     this.image_url = book.image_url;
     this.rating = book.rating;
+    this.favorites = Array.isArray(book.favorites)
+      ? book.favorites.map((fav: any) => ({ id: fav.id }))
+      : [];
   }
 }
