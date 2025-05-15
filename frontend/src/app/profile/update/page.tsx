@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DeleteUserButton from "@/components/DeleteUserButton";
 import { Save } from "lucide-react";
 import { useEffect, useState } from "react";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 const profileUpdateSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
@@ -48,8 +49,7 @@ export default function ProfileUpdatePage() {
   const [user_uuid, setUserUuid] = useState<string>("");
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     setUserUuid(parsedUser?.uuid || "");
   }, []);

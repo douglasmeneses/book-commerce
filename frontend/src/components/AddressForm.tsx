@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUserAddress } from "@/services/userServices";
-import { Address } from "@/types/userTypes"; 
+import { Address } from "@/types/userTypes";
 
 export default function AddressForm() {
   const [address, setAddress] = useState<Address | null>(null);
@@ -10,20 +10,19 @@ export default function AddressForm() {
   useEffect(() => {
     const user_uuid = localStorage.getItem("user_uuid");
     const authToken = localStorage.getItem("token");
-  
-    console.log("user_uuid:", user_uuid); 
+
+    console.log("user_uuid:", user_uuid);
     console.log("authToken:", authToken);
-  
-    
+
     if (!user_uuid || !authToken) {
       setError("Usuário ou token de autenticação não encontrados.");
       setLoading(false);
       return;
     }
-  
+
     const fetchAddress = async () => {
       try {
-        const data = await getUserAddress(user_uuid); 
+        const data = await getUserAddress(user_uuid);
         setAddress(data);
       } catch (err: any) {
         setError(err.response?.data?.message || "Erro ao buscar o endereço.");
@@ -31,7 +30,7 @@ export default function AddressForm() {
         setLoading(false);
       }
     };
-  
+
     fetchAddress();
   }, []);
 
@@ -45,8 +44,12 @@ export default function AddressForm() {
         <p className="text-red-500">{error}</p>
       ) : address ? (
         <div className="space-y-2 text-gray-700">
-          <p>{address.street}, {address.number}</p>
-          <p>{address.neighborhood}, {address.city} - {address.state}</p>
+          <p>
+            {address.street}, {address.number}
+          </p>
+          <p>
+            {address.neighborhood}, {address.city} - {address.state}
+          </p>
           <p>{address.postalCode}</p>
           <p>{address.country}</p>
           {address.complement && <p>{address.complement}</p>}

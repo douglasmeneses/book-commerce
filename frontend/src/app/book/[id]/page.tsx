@@ -9,11 +9,12 @@ import { favoriteBook } from "@/services/favoriteService";
 import CreateUpdateModel from "@/components/CreateUpdateModel";
 import { getReviewsByBook, createReview } from "@/services/reviewService";
 import CommentsArea from "@/components/ComentsArea";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 export default function BookPage() {
   const [book, setBook] = useState<Book | null>(null);
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = getUserInLocalStorageItem();
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const { id } = useParams();

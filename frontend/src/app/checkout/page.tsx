@@ -11,6 +11,7 @@ import * as cartService from "@/services/cartService";
 import * as orderService from "@/services/orderService";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -21,8 +22,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     setUser(storedUser ? JSON.parse(storedUser) : null);
   }, []);
 

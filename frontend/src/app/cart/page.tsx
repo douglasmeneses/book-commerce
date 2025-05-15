@@ -8,6 +8,7 @@ import CartItemsList from "@/components/CartItemsList";
 import SubTotalCart from "@/components/SubTotalCart";
 import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 export default function CartPage() {
   const router = useRouter();
@@ -19,8 +20,7 @@ export default function CartPage() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     setUser(parsedUser);
     setUserUuid(parsedUser?.uuid || "");
@@ -35,8 +35,14 @@ export default function CartPage() {
       }
       setCart(response);
     } catch (error) {
+      if (error instanceof Error && !error.message.includes("404")) {
+        console.log("KO");
+        toast.error(
+          `Erro ao buscar carrinho: ${error.message}. Faça login novamente.`
+        );
+      }
       toast.info("Sessão expirada, redirecionando para o login...");
-      setTimeout(() => router.push("/login"), 2000);
+      //setTimeout(() => router.push("/login"), 2000);
     } finally {
       const timer = setTimeout(() => {
         setLoading(false);
