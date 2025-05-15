@@ -37,7 +37,7 @@ const userController = {
       });
 
       return res
-        .status(200)
+        .status(201)
         .json({ message: "Usuário registrado com sucesso", user: newUser });
     } catch (error) {
       return res.status(400).json({
