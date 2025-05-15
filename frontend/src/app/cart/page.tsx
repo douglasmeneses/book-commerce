@@ -8,10 +8,9 @@ import CartItemsList from "@/components/CartItemsList";
 import SubTotalCart from "@/components/SubTotalCart";
 import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
+import { User } from "@/types/userTypes";
 
 export default function CartPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
   const [user_uuid, setUserUuid] = useState<string>("");
   const [cart, setCart] = useState<Cart>({} as Cart);
   const [accFetchCarts, setAccFetchCarts] = useState<number>(0);
@@ -21,22 +20,26 @@ export default function CartPage() {
   useEffect(() => {
     const storedUser =
       typeof window !== "undefined" ? localStorage.getItem("user") : null;
-    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-    setUser(parsedUser);
+    console.log("storedUser", storedUser);
+    const parsedUser: User = storedUser ? JSON.parse(storedUser) : null;
     setUserUuid(parsedUser?.uuid || "");
   }, []);
 
   const fetchCart = async () => {
+    if (!user_uuid) return;
     if (accFetchCarts == 0) setLoading(true);
     const response = await cartService.getCart(user_uuid);
+    console.log("uuid", user_uuid);
     try {
       if (typeof response === "string") {
         throw new Error(response);
       }
       setCart(response);
     } catch (error) {
-      toast.info("Sessão expirada, redirecionando para o login...");
-      setTimeout(() => router.push("/login"), 2000);
+      if (error instanceof Error && error.message.includes("401")) {
+        toast.info("Sessão expirada, redirecionando para o login...");
+        // setTimeout(() => router.push("/login"), 2000);
+      }
     } finally {
       const timer = setTimeout(() => {
         setLoading(false);
@@ -123,9 +126,11 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    fetchCart();
-    setAccFetchCarts((prep) => (prep ? prep + 1 : 1));
-  }, [accCart]);
+    if (user_uuid) {
+      fetchCart();
+      setAccFetchCarts((prep) => (prep ? prep + 1 : 1));
+    }
+  }, [accCart, user_uuid]);
 
   return (
     <div>
