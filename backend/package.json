@@ -20,7 +20,6 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.6.0",
-    "prisma": "^6.7.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/validator": "^13.12.2",
     "axios": "^1.8.4",
