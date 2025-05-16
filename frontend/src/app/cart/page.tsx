@@ -8,9 +8,11 @@ import CartItemsList from "@/components/CartItemsList";
 import SubTotalCart from "@/components/SubTotalCart";
 import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 import { User } from "@/types/userTypes";
 
 export default function CartPage() {
+  const router = useRouter();
   const [user_uuid, setUserUuid] = useState<string>("");
   const [cart, setCart] = useState<Cart>({} as Cart);
   const [accFetchCarts, setAccFetchCarts] = useState<number>(0);
@@ -18,10 +20,8 @@ export default function CartPage() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
-    console.log("storedUser", storedUser);
-    const parsedUser: User = storedUser ? JSON.parse(storedUser) : null;
+    const storedUser = getUserInLocalStorageItem();
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     setUserUuid(parsedUser?.uuid || "");
   }, []);
 
@@ -29,7 +29,6 @@ export default function CartPage() {
     if (!user_uuid) return;
     if (accFetchCarts == 0) setLoading(true);
     const response = await cartService.getCart(user_uuid);
-    console.log("uuid", user_uuid);
     try {
       if (typeof response === "string") {
         throw new Error(response);
@@ -38,7 +37,7 @@ export default function CartPage() {
     } catch (error) {
       if (error instanceof Error && error.message.includes("401")) {
         toast.info("Sessão expirada, redirecionando para o login...");
-        // setTimeout(() => router.push("/login"), 2000);
+        setTimeout(() => router.push("/login"), 2000);
       }
     } finally {
       const timer = setTimeout(() => {

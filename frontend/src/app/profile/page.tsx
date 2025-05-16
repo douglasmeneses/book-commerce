@@ -10,6 +10,8 @@ import ProfileHeaderInfos from "@/components/ProfileHeaderInfos";
 import ProfileBooksSection from "@/components/ProfileBooksSection";
 import { favoriteBook } from "@/services/favoriteService";
 import { toast } from "sonner";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
+import { get } from "http";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,8 +23,7 @@ export default function ProfilePage() {
   const [accFetchsBooks, setAccFetchsBooks] = useState<number>(0);
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     setUser(storedUser ? JSON.parse(storedUser) : null);
   }, []);
 

@@ -1,7 +1,7 @@
 import { Favorites, PrismaClient } from "@prisma/client";
 import { bookExists } from "../middlewares/bookValidators";
 import { userExists } from "../middlewares/userValidators";
-import bookService from "./bookService";
+import { bookFavoriteService } from "./bookFavoriteServices";
 import { error, Filter } from "../types/bookTypes";
 import { Book } from "@prisma/client";
 
@@ -34,13 +34,13 @@ const favoriteService = {
             user_id: user.id,
           },
         });
-        await bookService.bookFavorite(book_uuid, user_uuid);
+        await bookFavoriteService.toggleFavorite(book_uuid, user_uuid);
         return favorited;
       } else {
         await prisma.favorites.delete({
           where: { user_id_book_id: { user_id: user.id, book_id: book.id } },
         });
-        await bookService.bookFavorite(book_uuid, user_uuid);
+        await bookFavoriteService.toggleFavorite(book_uuid, user_uuid);
         return null;
       }
     } catch (error) {

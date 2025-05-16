@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { Heart, CircleUserRound, ShoppingCart } from "lucide-react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter, usePathname } from "next/navigation";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 export default function NavBar() {
   const [user, setUser] = useState<string | null>(null);
@@ -23,7 +24,7 @@ export default function NavBar() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
+      const storedUser = getUserInLocalStorageItem();
       setUser(storedUser);
     }
   }, [pathname]);

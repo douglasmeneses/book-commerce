@@ -11,6 +11,7 @@ import { updatePublishers } from "./publisherService";
 import { userExists, validUser } from "../middlewares/userValidators";
 import { BookResponseDTO } from "../dtos/booksDTOs";
 import redisClient from "../redisClient";
+import { bookWhere, handleError } from "../utils/bookUtils";
 
 const CACHE_EXPIRATION = 60 * 60 * 24;
 
@@ -89,97 +90,22 @@ const bookService = {
 
       return newBook;
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
+      return handleError(error);
     }
   },
+
   getBooks: async (
     filter: Filter,
     user_uuid?: string
   ): Promise<BookResponseDTO[] | error> => {
-    const {
-      search,
-      author,
-      genre,
-      publisher,
-      isbn,
-      title,
-      mostLiked,
-      mostRecent,
-      orderByPrice,
-      minPrice,
-      maxPrice,
-      page,
-      limit,
-    } = filter;
+    const { mostLiked, mostRecent, orderByPrice, page, limit } = filter;
 
     const user = user_uuid ? await userExists(user_uuid) : null;
     if (user && "error" in user) return { error: user.error };
 
     const skip = page && limit ? (page - 1) * limit : 0;
 
-    const where: any = {
-      OR: [
-        { title: { contains: search, mode: "insensitive" } },
-        { synopsis: { contains: search, mode: "insensitive" } },
-        { ISBN: { contains: search, mode: "insensitive" } },
-        { language: { contains: search, mode: "insensitive" } },
-        {
-          authors: {
-            some: {
-              author: { name: { contains: search, mode: "insensitive" } },
-            },
-          },
-        },
-        {
-          genres: {
-            some: {
-              genre: { name: { contains: search, mode: "insensitive" } },
-            },
-          },
-        },
-        {
-          publishers: {
-            some: {
-              publisher: {
-                name: { contains: search, mode: "insensitive" },
-              },
-            },
-          },
-        },
-      ],
-      price: {
-        gte: minPrice,
-        lte: maxPrice,
-      },
-    };
-
-    if (author) {
-      where.authors = {
-        some: { author: { name: { contains: author, mode: "insensitive" } } },
-      };
-    }
-
-    if (genre) {
-      where.genres = {
-        some: { genre: { name: { contains: genre, mode: "insensitive" } } },
-      };
-    }
-
-    if (publisher) {
-      where.publishers = {
-        some: {
-          publisher: { name: { contains: publisher, mode: "insensitive" } },
-        },
-      };
-    }
-    if (isbn) {
-      where.ISBN = { contains: isbn, mode: "insensitive" };
-    }
-    if (title) {
-      where.title = { contains: title, mode: "insensitive" };
-    }
+    const where = await bookWhere(filter);
 
     const orderBy: any[] = [];
     if (mostLiked) orderBy.push({ favorite_count: "desc" });
@@ -219,9 +145,7 @@ const bookService = {
 
       return booksDTO;
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
+      return handleError(error);
     }
   },
   getBookById: async (id: number): Promise<Book | error> => {
@@ -247,9 +171,7 @@ const bookService = {
 
       return book;
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
+      return handleError(error);
     }
   },
   getBookByUUID: async (
@@ -285,9 +207,7 @@ const bookService = {
 
       return book;
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
+      return handleError(error);
     }
   },
   getBookByISBN: async (isbn: string): Promise<Book | null> => {
@@ -343,9 +263,7 @@ const bookService = {
 
       return updatedBook as Book;
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
+      return handleError(error);
     }
   },
   bookDelete: async (uuid: string, user_uuid: string) => {
@@ -365,58 +283,7 @@ const bookService = {
 
       return { message: "Book deleted successfully" };
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
-    }
-  },
-  bookFavorite: async (uuid: string, user_uuid: string) => {
-    try {
-      const book = await bookExists(uuid);
-      if (book && "error" in book) {
-        return { error: book.error };
-      }
-      const user = await userExists(user_uuid);
-      if (user && "error" in user) {
-        return { error: user.error };
-      }
-
-      const favorite = await prisma.favorites.findFirst({
-        where: { user_id: user.id, book_id: book.id },
-      });
-
-      if (!favorite) {
-        await prisma.book.update({
-          where: { id: book.id },
-          data: { favorite_count: book.favorite_count - 1 },
-        });
-      } else {
-        await prisma.book.update({
-          where: { id: book.id },
-          data: { favorite_count: book.favorite_count + 1 },
-        });
-      }
-    } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "An error occurred",
-      };
-    }
-  },
-  uploadBookImage: async (uuid: string, imageBuffer: Buffer) => {
-    try {
-      const book = await bookExists(uuid);
-      if (book && "error" in book) {
-        return { error: book.error };
-      }
-
-      const updatedBook = await prisma.book.update({
-        where: { uuid },
-        data: { image: imageBuffer },
-      });
-
-      return updatedBook;
-    } catch (error) {
-      return { error: "Erro ao salvar imagem no banco" };
+      return handleError(error);
     }
   },
 };

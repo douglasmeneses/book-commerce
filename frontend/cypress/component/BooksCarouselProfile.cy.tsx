@@ -1,48 +1,32 @@
-import BooksCarouselProfile from '@/components/BooksCarouselProfile';
-import { Book } from '@/types/bookTypes';
+import BooksCarouselProfile from "@/components/BooksCarouselProfile";
+import { Book } from "@/types/bookTypes";
 
-describe('<BooksCarouselProfile />', () => {
+describe("<BooksCarouselProfile />", () => {
   const mockBooks: Book[] = [
     {
-      uuid: '1',
+      uuid: "1",
       id: 1,
-      title: 'Livro 1',
-      synopsis: 'Sinopse do Livro 1',
-      language: 'Português',
-      price: '29.90',
-      ISBN: '123456789',
-      rating: '4.5',
+      title: "Livro 1",
+      synopsis: "Sinopse do Livro 1",
+      language: "Português",
+      price: "29.90",
+      ISBN: "123456789",
+      rating: "4.5",
       favorite_count: 10,
       page_count: 200,
       stock_quantity: 5,
-      release_date: '2023-01-01',
-      created_at: '',
-      updated_at: '',
-      image_url: '/book1.jpg',
-      authors: [
-        {
-          id: 1,
-          book_id: 1,
-          author_id: 1,
-          created_at: '',
-          updated_at: '',
-          author: {
-            id: 1,
-            name: 'Autor 1',
-            bio: '',
-            year_of_birth: '',
-            image: {},
-            created_at: '',
-            updated_at: '',
-          },
-        },
-      ],
+      release_date: "2023-01-01",
+      created_at: "",
+      updated_at: "",
+      image_url: "/book1.jpg",
+      authors: ["Autor 1"],
       genres: [],
       favorites: [],
+      publishers: [],
     },
   ];
 
-  it('renders loading state', () => {
+  it("renders loading state", () => {
     cy.mount(
       <BooksCarouselProfile
         books={mockBooks}
@@ -51,10 +35,10 @@ describe('<BooksCarouselProfile />', () => {
       />
     );
 
-    cy.get('[data-testid="loading-spinner"]').should('exist');
+    cy.get('[data-testid="loading-spinner"]').should("exist");
   });
 
-  it('renders books', () => {
+  it("renders books", () => {
     cy.mount(
       <BooksCarouselProfile
         books={mockBooks}
@@ -64,16 +48,16 @@ describe('<BooksCarouselProfile />', () => {
     );
 
     // Verifica se o título do livro é exibido
-    cy.contains('Livro 1').should('exist');
+    cy.contains("Livro 1").should("exist");
 
     // Verifica se o preço do livro é exibido
-    cy.contains('R$ 29,90').should('exist');
+    cy.contains("R$ 29,90").should("exist");
 
     // Verifica se a imagem do livro é exibida
-    cy.get('img').should('have.attr', 'src', '/book1.jpg');
+    cy.get("img").should("have.attr", "src", "/book1.jpg");
   });
 
-  it('shows empty message when no books', () => {
+  it("shows empty message when no books", () => {
     cy.mount(
       <BooksCarouselProfile
         books={[]}
@@ -83,10 +67,10 @@ describe('<BooksCarouselProfile />', () => {
     );
 
     // Verifica se a mensagem de "Sem livros" é exibida
-    cy.contains('Sem livros').should('exist');
+    cy.contains("Sem livros").should("exist");
   });
 
-  it('handles favorite book action', () => {
+  it("handles favorite book action", () => {
     const handleFavoriteBook = cy.stub();
 
     cy.mount(
@@ -101,6 +85,6 @@ describe('<BooksCarouselProfile />', () => {
     cy.get('[data-testid="favorite-button"]').first().click();
 
     // Verifica se a função de favoritar foi chamada
-    cy.wrap(handleFavoriteBook).should('be.calledWith', '1');
+    cy.wrap(handleFavoriteBook).should("be.calledWith", "1");
   });
 });

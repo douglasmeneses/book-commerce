@@ -35,7 +35,7 @@ export default function BookDetails({
             {book.publishers[0]?.publisher.name || "Desconhecido"}
           </p>
           <p className="text-lg font-semibold">
-            {book.authors[0]?.author.name || "Autor Desconhecido"}
+            {book.authors[0] || "Autor Desconhecido"}
           </p>
         </div>
       </div>

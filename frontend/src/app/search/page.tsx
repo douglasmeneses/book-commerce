@@ -26,23 +26,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 function SearchContent() {
   const [user, setUser] = useState<any>(null);
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   const itemsPerPage = 10;
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
-  const router = useRouter();
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     setUser(storedUser ? JSON.parse(storedUser) : null);
   }, []);
 

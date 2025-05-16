@@ -2,7 +2,7 @@ import axios from "axios";
 import { cleanToken, handleNewToken } from "../utils/tokenUtils";
 import { Order } from "@/types/orderTypes";
 
-const API_URL = "http://localhost:3001/orders";
+const API_URL = "https://backend-llyr.onrender.com/orders";
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",

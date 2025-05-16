@@ -1,6 +1,7 @@
 import sharp from "sharp";
 import { Book } from "@prisma/client";
 import { BookResponse } from "../types/bookTypes";
+import { Filter } from "../types/bookTypes";
 
 export const processImage = async (
   imageBuffer: Buffer | null,
@@ -62,4 +63,78 @@ export const handleBookImage = async (book: Book): Promise<BookResponse> => {
   }
 
   return bookResponse;
+};
+
+export const bookWhere = async (filter: Filter) => {
+  const { search, author, genre, publisher, isbn, title, minPrice, maxPrice } =
+    filter;
+  console.log("Filter:", filter);
+
+  const where: any = {
+    OR: [
+      { title: { contains: search, mode: "insensitive" } },
+      { synopsis: { contains: search, mode: "insensitive" } },
+      { ISBN: { contains: search, mode: "insensitive" } },
+      { language: { contains: search, mode: "insensitive" } },
+      {
+        authors: {
+          some: {
+            author: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
+      },
+      {
+        genres: {
+          some: {
+            genre: { name: { contains: search, mode: "insensitive" } },
+          },
+        },
+      },
+      {
+        publishers: {
+          some: {
+            publisher: {
+              name: { contains: search, mode: "insensitive" },
+            },
+          },
+        },
+      },
+    ],
+    price: {
+      gte: minPrice,
+      lte: maxPrice,
+    },
+  };
+
+  if (author) {
+    where.authors = {
+      some: { author: { name: { contains: author, mode: "insensitive" } } },
+    };
+  }
+  if (genre) {
+    where.genres = {
+      some: { genre: { name: { contains: genre, mode: "insensitive" } } },
+    };
+  }
+  if (publisher) {
+    where.publishers = {
+      some: {
+        publisher: { name: { contains: publisher, mode: "insensitive" } },
+      },
+    };
+  }
+  if (isbn) {
+    where.ISBN = { contains: isbn, mode: "insensitive" };
+  }
+  if (title) {
+    where.title = { contains: title, mode: "insensitive" };
+  }
+
+  return where;
+};
+
+export const handleError = (error: unknown) => {
+  return {
+    error: error instanceof Error ? error.message : "An unknown error occurred",
+  };
 };

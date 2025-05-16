@@ -19,6 +19,7 @@ import FavoriteButton from "./FavoriteButton";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { addItemToCart } from "@/services/cartService";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 export default function BookCarousel({
   books,
@@ -33,8 +34,7 @@ export default function BookCarousel({
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     setUser(storedUser ? JSON.parse(storedUser) : null);
   }, []);
 
