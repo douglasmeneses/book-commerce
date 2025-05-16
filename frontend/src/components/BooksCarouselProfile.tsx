@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import FavoriteButton from "./FavoriteButton";
 import { useRouter } from "next/navigation";
 import { addItemToCart } from "@/services/cartService";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 interface BookCarouselProps {
   books: Array<Book>;
@@ -34,7 +35,7 @@ export default function BooksPerfilCarousel({
 
   const handleAddToCart = async (bookId: string) => {
     try {
-      const user = localStorage.getItem("user");
+      const user = getUserInLocalStorageItem();
       const user_uuid: string = user ? JSON.parse(user).uuid : "";
 
       if (!user_uuid) {

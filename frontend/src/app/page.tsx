@@ -10,6 +10,7 @@ import { favoriteBook } from "@/services/favoriteService";
 import { toast } from "sonner";
 import { getRecommendations } from "@/services/userServices";
 import { set } from "react-hook-form";
+import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -30,8 +31,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const storedUser =
-      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    const storedUser = getUserInLocalStorageItem();
     setUser(storedUser ? JSON.parse(storedUser) : null);
 
     const fetchBooks = async () => {
