@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cleanToken, handleNewToken } from "../utils/tokenUtils";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://backend-llyr.onrender.com";
 
 const TOKEN = cleanToken(localStorage.getItem("token") || "");
 const REFRESH_TOKEN = cleanToken(localStorage.getItem("refreshToken") || "");

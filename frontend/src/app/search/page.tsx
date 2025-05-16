@@ -32,7 +32,6 @@ function SearchContent() {
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   const itemsPerPage = 10;

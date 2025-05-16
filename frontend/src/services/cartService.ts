@@ -2,7 +2,7 @@ import { Cart } from "@/types/cartTypes";
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { cleanToken, handleNewToken } from "@/utils/tokenUtils";
 
-const API_URL = "http://localhost:3001/carts/user";
+const API_URL = "https://backend-llyr.onrender.com/carts/user";
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",

@@ -2,7 +2,7 @@ import axios from "axios";
 import { RegisterUser } from "@/types/userTypes";
 import { cleanToken } from "@/utils/tokenUtils";
 
-const API_URL = "http://localhost:3001/users";
+const API_URL = "https://backend-llyr.onrender.com/users";
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
