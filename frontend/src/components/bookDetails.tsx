@@ -8,18 +8,30 @@ import StarHalfIcon from "@mui/icons-material/StarHalf";
 import { Book } from "@/types/bookTypes";
 import { ScanBarcode } from "lucide-react";
 import FavoriteButton from "./FavoriteButton";
+import { Cart } from "@/types/cartTypes";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface BookDetailsProps {
+  user_uuid: string;
   book: Book;
   handleFavoriteBook: (book_uuid: string) => Promise<void>;
   isLogin: boolean;
+  handleAddItem: (
+    user_uuid: string,
+    book_uuid: string,
+    quantity: number
+  ) => Promise<string | Cart>;
 }
 
 export default function BookDetails({
+  user_uuid,
   book,
   handleFavoriteBook,
   isLogin,
+  handleAddItem,
 }: BookDetailsProps) {
+  const router = useRouter();
   return (
     <div className="flex flex-col lg:flex-row gap-20 p-8 bg-white">
       <div className="flex-shrink-0">
@@ -60,16 +72,37 @@ export default function BookDetails({
           R$ {book.price}
         </p>
 
-        <div className="flex gap-4 mt-4">
-          <Button className="bg-[#e67e22] hover:bg-[#d35400] text-white px-6 py-2 rounded-md">
+        <div className="flex gap-4 mt-4 items-center">
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              user_uuid
+                ? (() => {
+                    handleAddItem(user_uuid, book.uuid, 1);
+                    toast.success("Item adicionado ao carrinho!");
+                  })()
+                : () => {
+                    toast.info(
+                      "Você precisa estar logado para adicionar itens ao carrinho."
+                    );
+                    setTimeout(() => {
+                      router.push("/login");
+                    }, 1000);
+                  };
+            }}
+            className="bg-[#e67e22] hover:bg-[#d35400] text-white px-6 py-2 rounded-md"
+          >
             <strong>Adicionar ao Carrinho</strong>
           </Button>
-          <FavoriteButton
-            book_uuid={book.uuid}
-            favorite={book.favorites}
-            handleFavoriteBook={handleFavoriteBook}
-            isLogin={isLogin}
-          />
+
+          {isLogin && (
+            <FavoriteButton
+              book_uuid={book.uuid}
+              favorite={book.favorites}
+              handleFavoriteBook={handleFavoriteBook}
+              isLogin={isLogin}
+            />
+          )}
         </div>
 
         <div className="flex items-center gap-1 mt-4">

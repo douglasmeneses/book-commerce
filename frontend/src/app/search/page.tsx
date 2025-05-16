@@ -29,6 +29,7 @@ import {
 import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
 function SearchContent() {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [books, setBooks] = useState<Array<Book>>([]);
   const [currentPage, setCurrentPage] = useState(1);

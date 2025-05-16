@@ -6,6 +6,7 @@ import { getBookByUUID } from "@/services/bookService";
 import BookDetails from "@/components/bookDetails";
 import { Book } from "@/types/bookTypes";
 import { favoriteBook } from "@/services/favoriteService";
+import { addItemToCart } from "@/services/cartService";
 import CreateUpdateModel from "@/components/CreateUpdateModel";
 import { getReviewsByBook, createReview } from "@/services/reviewService";
 import CommentsArea from "@/components/ComentsArea";
@@ -89,6 +90,18 @@ export default function BookPage() {
     }
   };
 
+  const handleAddItem = async (
+    user_uuid: string,
+    book_uuid: string,
+    quantity: number
+  ) => {
+    try {
+      await addItemToCart(user_uuid, book_uuid, quantity);
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
+
   if (!book) {
     return <p>Carregando...</p>;
   }
@@ -96,9 +109,11 @@ export default function BookPage() {
   return (
     <div className="max-w-7xl mx-auto p-6">
       <BookDetails
+        user_uuid={user?.uuid}
         book={book}
         handleFavoriteBook={handleFavoriteBook}
         isLogin={user ? true : false}
+        handleAddItem={addItemToCart}
       />
       <button
         onClick={() => setIsOpen(true)}
