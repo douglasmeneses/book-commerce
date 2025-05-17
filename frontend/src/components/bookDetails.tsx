@@ -46,9 +46,7 @@ export default function BookDetails({
           <p className="text-sm text-gray-500">
             {book.publishers[0]?.publisher.name || "Desconhecido"}
           </p>
-          <p className="text-lg font-semibold">
-            {book.authors[0] || "Autor Desconhecido"}
-          </p>
+          <p className="text-lg font-semibold">{book.authors.join(", ")}</p>
         </div>
       </div>
 

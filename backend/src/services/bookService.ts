@@ -174,10 +174,7 @@ const bookService = {
       return handleError(error);
     }
   },
-  getBookByUUID: async (
-    uuid: string,
-    user_uuid?: string
-  ): Promise<Book | error> => {
+  getBookByUUID: async (uuid: string, user_uuid?: string) => {
     if (!uuid || typeof uuid !== "string") {
       return { error: "Invalid UUID" };
     }
@@ -205,7 +202,10 @@ const bookService = {
         return { error: "Book not found" };
       }
 
-      return book;
+      return {
+        ...book,
+        authors: book.authors.map((a) => a.author.name),
+      };
     } catch (error) {
       return handleError(error);
     }
