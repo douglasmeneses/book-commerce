@@ -52,13 +52,11 @@ export const handleBookImage = async (book: Book): Promise<BookResponse> => {
       ...book,
       image: `data:image/png;base64,${imageBase64}`,
       image_url: null,
-      authors: [],
     };
   } else {
     bookResponse = {
       ...book,
       image: null,
-      authors: [],
     };
   }
 
