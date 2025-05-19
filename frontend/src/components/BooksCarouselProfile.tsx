@@ -90,7 +90,11 @@ export default function BooksPerfilCarousel({
             {books.map((book) => (
               <CarouselItem
                 key={book.uuid}
-                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle min-w-[250px] max-w-[250px]"
+                className="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5 flex justify-center align-middle min-w-[250px] max-w-[250px] cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push(`/book/${book.uuid}`);
+                }}
               >
                 <Card className="border shadow-sm overflow-hidden mx-1 ">
                   <CardContent className="flex flex-col items-center justify-center">
@@ -118,7 +122,11 @@ export default function BooksPerfilCarousel({
                       <div className="flex gap-2 items-center mt-2">
                         <Button
                           className="text-xs h-8 bg-[#e67e22] hover:bg-[#d35400] text-white font-semibold rounded-sm"
-                          onClick={() => handleAddToCart(book.uuid)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddToCart(book.uuid);
+                          }}
                         >
                           Adicionar
                         </Button>
