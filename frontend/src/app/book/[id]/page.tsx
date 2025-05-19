@@ -27,7 +27,7 @@ export default function BookPage() {
     const fetchBook = async () => {
       try {
         if (typeof id === "string") {
-          const bookData = await getBookByUUID(id);
+          const bookData = await getBookByUUID(id, user?.uuid);
           setTimeout(() => {
             setBook(bookData);
           }, 500);
