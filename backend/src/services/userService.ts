@@ -4,7 +4,7 @@ import { z } from "zod";
 
 const prisma = new PrismaClient();
 
-// Validation schemas
+
 const uuidSchema = z.string().uuid();
 const emailSchema = z.string().email();
 const usernameSchema = z.string().min(3).max(50);
@@ -58,7 +58,7 @@ const userService = {
   },
 
   getUserByEmail: async (email: string): Promise<User | null> => {
-    // Validate email
+    
     const validation = emailSchema.safeParse(email);
     if (!validation.success) {
       throw new Error("Invalid email format");
@@ -85,7 +85,7 @@ const userService = {
   },
 
   getUserByUsername: async (username: string): Promise<User | null> => {
-    // Validate username
+    
     const validation = usernameSchema.safeParse(username);
     if (!validation.success) {
       throw new Error("Invalid username format");
@@ -112,13 +112,13 @@ const userService = {
   },
 
   registerUser: async (user: RegisterUser): Promise<User> => {
-    // Validate registration data
+    
     const validation = registerUserSchema.safeParse(user);
     if (!validation.success) {
       throw new Error(`Validation error: ${validation.error.message}`);
     }
 
-    // Check if email or username already exists
+    
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
@@ -153,13 +153,11 @@ const userService = {
   },
 
   deleteUser: async (uuid: string): Promise<User | null> => {
-    // Validate UUID
     const validation = uuidSchema.safeParse(uuid);
     if (!validation.success) {
       throw new Error("Invalid UUID format");
     }
 
-    // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { uuid }
     });
@@ -192,13 +190,11 @@ const userService = {
     uuid: string,
     updateUser: UpdateUser
   ): Promise<User | null> => {
-    // Validate UUID
     const uuidValidation = uuidSchema.safeParse(uuid);
     if (!uuidValidation.success) {
       throw new Error("Invalid UUID format");
     }
 
-    // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { uuid }
     });
@@ -207,7 +203,6 @@ const userService = {
       throw new Error("User not found");
     }
 
-    // If email or username is being updated, check for uniqueness
     if (updateUser.username) {
       const duplicateUser = await prisma.user.findFirst({
         where: {
@@ -223,7 +218,7 @@ const userService = {
       }
     }
 
-    // Update user profile
+  
     const user = await prisma.user.update({
       where: {
         uuid: uuid,
@@ -254,18 +249,18 @@ const userService = {
   },
 
   uploadAvatar: async (uuid: string, avatar: Buffer): Promise<User | null> => {
-    // Validate UUID
+  
     const validation = uuidSchema.safeParse(uuid);
     if (!validation.success) {
       throw new Error("Invalid UUID format");
     }
 
-    // Validate avatar buffer
+ 
     if (!avatar || !(avatar instanceof Buffer)) {
       throw new Error("Invalid avatar format");
     }
 
-    // Check if user exists
+   
     const existingUser = await prisma.user.findUnique({
       where: { uuid }
     });
