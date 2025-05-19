@@ -43,8 +43,8 @@ export const processBookImages = async (books: BookResponse[]) => {
   );
 };
 
-export const handleBookImage = async (book: Book): Promise<BookResponse> => {
-  let bookResponse: BookResponse;
+export const handleBookImage = async (book: Book) => {
+  let bookResponse: any;
 
   if (book.image) {
     const imageBase64 = await processImage(Buffer.from(book.image));
@@ -52,14 +52,21 @@ export const handleBookImage = async (book: Book): Promise<BookResponse> => {
       ...book,
       image: `data:image/png;base64,${imageBase64}`,
       image_url: null,
-      authors: [],
     };
   } else {
     bookResponse = {
       ...book,
       image: null,
-      authors: [],
     };
+  }
+
+  if (
+    bookResponse.authors &&
+    Array.isArray(bookResponse.authors) &&
+    bookResponse.authors.length > 0 &&
+    bookResponse.authors[0].author
+  ) {
+    bookResponse.authors = bookResponse.authors.map((a: any) => a.author.name);
   }
 
   return bookResponse;
