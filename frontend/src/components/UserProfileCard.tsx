@@ -14,10 +14,8 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
 
-dayjs.locale("pt-br");
+import { dateFormater } from "@/utils/dateUtils";
 
 export default function UserProfileCard({
   user,
@@ -26,11 +24,6 @@ export default function UserProfileCard({
   user: User | null;
   className?: string;
 }) {
-  const dateFormater = (date: string | Date) => {
-    const data = dayjs(date).format("DD [de] MMMM [de] YYYY");
-    return data;
-  };
-
   const [userData, setUserData] = useState<User | null>(user);
   const [loading, setLoading] = useState(true);
 

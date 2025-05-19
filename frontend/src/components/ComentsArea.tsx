@@ -8,6 +8,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import CreateUpdateModel from "./CreateUpdateModel";
 import { deleteReview, updateReview } from "@/services/reviewService";
 import { Comment, CommentsAreaProps } from "@/types/commentsTypes";
+import { dateFormater } from "@/utils/dateUtils";
 
 export default function CommentsArea({
   comments,
@@ -65,7 +66,11 @@ export default function CommentsArea({
             <div>
               <p className="font-semibold">{comment.user.name}</p>
               <p className="text-sm text-gray-500">
-                Avaliado em {new Date(comment.createdAt).toLocaleDateString()}
+                {comment.created_at ? (
+                  <>Avaliado em {dateFormater(comment.created_at)}</>
+                ) : (
+                  <>data não dita</>
+                )}
               </p>
             </div>
             <div className="flex items-center">
