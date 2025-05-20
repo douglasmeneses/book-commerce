@@ -14,14 +14,18 @@ import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 import { LoaderCircle } from "lucide-react";
 export default function BookPage() {
   const [book, setBook] = useState<Book | null>(null);
-  const [user, setUser] = useState(() => {
-    const storedUser = getUserInLocalStorageItem();
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const [user, setUser] = useState<any>(null);
   const { id } = useParams();
   const [reviews, setReviews] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = getUserInLocalStorageItem();
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchBook = async () => {
