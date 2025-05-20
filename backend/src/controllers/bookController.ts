@@ -70,9 +70,12 @@ const bookController = {
   },
   getBookByUUID: async (req: Request, res: Response): Promise<Response> => {
     const uuid = req.params.uuid;
+    const user_uuid = req.query.user_uuid as string | undefined;
 
     try {
-      const response = await bookService.getBookByUUID(uuid);
+      const response = await bookService.getBookByUUID(uuid, user_uuid);
+      if ("error" in response)
+        return res.status(400).json({ error: response.error });
 
       if (!response) {
         return res.status(404).json({ error: "Book not found" });
