@@ -75,7 +75,6 @@ export const handleBookImage = async (book: Book) => {
 export const bookWhere = async (filter: Filter) => {
   const { search, author, genre, publisher, isbn, title, minPrice, maxPrice } =
     filter;
-  console.log("Filter:", filter);
 
   const where: any = {
     OR: [
