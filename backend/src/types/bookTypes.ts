@@ -41,7 +41,6 @@ export interface BookResponse {
   image_url?: string | null;
   price: number;
   synopsis: string;
-  authors: string[];
   rating?: number;
 }
 

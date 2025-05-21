@@ -3,7 +3,7 @@ export interface Comment {
   user: { uuid: string; name: string };
   rating: number;
   content: string;
-  createdAt: string;
+  created_at: string;
 }
 
 export interface CommentsAreaProps {

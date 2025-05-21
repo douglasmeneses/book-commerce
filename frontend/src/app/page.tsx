@@ -32,21 +32,22 @@ export default function Home() {
 
   useEffect(() => {
     const storedUser = getUserInLocalStorageItem();
-    setUser(storedUser ? JSON.parse(storedUser) : null);
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    setUser(parsedUser);
 
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        const mostLiked = await getBooks({ mostLiked: true }, user?.uuid || "");
+        const uuid = parsedUser?.uuid || "";
+
+        const mostLiked = await getBooks({ mostLiked: true }, uuid);
         setMostLikedBooks(mostLiked);
 
-        const mostRecent = await getBooks(
-          { mostRecent: true },
-          user?.uuid || ""
-        );
+        const mostRecent = await getBooks({ mostRecent: true }, uuid);
         setMostRecentBooks(mostRecent);
-        if (user) {
-          const recomendations = await getRecommendations(user?.uuid);
+
+        if (parsedUser?.uuid) {
+          const recomendations = await getRecommendations(parsedUser.uuid);
           setRecomendationsBooks(recomendations);
         }
       } catch (error) {

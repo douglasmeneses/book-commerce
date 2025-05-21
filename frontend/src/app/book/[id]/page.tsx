@@ -11,7 +11,7 @@ import CreateUpdateModel from "@/components/CreateUpdateModel";
 import { getReviewsByBook, createReview } from "@/services/reviewService";
 import CommentsArea from "@/components/ComentsArea";
 import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
-
+import { LoaderCircle } from "lucide-react";
 export default function BookPage() {
   const [book, setBook] = useState<Book | null>(null);
   const [user, setUser] = useState<any>(null);
@@ -31,8 +31,10 @@ export default function BookPage() {
     const fetchBook = async () => {
       try {
         if (typeof id === "string") {
-          const bookData = await getBookByUUID(id);
-          setBook(bookData);
+          const bookData = await getBookByUUID(id, user?.uuid);
+          setTimeout(() => {
+            setBook(bookData);
+          }, 500);
         }
       } catch (error) {
         console.error("Erro ao buscar livro:", error);
@@ -107,7 +109,11 @@ export default function BookPage() {
   };
 
   if (!book) {
-    return <p>Carregando...</p>;
+    return (
+      <div className="w-full flex justify-center items-center h-[calc(100dvh-80px)]">
+        <LoaderCircle className="animate-spin text-[#e67e22]" size={40} />
+      </div>
+    );
   }
 
   return (

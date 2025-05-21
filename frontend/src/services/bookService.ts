@@ -60,10 +60,13 @@ export const getFavoriteBooks = async (user_uuid: string) => {
   }
 };
 
-export const getBookByUUID = async (uuid: string) => {
+export const getBookByUUID = async (uuid: string, user_uuid?: string) => {
   try {
     const url = `${API_URL}/${uuid}`;
-    return ApiRequest("get", url);
+    const paramas = {
+      params: { user_uuid: user_uuid ? user_uuid : "" },
+    };
+    return ApiRequest("get", url, paramas);
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Erro ao buscar livro.";
