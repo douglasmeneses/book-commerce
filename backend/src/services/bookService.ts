@@ -113,6 +113,7 @@ const bookService = {
     if (orderByPrice) orderBy.push({ price: orderByPrice });
 
     const cacheKey = `books:${JSON.stringify({
+      genre: filter.genre,
       mostLiked,
       mostRecent,
       page,
@@ -120,9 +121,19 @@ const bookService = {
     })}`;
 
     try {
-      const cachedData = await redisClient.get(cacheKey);
-      if (cachedData) {
-        return JSON.parse(cachedData);
+      const hasFilter =
+        filter.search ||
+        filter.author ||
+        filter.publisher ||
+        filter.isbn ||
+        filter.title ||
+        user_uuid;
+
+      if (!hasFilter) {
+        const cachedData = await redisClient.get(cacheKey);
+        if (cachedData && cachedData !== "[]") {
+          return JSON.parse(cachedData);
+        }
       }
 
       const books = await prisma.book.findMany({
@@ -139,9 +150,11 @@ const bookService = {
       });
       const booksDTO = books.map((book) => new BookResponseDTO(book));
 
-      await redisClient.set(cacheKey, JSON.stringify(booksDTO), {
-        EX: CACHE_EXPIRATION,
-      });
+      if (!hasFilter) {
+        await redisClient.set(cacheKey, JSON.stringify(booksDTO), {
+          EX: CACHE_EXPIRATION,
+        });
+      }
 
       return booksDTO;
     } catch (error) {
