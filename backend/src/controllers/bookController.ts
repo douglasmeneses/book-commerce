@@ -3,6 +3,7 @@ import { bookImageService } from "../services/bookImageService";
 import { Filter } from "../types/bookTypes";
 import { Request, Response } from "express";
 import { processBookImages, handleBookImage } from "../utils/bookUtils";
+import { BookDetailsDTO } from "../dtos/booksDTOs";
 
 const bookController = {
   registerBook: async (req: Request, res: Response): Promise<Response> => {
@@ -87,7 +88,9 @@ const bookController = {
 
       const bookResponse = await handleBookImage(response);
 
-      return res.status(200).json(bookResponse);
+      const bookDTO = new BookDetailsDTO(bookResponse);
+
+      return res.status(200).json(bookDTO);
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "An error occurred",

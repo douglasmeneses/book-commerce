@@ -43,9 +43,7 @@ export default function BookDetails({
           className="rounded shadow-md shadow-gray-500"
         />
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-500">
-            {book.publishers[0]?.publisher.name || "Desconhecido"}
-          </p>
+          <p className="text-sm text-gray-500">{book.publishers.join(", ")}</p>
           <p className="text-lg font-semibold">{book.authors.join(", ")}</p>
         </div>
       </div>
@@ -61,9 +59,7 @@ export default function BookDetails({
         <div className="flex items-center gap-4 mt-4">
           <p className="text-sm text-gray-500">{book.page_count} Páginas</p>
           <p className="text-sm text-gray-500">{book.language}</p>
-          <p className="text-sm text-gray-500">
-            {book.genres.map((genre) => genre.genre.name).join(", ")}
-          </p>
+          <p className="text-sm text-gray-500">{book.genres.join(", ")}</p>
         </div>
 
         <p className="text-3xl font-bold text-[#24140099] mt-4">
