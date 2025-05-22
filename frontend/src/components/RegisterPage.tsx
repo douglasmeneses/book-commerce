@@ -97,6 +97,13 @@ export default function RegisterPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <div className="text-center text-sm text-gray-500">
+          já possui uma conta?{" "}
+          <a href="/login" className="text-[#e67e22]">
+            Login
+          </a>
+        </div>
       </div>
     </div>
   );

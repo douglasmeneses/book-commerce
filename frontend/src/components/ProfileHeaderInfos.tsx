@@ -2,13 +2,18 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import UserProfileCard from "@/components/UserProfileCard";
 import { User } from "@/types/userTypes";
+import { useRouter } from "next/navigation";
 
 export default function ProfileHeaderInfos({ user }: { user: User | null }) {
+  const router = useRouter();
   return (
     <div className="flex flex-row justify-center items-center gap-4 mt-8 mb-4 relative z-[10] min-w-500px">
       <Button
         type="submit"
         className="w-auto min-w-[170px] bg-[#e67e22] text-white"
+        onClick={() => {
+          router.push("/orders");
+        }}
       >
         PEDIDOS
       </Button>
