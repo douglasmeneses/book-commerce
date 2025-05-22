@@ -12,6 +12,8 @@ import { getReviewsByBook, createReview } from "@/services/reviewService";
 import CommentsArea from "@/components/ComentsArea";
 import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+
 export default function BookPage() {
   const [book, setBook] = useState<Book | null>(null);
   const [user, setUser] = useState<any>(null);
@@ -79,6 +81,15 @@ export default function BookPage() {
     review: string;
   }) => {
     try {
+      if (!user_uuid) {
+        toast.error(
+          "Você precisa estar logado para adicionar livros ao carrinho."
+        );
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
+        return;
+      }
       await createReview(book_uuid, user_uuid, review, rating);
       setIsOpen(false);
       const reviews = await getReviewsByBook(book_uuid);
@@ -93,18 +104,6 @@ export default function BookPage() {
       await favoriteBook(book_uuid, user?.uuid || "");
     } catch (error) {
       console.error("Error favoriting book:", error);
-    }
-  };
-
-  const handleAddItem = async (
-    user_uuid: string,
-    book_uuid: string,
-    quantity: number
-  ) => {
-    try {
-      await addItemToCart(user_uuid, book_uuid, quantity);
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
     }
   };
 
