@@ -70,6 +70,7 @@ export const updateUserProfile = async (
   user_uuid: string,
   formData: FormData
 ) => {
+  console.log("formData", formData);
   const url = `${API_URL}/${user_uuid}`;
   try {
     return ApiRequest("put", url, formData);
@@ -115,7 +116,6 @@ export const getRecommendations = async (user_uuid: string) => {
   try {
     const url = `${API_URL}/recommendations/${user_uuid}`;
     const response = await ApiRequest("get", url);
-    console.log("response", response);
     return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -124,5 +124,19 @@ export const getRecommendations = async (user_uuid: string) => {
       );
     }
     throw new Error("Something went wrong to fetch recommendations");
+  }
+};
+
+export const getUserByUuid = async (user_uuid: string) => {
+  const url = `${API_URL}/${user_uuid}`;
+  try {
+    return ApiRequest("get", url);
+  } catch (error) {
+    if (axios.isAxiosError(error))
+      throw new Error(
+        error.response?.data?.message || "Error while fetching user"
+      );
+
+    throw new Error("Something went wrong to fetch user");
   }
 };
