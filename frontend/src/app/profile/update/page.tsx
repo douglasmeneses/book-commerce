@@ -1,20 +1,20 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { updateUserProfile } from "@/services/userServices";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import DeleteUserButton from "@/components/DeleteUserButton";
 import { Save } from "lucide-react";
-import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+import DeleteUserButton from "@/components/DeleteUserButton";
+import { getUserByUuid, updateUserProfile } from "@/services/userServices";
 import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
+// Schema de validação
 const profileUpdateSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
   username: z
@@ -24,10 +24,7 @@ const profileUpdateSchema = z.object({
   password: z.string().optional(),
   phone: z
     .string()
-    .regex(
-      /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/,
-      "O telefone deve estar no formato (11) 91234-5678"
-    )
+    .regex(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/, "Telefone inválido")
     .optional(),
   cpf: z
     .string()
@@ -44,9 +41,19 @@ const profileUpdateSchema = z.object({
 type ProfileUpdateForm = z.infer<typeof profileUpdateSchema>;
 
 export default function ProfileUpdatePage() {
-  const { toast } = useToast();
   const router = useRouter();
-  const [user_uuid, setUserUuid] = useState<string>("");
+  const [userUuid, setUserUuid] = useState("");
+  const [formData, setFormData] = useState<ProfileUpdateForm>({
+    name: "",
+    username: "",
+    password: "",
+    phone: "",
+    cpf: "",
+    birthDate: "",
+    avatar: undefined,
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const storedUser = getUserInLocalStorageItem();
@@ -54,43 +61,63 @@ export default function ProfileUpdatePage() {
     setUserUuid(parsedUser?.uuid || "");
   }, []);
 
-  const form = useForm<ProfileUpdateForm>({
-    resolver: zodResolver(profileUpdateSchema),
-    defaultValues: {
-      name: "",
-      username: "",
-      phone: "",
-      cpf: "",
-      birthDate: "",
-      avatar: undefined,
-    },
-  });
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!userUuid) return;
 
-  const handleSubmit = async (data: ProfileUpdateForm) => {
-    try {
-      const formData = new FormData();
-      formData.append("username", data.username || "");
-      formData.append("name", data.name || "");
-      formData.append("password", data.password || "");
-      if (data.avatar) {
-        formData.append("avatar", data.avatar);
+      try {
+        const response = await getUserByUuid(userUuid);
+        const user = response.user;
+        setFormData((prev) => ({
+          ...prev,
+          name: user.name || "",
+          username: user.username || "",
+          phone: user.phone || "",
+          cpf: user.cpf || "",
+          birthDate: user.birth_date?.split("T")[0] || "",
+        }));
+      } catch {
+        toast.error("Erro ao carregar os dados do usuário.");
       }
-      formData.append("cpf", data.cpf || "");
-      formData.append("phone", data.phone || "");
-      formData.append("birthDate", data.birthDate || "");
+    };
 
-      await updateUserProfile(user_uuid, formData);
-      toast({
-        title: "Sucesso",
-        description: "Perfil atualizado com sucesso!",
+    fetchUser();
+  }, [userUuid]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: files ? files[0] : value,
+    }));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const result = profileUpdateSchema.safeParse(formData);
+
+    if (!result.success) {
+      const zodErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          zodErrors[err.path[0] as string] = err.message;
+        }
       });
+      setErrors(zodErrors);
+      return;
+    }
+
+    try {
+      const submission = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) submission.append(key, value as string | Blob);
+      });
+
+      await updateUserProfile(userUuid, submission);
+      toast.success("Perfil atualizado com sucesso!");
       router.push("/profile");
     } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível atualizar o perfil. Tente novamente.",
-        variant: "destructive",
-      });
+      toast.error("Erro ao atualizar o perfil.");
     }
   };
 
@@ -98,118 +125,112 @@ export default function ProfileUpdatePage() {
     <div className="max-w-7xl mx-auto p-6">
       <form
         className="space-y-4"
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
-        <div className="flex flex-row justify-between items-center gap-8 mb-4">
+        <div className="flex justify-between items-center gap-8 mb-4">
           <h1 className="text-3xl font-bold mb-6 text-[#241400]">
             Atualizar Dados
           </h1>
+
           <div className="flex items-center gap-4">
             <Input
               id="avatar"
-              className="border border-[#E16A0099] rounded-md p-2 mb-4 w-80 text-[#E16A00]"
               type="file"
               accept="image/*"
-              {...form.register("avatar")}
+              onChange={handleChange}
+              className="border border-[#E16A0099] rounded-md p-2 mb-4 w-80 text-[#E16A00]"
             />
-            {form.formState.errors.avatar && (
-              <p className="text-red-500 text-sm">
-                {typeof form.formState.errors.avatar.message === "string"
-                  ? form.formState.errors.avatar.message
-                  : "Erro no campo avatar"}
-              </p>
+            {errors.avatar && (
+              <p className="text-red-500 text-sm">{errors.avatar}</p>
             )}
+
             <Avatar className="w-24 h-24 mb-4">
               <AvatarImage alt="Avatar" />
               <AvatarFallback className="bg-gray-200 text-gray-500">
-                {form.watch("name")?.charAt(0).toUpperCase()}
+                {formData.name?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </div>
         </div>
-
         <div>
           <Label htmlFor="name">Nome</Label>
-          <Input id="name" placeholder="Seu nome" {...form.register("name")} />
-          {form.formState.errors.name && (
-            <p className="text-red-500 text-sm">
-              {form.formState.errors.name.message}
-            </p>
-          )}
-        </div>
+          <Input
+            id="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            className="border border-[#E16A0099] rounded-md p-2 mb-4"
+          />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
 
-        <div>
           <Label htmlFor="username">Apelido</Label>
           <Input
             id="username"
-            placeholder="Seu apelido de usuário"
-            {...form.register("username")}
+            type="text"
+            value={formData.username}
+            onChange={handleChange}
+            className="border border-[#E16A0099] rounded-md p-2 mb-4"
           />
-          {form.formState.errors.username && (
-            <p className="text-red-500 text-sm">
-              {form.formState.errors.username.message}
-            </p>
+          {errors.username && (
+            <p className="text-red-500 text-sm">{errors.username}</p>
           )}
-        </div>
 
-        <div>
           <Label htmlFor="password">Senha</Label>
           <Input
             id="password"
             type="password"
-            placeholder="Sua senha"
-            {...form.register("password")}
+            value={formData.password}
+            onChange={handleChange}
+            className="border border-[#E16A0099] rounded-md p-2 mb-4"
           />
-          {form.formState.errors.password && (
-            <p className="text-red-500 text-sm">
-              {form.formState.errors.password.message}
-            </p>
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
           )}
-        </div>
 
-        <div>
           <Label htmlFor="phone">Telefone</Label>
           <Input
             id="phone"
-            placeholder="(11) 91234-5678"
-            {...form.register("phone")}
+            type="text"
+            value={formData.phone}
+            onChange={handleChange}
+            className="border border-[#E16A0099] rounded-md p-2 mb-4"
           />
-          {form.formState.errors.phone && (
-            <p className="text-red-500 text-sm">
-              {form.formState.errors.phone.message}
-            </p>
+          {errors.phone && (
+            <p className="text-red-500 text-sm">{errors.phone}</p>
           )}
-        </div>
 
-        <div>
           <Label htmlFor="cpf">CPF</Label>
-          <Input id="cpf" placeholder="12345678900" {...form.register("cpf")} />
-          {form.formState.errors.cpf && (
-            <p className="text-red-500 text-sm">
-              {form.formState.errors.cpf.message}
-            </p>
+          <Input
+            id="cpf"
+            type="text"
+            value={formData.cpf}
+            onChange={handleChange}
+            className="border border-[#E16A0099] rounded-md p-2 mb-4"
+          />
+          {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf}</p>}
+
+          <Label htmlFor="birthDate">Data de Nascimento</Label>
+          <Input
+            id="birthDate"
+            type="date"
+            value={formData.birthDate}
+            onChange={handleChange}
+            className="border border-[#E16A0099] rounded-md p-2 mb-4"
+          />
+          {errors.birthDate && (
+            <p className="text-red-500 text-sm">{errors.birthDate}</p>
           )}
         </div>
 
-        <div>
-          <Label htmlFor="birthDate">Data de Nascimento</Label>
-          <Input id="birthDate" type="date" {...form.register("birthDate")} />
-          {form.formState.errors.birthDate && (
-            <p className="text-red-500 text-sm">
-              {form.formState.errors.birthDate.message}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-row justify-center items-center gap-4">
+        <div className="flex justify-center items-center gap-4">
           <Button
             type="submit"
             className="w-80 bg-[#e67e22] text-white mt-10 mb-8"
           >
-            Salvar Dados
-            <Save />
+            Salvar Dados <Save />
           </Button>
-          <DeleteUserButton user_uuid={user_uuid} />
+          <DeleteUserButton user_uuid={userUuid} />
         </div>
       </form>
     </div>
