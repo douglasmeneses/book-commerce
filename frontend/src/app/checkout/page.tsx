@@ -78,7 +78,7 @@ export default function CheckoutPage() {
     try {
       await orderService.createOrder(user_uuid, order);
       toast.success("Pedido realizado com sucesso!");
-      router.push("/pedidos");
+      router.push("/orders");
     } catch (err) {
       toast.error("Erro ao finalizar pedido.");
     }

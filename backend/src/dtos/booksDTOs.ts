@@ -14,7 +14,7 @@ export class BookResponseDTO {
   created_at: string;
   updated_at: string;
   image_url: string | null;
-  image?: Buffer | null;
+  image?: string | null;
   authors: string[];
   genres: { name: string }[];
   favorites: { id: number }[];
@@ -28,7 +28,7 @@ export class BookResponseDTO {
     this.language = book.language;
     this.price = parseFloat(book.price.toString());
     this.ISBN = book.ISBN;
-    this.rating = parseFloat(book.rating?.toString() || '0');
+    this.rating = parseFloat(book.rating?.toString() || "0");
     this.favorite_count = book.favorite_count;
     this.page_count = book.page_count;
     this.stock_quantity = book.stock_quantity;
@@ -42,7 +42,9 @@ export class BookResponseDTO {
     this.favorites = Array.isArray(book.favorites)
       ? book.favorites.map((fav: any) => ({ id: fav.id }))
       : [];
-    this.publishers = book.publishers.map((p: any) => ({ name: p.publisher.name }));
+    this.publishers = book.publishers.map((p: any) => ({
+      name: p.publisher.name,
+    }));
   }
 }
 
