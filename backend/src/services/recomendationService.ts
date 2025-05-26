@@ -69,19 +69,23 @@ const recomendationService = {
       );
 
       const booksArray1 = await Promise.all(
-        bookTitles.map((title: string) => bookService.getBooks({ title }))
+        bookTitles.map((title: string) =>
+          bookService.getBooks({ title }, user_uuid)
+        )
       );
 
       const booksArray2 = await Promise.all(
-        bookAuthors.map((author) => bookService.getBooks({ author }))
+        bookAuthors.map((author) => bookService.getBooks({ author }, user_uuid))
       );
 
       const booksArray3 = await Promise.all(
-        bookGenres.map((genre) => bookService.getBooks({ genre }))
+        bookGenres.map((genre) => bookService.getBooks({ genre }, user_uuid))
       );
 
       const booksArray4 = await Promise.all(
-        bookPublishers.map((publisher) => bookService.getBooks({ publisher }))
+        bookPublishers.map((publisher) =>
+          bookService.getBooks({ publisher }, user_uuid)
+        )
       );
 
       const allBooks = [
