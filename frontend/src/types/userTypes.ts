@@ -1,3 +1,5 @@
+import { Key } from "readline";
+
 export interface RegisterUser {
   name: string;
   username: string;
@@ -36,6 +38,7 @@ export interface User {
 
 
 export interface Address {
+  uuid: Key | null | undefined;
   street: string;
   number: string;
   neighborhood: string;
