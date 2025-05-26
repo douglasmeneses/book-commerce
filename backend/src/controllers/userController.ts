@@ -69,105 +69,36 @@ const userController = {
       try {
         const authResponse = await axios.post<{
           token: string;
-          refreshToken: string;
           error?: boolean;
-          message?: string;
+          refreshToken: string;
         }>(`${AUTH_SERVICE_URL}/login`, { email, password });
 
         if (authResponse.data.error) {
-          console.error(
-            "Serviço de autenticação externo retornou 'error: true' na resposta:",
-            authResponse.data
-          );
-          return res.status(401).json({
-            error: "Falha na autenticação",
-            message:
-              authResponse.data.message ||
-              "Credenciais inválidas ou erro indicado pelo serviço de autenticação.",
+          return res.status(500).json({
+            error: "Erro na autenticação",
+            message: "Erro ao autenticar. Tente novamente mais tarde.",
           });
         }
-
-        const userPayload = {
-          uuid: user.uuid,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          // address: user.address, // Verifique e ajuste conforme a definição do seu tipo User
-        };
 
         return res.status(200).json({
           message: "Login realizado com sucesso!",
-          user: userPayload,
+          user: user,
           token: authResponse.data.token,
           refreshToken: authResponse.data.refreshToken,
         });
-      } catch (authError: any) { // Usar 'any' para authError para acesso flexível às propriedades
-        console.error(
-          "Erro detalhado ao autenticar com o serviço externo:",
-          authError
-        );
-
-        if (authError.isAxiosError) {
-          if (authError.response) {
-            console.error(
-              "Resposta de erro do serviço de autenticação:",
-              authError.response.data
-            );
-            console.error(
-              "Status do erro do serviço de autenticação:",
-              authError.response.status
-            );
-            return res
-              .status(authError.response.status || 502)
-              .json({
-                error: "Erro na comunicação com o serviço de autenticação",
-                message:
-                  authError.response.data?.message ||
-                  authError.response.data?.error ||
-                  "O serviço de autenticação retornou um erro.",
-                details: authError.response.data,
-              });
-          } else if (authError.request) {
-            console.error(
-              "Nenhuma resposta recebida do serviço de autenticação:",
-              authError.request
-            );
-            return res.status(503).json({
-              error: "Serviço de autenticação indisponível",
-              message:
-                "Não foi possível conectar ao serviço de autenticação. Tente novamente mais tarde.",
-            });
-          } else {
-            console.error(
-              "Erro ao configurar requisição para serviço de autenticação:",
-              authError.message
-            );
-            return res.status(500).json({
-              error:
-                "Erro interno ao tentar contatar o serviço de autenticação",
-              message:
-                "Ocorreu um problema ao preparar a comunicação com o serviço de autenticação.",
-            });
-          }
-        } else {
-          // Fallback para erros não Axios ou erros onde isAxiosError não está presente
-          console.error("Erro não Axios na autenticação externa:", authError);
-          return res.status(500).json({
-            error: "Erro inesperado na autenticação externa",
-            message:
-              authError.message ||
-              "Ocorreu um erro inesperado ao tentar autenticar com o serviço externo.",
-          });
-        }
+      } catch (authError) {
+        console.error("Erro ao autenticar no serviço externo:", authError);
+        return res.status(500).json({
+          error: "Erro na autenticação externa",
+          message:
+            "Erro ao autenticar com o serviço externo. Tente novamente mais tarde.",
+        });
       }
     } catch (error) {
-      console.error(
-        "Erro interno antes de chamar o serviço de autenticação:",
-        error
-      );
+      console.error("Erro ao tentar fazer login:", error);
       return res.status(500).json({
         error: "Erro interno do servidor",
-        message: "Erro ao processar dados do usuário. Tente novamente mais tarde.",
+        message: "Erro ao tentar fazer o login. Tente novamente mais tarde.",
       });
     }
   },
@@ -284,7 +215,7 @@ const userController = {
     const { uuid } = req.params;
 
     try {
-      const address = await userService.getUserAddresses(uuid); // Verifique se o método 'getUserAddress' está funcionando corretamente
+      const address = await userService.getUserAddresses(uuid); 
       if (!address) {
         return res.status(404).json({ message: "Endereço não encontrado" });
       }
