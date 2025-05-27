@@ -4,7 +4,6 @@ import { z } from "zod";
 
 const prisma = new PrismaClient();
 
-
 const uuidSchema = z.string().uuid();
 const emailSchema = z.string().email();
 const usernameSchema = z.string().min(3).max(50);
@@ -38,16 +37,16 @@ const userService = {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
         favorites: {
           include: {
             book: true,
-          }
+          },
         },
         reviews: true,
-        orders: true
-      }
+        orders: true,
+      },
     });
 
     if (!user) {
@@ -58,7 +57,6 @@ const userService = {
   },
 
   getUserByEmail: async (email: string): Promise<User | null> => {
-    
     const validation = emailSchema.safeParse(email);
     if (!validation.success) {
       throw new Error("Invalid email format");
@@ -72,9 +70,9 @@ const userService = {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
-      }
+      },
     });
 
     if (!user) {
@@ -85,7 +83,6 @@ const userService = {
   },
 
   getUserByUsername: async (username: string): Promise<User | null> => {
-    
     const validation = usernameSchema.safeParse(username);
     if (!validation.success) {
       throw new Error("Invalid username format");
@@ -99,9 +96,9 @@ const userService = {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
-      }
+      },
     });
 
     if (!user) {
@@ -112,37 +109,51 @@ const userService = {
   },
 
   registerUser: async (user: RegisterUser): Promise<User> => {
-    
     const validation = registerUserSchema.safeParse(user);
     if (!validation.success) {
       throw new Error(`Validation error: ${validation.error.message}`);
     }
 
-    
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [
-          { email: user.email },
-          { username: user.username }
-        ]
-      }
+        OR: [{ email: user.email }, { username: user.username }],
+      },
     });
 
     if (existingUser) {
       throw new Error("Email or username already exists");
     }
 
+    const { address, ...userData } = user;
+
+    const createdAddress = await prisma.address.create({
+      data: {
+        street: address.street,
+        number: address.number,
+        city: address.city,
+        state: address.state,
+        zip_code: address.zip_code,
+        country: address.country || "Brasil",
+      },
+    });
+
     const newUser = await prisma.user.create({
       data: {
-        ...user,
+        ...userData,
+        addresses: {
+          create: {
+            is_default: true,
+            address_id: createdAddress.id,
+          },
+        },
       },
       include: {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
-      }
+      },
     });
 
     if (!newUser) {
@@ -159,7 +170,7 @@ const userService = {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { uuid }
+      where: { uuid },
     });
 
     if (!existingUser) {
@@ -174,9 +185,9 @@ const userService = {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
-      }
+      },
     });
 
     if (!user) {
@@ -196,7 +207,7 @@ const userService = {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { uuid }
+      where: { uuid },
     });
 
     if (!existingUser) {
@@ -206,11 +217,8 @@ const userService = {
     if (updateUser.username) {
       const duplicateUser = await prisma.user.findFirst({
         where: {
-          AND: [
-            { uuid: { not: uuid } },
-            { username: updateUser.username }
-          ]
-        }
+          AND: [{ uuid: { not: uuid } }, { username: updateUser.username }],
+        },
       });
 
       if (duplicateUser) {
@@ -218,7 +226,6 @@ const userService = {
       }
     }
 
-  
     const user = await prisma.user.update({
       where: {
         uuid: uuid,
@@ -230,15 +237,15 @@ const userService = {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
         favorites: {
           include: {
             book: true,
-          }
+          },
         },
         reviews: true,
-      }
+      },
     });
 
     if (!user) {
@@ -249,20 +256,17 @@ const userService = {
   },
 
   uploadAvatar: async (uuid: string, avatar: Buffer): Promise<User | null> => {
-  
     const validation = uuidSchema.safeParse(uuid);
     if (!validation.success) {
       throw new Error("Invalid UUID format");
     }
 
- 
     if (!avatar || !(avatar instanceof Buffer)) {
       throw new Error("Invalid avatar format");
     }
 
-   
     const existingUser = await prisma.user.findUnique({
-      where: { uuid }
+      where: { uuid },
     });
 
     if (!existingUser) {
@@ -276,31 +280,35 @@ const userService = {
         addresses: {
           include: {
             address: true,
-          }
+          },
         },
-      }
+      },
     });
 
     return user;
   },
 
-  getUserAddresses: async (uuid: string): Promise<{
-    is_default: boolean;
-    label: string | null;
-    address: {
-      number: string;
-      id: number;
-      created_at: Date;
-      updated_at: Date;
-      street: string;
-      neighborhood: string | null;
-      complement: string | null;
-      city: string;
-      state: string;
-      zip_code: string;
-      country: string;
-    };
-  }[]> => {
+  getUserAddresses: async (
+    uuid: string
+  ): Promise<
+    {
+      is_default: boolean;
+      label: string | null;
+      address: {
+        number: string;
+        id: number;
+        created_at: Date;
+        updated_at: Date;
+        street: string;
+        neighborhood: string | null;
+        complement: string | null;
+        city: string;
+        state: string;
+        zip_code: string;
+        country: string;
+      };
+    }[]
+  > => {
     const user = await prisma.user.findUnique({
       where: { uuid },
       select: {
@@ -327,16 +335,15 @@ const userService = {
         },
       },
     });
-  
+
     if (!user || !user.addresses) return [];
-  
+
     return user.addresses.map((address) => ({
       is_default: address.is_default,
       label: address.label,
       address: address.address,
     }));
-  }
-  
+  },
 };
 
 export default userService;
