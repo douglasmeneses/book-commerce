@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Cart } from "@/types/cartTypes";
 import { Card } from "@/components/ui/card";
@@ -6,6 +8,16 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function SubTotalCart({ cart }: { cart: Cart }) {
+  const router = useRouter();
+
+  const handleConcluirCompra = () => {
+    if (!cart || !cart.cartItem || cart.cartItem.length === 0) {
+      toast.error("Seu carrinho está vazio. Adicione itens antes de prosseguir.");
+      return;
+    }
+    router.push("/checkout");
+  };
+
   return (
     <div className="Subtotal flex font-bold w-1/5 mt-9">
       <Card className="bg-white rounded-md shadow-md p-4 text-base w-full h-1/5 flex flex-col justify-center items-center">
@@ -24,9 +36,7 @@ export default function SubTotalCart({ cart }: { cart: Cart }) {
         <Button
           variant="secondary"
           className="mt-4 bg-orange-600 text-white rounded-md p-2 w-full text-base hover:bg-black"
-          onClick={() => {
-            toast.success("Compra realizada com sucesso!");
-          }}
+          onClick={handleConcluirCompra}
         >
           Concluir Compra
         </Button>

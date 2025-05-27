@@ -215,7 +215,7 @@ const userController = {
     const { uuid } = req.params;
 
     try {
-      const address = await userService.getUserAddresses(uuid); // Verifique se o método 'getUserAddress' está funcionando corretamente
+      const address = await userService.getUserAddresses(uuid); 
       if (!address) {
         return res.status(404).json({ message: "Endereço não encontrado" });
       }
