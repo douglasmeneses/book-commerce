@@ -8,7 +8,8 @@ const AUTH_SERVICE_URL = "https://api-auth-4gd7.onrender.com/api/auth/";
 
 const userController = {
   registerUser: async (req: Request, res: Response): Promise<Response> => {
-    const { name, username, email, password, address } = req.body;
+    const { name, username, email, password, birth_date, cpf, phone, address } =
+      req.body;
 
     try {
       const existingUser = await userService.getUserByEmail(email);
@@ -33,6 +34,9 @@ const userController = {
         username,
         email,
         password: hashedPassword,
+        birth_date,
+        cpf,
+        phone,
         address,
       });
 
@@ -80,9 +84,13 @@ const userController = {
           });
         }
 
+        const avatarBase64 = user.avatar
+          ? await processAvatar(Buffer.from(user.avatar))
+          : null;
+
         return res.status(200).json({
           message: "Login realizado com sucesso!",
-          user: user,
+          user: { ...user, avatar: `data:image/png;base64,${avatarBase64}` },
           token: authResponse.data.token,
           refreshToken: authResponse.data.refreshToken,
         });
@@ -111,7 +119,13 @@ const userController = {
         return res.status(404).json({ error: "Usuário não encontrado" });
       }
 
-      return res.status(200).json({ user });
+      const avatarBase64 = user.avatar
+        ? await processAvatar(Buffer.from(user.avatar))
+        : null;
+
+      return res.status(200).json({
+        user: { ...user, avatar: `data:image/png;base64,${avatarBase64}` },
+      });
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "Ocorreu um erro",
@@ -123,6 +137,10 @@ const userController = {
     const uuid = req.params.uuid;
     const { username, name, password, avatar, cpf, phone, birth_date } =
       req.body;
+    const hashedPassword = password
+      ? await bcrypt.hash(password, 10)
+      : undefined;
+
     if (birth_date && !/^\d{4}-\d{2}-\d{2}$/.test(birth_date)) {
       return res.status(400).json({
         error: "Data de nascimento inválida. O formato correto é YYYY-MM-DD.",
@@ -134,7 +152,7 @@ const userController = {
       const user = await userService.updateUserProfile(uuid, {
         username,
         name,
-        password,
+        password: hashedPassword,
         avatar: avatar ? Buffer.from(avatar, "base64") : undefined,
         cpf,
         phone,
@@ -145,9 +163,14 @@ const userController = {
         return res.status(404).json({ error: "Usuário não encontrado" });
       }
 
-      return res
-        .status(200)
-        .json({ message: "Perfil atualizado com sucesso", user });
+      const avatarBase64 = user.avatar
+        ? await processAvatar(Buffer.from(user.avatar))
+        : null;
+
+      return res.status(200).json({
+        message: "Perfil atualizado com sucesso",
+        user: { ...user, avatar: `data:image/png;base64,${avatarBase64}` },
+      });
     } catch (error) {
       return res.status(400).json({
         error: error instanceof Error ? error.message : "Ocorreu um erro",

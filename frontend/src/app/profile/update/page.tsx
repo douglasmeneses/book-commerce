@@ -9,29 +9,41 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Save } from "lucide-react";
 import { toast } from "sonner";
+import { cpf as cpfValidator } from "cpf-cnpj-validator";
 
 import DeleteUserButton from "@/components/DeleteUserButton";
-import { getUserByUuid, updateUserProfile } from "@/services/userServices";
+import {
+  getUserByUuid,
+  updateUserProfile,
+  uploadUserAvatar,
+} from "@/services/userServices";
 import { getUserInLocalStorageItem } from "@/utils/localStorageUtils";
 
-// Schema de validação
 const profileUpdateSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
   username: z
     .string()
     .min(3, "O nome de usuário deve ter pelo menos 3 caracteres")
     .optional(),
-  password: z.string().optional(),
+  password: z
+    .string()
+    .min(8, "A senha deve ter pelo menos 8 caracteres")
+    .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
+    .regex(/[0-9]/, "A senha deve conter pelo menos um número")
+    .regex(/[@$!%*?&.]/, "A senha deve conter pelo menos um caractere especial")
+    .optional(),
   phone: z
     .string()
     .regex(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/, "Telefone inválido")
     .optional(),
   cpf: z
     .string()
-    .length(11, "O CPF deve ter exatamente 11 dígitos")
-    .regex(/^\d+$/, "O CPF deve conter apenas números")
+    .length(14, "O CPF deve ter 11 dígitos")
+    .refine((value) => cpfValidator.isValid(value), {
+      message: "CPF inválido",
+    })
     .optional(),
-  birthDate: z
+  birth_date: z
     .string()
     .refine((value) => !isNaN(Date.parse(value)), "Data de nascimento inválida")
     .optional(),
@@ -49,7 +61,7 @@ export default function ProfileUpdatePage() {
     password: "",
     phone: "",
     cpf: "",
-    birthDate: "",
+    birth_date: "",
     avatar: undefined,
   });
 
@@ -68,13 +80,15 @@ export default function ProfileUpdatePage() {
       try {
         const response = await getUserByUuid(userUuid);
         const user = response.user;
+        console.log("Dados do usuário:", user);
         setFormData((prev) => ({
           ...prev,
           name: user.name || "",
           username: user.username || "",
           phone: user.phone || "",
           cpf: user.cpf || "",
-          birthDate: user.birth_date?.split("T")[0] || "",
+          birth_date: user.birth_date?.split("T")[0] || "",
+          avatar: user.avatar || "",
         }));
       } catch {
         toast.error("Erro ao carregar os dados do usuário.");
@@ -94,8 +108,8 @@ export default function ProfileUpdatePage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const result = profileUpdateSchema.safeParse(formData);
 
+    const result = profileUpdateSchema.safeParse(formData);
     if (!result.success) {
       const zodErrors: Record<string, string> = {};
       result.error.errors.forEach((err) => {
@@ -108,12 +122,28 @@ export default function ProfileUpdatePage() {
     }
 
     try {
-      const submission = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value) submission.append(key, value as string | Blob);
-      });
+      if (formData.avatar instanceof File) {
+        const avatarResponse = await uploadUserAvatar(
+          userUuid,
+          formData.avatar
+        );
+        console.log("Avatar atualizado:", avatarResponse);
+        if (avatarResponse.error) {
+          toast.error("Erro ao atualizar o avatar.");
+          return;
+        }
+      }
 
-      await updateUserProfile(userUuid, submission);
+      // Remove o avatar dos dados antes de enviar o restante
+      const { avatar, ...rest } = formData;
+
+      const filteredData = Object.fromEntries(
+        Object.entries(rest).filter(([_, value]) => value)
+      );
+
+      console.log("Dados atualizados (sem avatar):", filteredData);
+
+      await updateUserProfile(userUuid, filteredData);
       toast.success("Perfil atualizado com sucesso!");
       router.push("/profile");
     } catch (error) {
@@ -146,7 +176,13 @@ export default function ProfileUpdatePage() {
             )}
 
             <Avatar className="w-24 h-24 mb-4">
-              <AvatarImage alt="Avatar" />
+              <AvatarImage
+                src={
+                  formData.avatar instanceof File
+                    ? URL.createObjectURL(formData.avatar)
+                    : formData.avatar || undefined
+                }
+              />
               <AvatarFallback className="bg-gray-200 text-gray-500">
                 {formData.name?.charAt(0).toUpperCase()}
               </AvatarFallback>
@@ -210,16 +246,16 @@ export default function ProfileUpdatePage() {
           />
           {errors.cpf && <p className="text-red-500 text-sm">{errors.cpf}</p>}
 
-          <Label htmlFor="birthDate">Data de Nascimento</Label>
+          <Label htmlFor="birth_date">Data de Nascimento</Label>
           <Input
-            id="birthDate"
+            id="birth_date"
             type="date"
-            value={formData.birthDate}
+            value={formData.birth_date}
             onChange={handleChange}
             className="border border-[#E16A0099] rounded-md p-2 mb-4"
           />
-          {errors.birthDate && (
-            <p className="text-red-500 text-sm">{errors.birthDate}</p>
+          {errors.birth_date && (
+            <p className="text-red-500 text-sm">{errors.birth_date}</p>
           )}
         </div>
 
