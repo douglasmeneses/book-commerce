@@ -2,7 +2,7 @@ import axios from "axios";
 import { RegisterUser, UpdateUser } from "@/types/userTypes";
 import { cleanToken } from "@/utils/tokenUtils";
 
-const API_URL = "https://backend-llyr.onrender.com/users";
+const API_URL = "http://localhost:3001/users";
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
@@ -70,10 +70,19 @@ export const updateUserProfile = async (
   user_uuid: string,
   updatedData: UpdateUser
 ) => {
-  console.log("formData", updatedData);
   const url = `${API_URL}/${user_uuid}`;
   try {
-    return ApiRequest("put", url, updatedData);
+    await ApiRequest("put", url, updatedData);
+    const updatedUser = await getUserByUuid(user_uuid);
+
+    const storedUser = localStorage.getItem("user");
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+    if (JSON.stringify(parsedUser) !== JSON.stringify(updatedUser)) {
+      localStorage.setItem("user", JSON.stringify(updatedUser.user));
+    }
+
+    return updatedUser;
   } catch (error) {
     if (axios.isAxiosError(error))
       throw new Error(
