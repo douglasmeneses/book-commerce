@@ -1,8 +1,9 @@
 import axios from "axios";
-import { RegisterUser } from "@/types/userTypes";
+import { RegisterUser, UpdateUser } from "@/types/userTypes";
 import { cleanToken } from "@/utils/tokenUtils";
 
-const API_URL = "https://backend-llyr.onrender.com/users";
+// const API_URL = "https://backend-llyr.onrender.com/users";
+const API_URL = "http://localhost:3001/users"; // Use this for local development
 
 const ApiRequest = async (
   method: "get" | "post" | "put" | "delete",
@@ -68,12 +69,12 @@ export const registerUser = async (newUser: RegisterUser) => {
 
 export const updateUserProfile = async (
   user_uuid: string,
-  formData: FormData
+  updatedData: UpdateUser
 ) => {
-  console.log("formData", formData);
+  console.log("formData", updatedData);
   const url = `${API_URL}/${user_uuid}`;
   try {
-    return ApiRequest("put", url, formData);
+    return ApiRequest("put", url, updatedData);
   } catch (error) {
     if (axios.isAxiosError(error))
       throw new Error(
@@ -138,5 +139,25 @@ export const getUserByUuid = async (user_uuid: string) => {
       );
 
     throw new Error("Something went wrong to fetch user");
+  }
+};
+
+export const uploadUserAvatar = async (user_uuid: string, avatar: File) => {
+  const url = `${API_URL}/${user_uuid}/upload`;
+
+  const formData = new FormData();
+  formData.append("avatar", avatar);
+
+  console.log("Avatar being uploaded:", formData.get("avatar"));
+
+  try {
+    return ApiRequest("put", url, formData);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Erro ao fazer upload do avatar"
+      );
+    }
+    throw new Error("Algo deu errado ao fazer upload do avatar");
   }
 };

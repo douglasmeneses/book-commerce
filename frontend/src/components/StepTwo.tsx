@@ -10,7 +10,7 @@ import { cpf as cpfValidator } from "cpf-cnpj-validator";
 
 const stepTwoZodSchema = z.object({
   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
-  birthDate: z.string().refine((value) => !isNaN(Date.parse(value)), {
+  birth_date: z.string().refine((value) => !isNaN(Date.parse(value)), {
     message: "Data de nascimento inválida",
   }),
   cpf: z
@@ -34,14 +34,14 @@ export default function StepTwo({
 }: {
   defaultValues: {
     name: string;
-    birthDate: string;
+    birth_date: string;
     cpf: string;
     phone: string;
   };
   onPrevious: () => void;
   onSubmit: (data: {
     name: string;
-    birthDate: string;
+    birth_date: string;
     cpf: string;
     phone: string;
   }) => void;
@@ -63,7 +63,7 @@ export default function StepTwo({
 
   const handleSubmit = (data: {
     name: string;
-    birthDate: string;
+    birth_date: string;
     cpf: string;
     phone: string;
   }) => {
@@ -111,10 +111,10 @@ export default function StepTwo({
 
         <FormField
           control={form.control}
-          name="birthDate"
+          name="birth_date"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="birthDate" className="mb-1 block">
+              <Label htmlFor="birth_date" className="mb-1 block">
                 Data de Nascimento
               </Label>
               <FormControl>
@@ -123,7 +123,7 @@ export default function StepTwo({
                     <Calendar className="h-5 w-5 text-gray-500" />
                   </div>
                   <Input
-                    id="birthDate"
+                    id="birth_date"
                     className="pl-10 bg-gray-100 border-none h-12"
                     placeholder="DD/MM/AAAA"
                     type="date"

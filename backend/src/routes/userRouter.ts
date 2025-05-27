@@ -235,7 +235,7 @@ router.get(
 router.put(
   "/:uuid/upload",
   authMiddleware,
-  upload.single("image"),
+  upload.single("avatar"),
   (req: Request, res: Response) => {
     userController.uploadAvatar(req, res);
   }

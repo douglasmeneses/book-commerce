@@ -14,7 +14,7 @@ export class BookResponseDTO {
   created_at: string;
   updated_at: string;
   image_url: string | null;
-  image?: string | null;
+  image?: Buffer | null;
   authors: string[];
   genres: { name: string }[];
   favorites: { id: number }[];
