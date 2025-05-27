@@ -16,7 +16,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    birthDate: "",
+    birth_date: "",
     cpf: "",
     phone: "",
   });
@@ -35,7 +35,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (data: {
     name: string;
-    birthDate: string;
+    birth_date: string;
     cpf: string;
     phone: string;
   }) => {

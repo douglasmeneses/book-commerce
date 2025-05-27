@@ -37,7 +37,7 @@ export interface UpdateBook {
 export interface BookResponse {
   uuid: string;
   title: string;
-  image?: string | null;
+  image?: Buffer | null;
   image_url?: string | null;
   price: number;
   synopsis: string;
